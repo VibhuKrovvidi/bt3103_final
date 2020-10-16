@@ -5,7 +5,7 @@
           MySID
           </div>
     <nav class="pagecontents">
-            <router-link class="custom-nav-item" to="/aboutus" exact>About Us</router-link>
+            <router-link class="custom-nav-item" to="/" exact>About Us</router-link>
             <router-link class="custom-nav-item" to="/admin" exact>Admin</router-link>
             <router-link class="custom-nav-item" to="/dashboard" exact>Dashboard</router-link>
             <router-link class="custom-nav-item" to="/faq" exact>FAQ</router-link>
@@ -30,6 +30,14 @@ export default {
     .logo {
         font-size: 3em;
         color : #003D7C;
+        text-align: left;
+        float: left;
+        width: 100%;
+    }
+    .logo:after {
+        content: "";
+        display: table;
+        clear: both;
     }
     
     
@@ -41,6 +49,7 @@ export default {
         letter-spacing: 1px;
         margin-left: 10px;
         text-decoration: none;
+        padding-right: 20px;
     }
 
     .custom-nav-item:hover {
@@ -53,6 +62,15 @@ export default {
 
     .pagecontents {
         margin-top: 20px;
+        width: 100%;
+        text-align:right;
+        float: right;
+        padding-bottom: 20px;
+    }
+    .pagecontents:after {
+        content: "";
+        display: table;
+        clear: both;
     }
     
 
