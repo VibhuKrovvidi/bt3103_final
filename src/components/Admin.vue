@@ -1,6 +1,6 @@
 <template>
     <div class="page"> 
-        <h1> Admin </h1>
+        <h1>  Admin  </h1>
         <div class = "content"> 
             <body>
                 The Project Gutenberg EBook of The Adventures of Sherlock Holmes
@@ -97,8 +97,19 @@ export default {
 
 <style scoped>
 .page {
+
+    font-size: 1em;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    color:#003D7C;
+    text-decoration: none;
     
-    margin-top : 30px;
-    background : red;
+}
+
+body {
+    font-size: 1em;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    color:#003D7C;
+    text-decoration: none;
+    text-align: left;
 }
 </style>

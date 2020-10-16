@@ -14,6 +14,7 @@
             <router-link class="custom-nav-item" to="/time" exact>Time</router-link>
             <router-link class="custom-nav-item" to="/zoning" exact>Zoning</router-link>
             
+            
         </nav> 
   </div>
 </template>
@@ -27,12 +28,8 @@ export default {
 
 <style scoped>
     .logo {
-        width : 10%;
-        overflow: hidden;
         font-size: 3em;
-        text-align:left;
-        float : left;
-
+        color : #003D7C;
     }
     
     
@@ -55,7 +52,7 @@ export default {
     }
 
     .pagecontents {
-        margin-top: 100px;
+        margin-top: 20px;
     }
     
 

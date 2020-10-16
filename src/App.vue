@@ -1,4 +1,5 @@
 <template> 
+ 
   <div id="app">
     <navi> </navi>
     <router-view></router-view>
