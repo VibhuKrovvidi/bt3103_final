@@ -106,10 +106,13 @@ export default {
 }
 
 body {
-    font-size: 1em;
+    font-size: 1.25em;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     color:#003D7C;
     text-decoration: none;
     text-align: left;
+    padding-left: 8%;
+    padding-right: 8%;
+
 }
 </style>
