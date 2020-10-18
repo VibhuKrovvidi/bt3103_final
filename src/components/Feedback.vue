@@ -56,6 +56,7 @@ export default {
             cat : "",
             residency : "",
             txtfback : ""
+             
         }
     },
     methods:{
@@ -76,18 +77,13 @@ export default {
         },
         submitForm(event) {
             event.preventDefault()
-            console.log("Submitted Form : " + this.cat + this.residency + this.txtfback)
-            //database.collection('feedback').add(this.cat);
-            database.collection("feedback_forms").doc("f1").set({
+            console.log("Submitted Form : " + this.cat + " " + this.residency + " " + this.txtfback)
+            database.collection('feedback_forms').add({
                 category: this.cat,
                 residency: this.residency,
                 feedback: this.txtfback
-            }).then(function() {
-                console.log("Document successfully written!");
-            })
-            .catch(function(error) {
-                console.error("Error writing document: ", error);
             });
+            
             
         }
     }
