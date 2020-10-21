@@ -42,6 +42,7 @@
 
 
             </form>
+            *This form is completely anonymous.
         </div>
     </div>
     
