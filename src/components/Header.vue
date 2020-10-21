@@ -33,6 +33,7 @@ export default {
         text-align: left;
         float: left;
         width: 100%;
+        padding-left: 20px;
     }
     .logo:after {
         content: "";
