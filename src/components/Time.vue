@@ -3,22 +3,45 @@
         <h1> Time </h1>
         <h3> Good afternoon. Here is a breakdown and analysis of your time spent yesterday.</h3>
 
+        <button v-show="!form" v-on:click="showform"> Add Item </button>
+
+        <form v-show="form">
+            <label>Event Name</label>
+            <input type="text" v-model="entry.title"/>
+            <label>Category</label>
+            <select v-model="entry.category">
+                <option value="work">Work</option>
+                <option value="social">Social</option>
+                <option value="exercise">Exercise</option>
+                <option value="sleep">Sleep</option>
+                <option value="idle">Idle</option>
+                <option value="others">Others</option>
+            </select>
+            <label>Date</label>
+            <input type="number" v-model.number="entry.date" placeholder="YYYYMMDD"/>
+            <label>Start Time</label>
+            <input type="number" v-model.number="entry.start" placeholder="HHMM"/>
+            <label>End Time</label>
+            <input type="number" v-model.number="entry.end" placeholder="HHMM"/>
+            <button v-on:click.prevent="sub" > Submit </button>
+        </form>
+
         <div id=chart>
-            <piechart></piechart>
+            <piechart v-bind:chartdata = "datacollection" ></piechart>
         </div>
 
         <div id=data>
             <ul>
-                <li v-for="item in items" v-bind:key="item.category">
-                    <h3>{{item.category}} <span id=circle>{{item.hours}} hours</span></h3>
-                </li>                
+                <li v-for="cat in categories" v-bind:key="cat">
+                    <h3> {{cat}} <span id=circle> {{Math.round(agg[categories.indexOf(cat)])}} hours</span> </h3>
+                </li>
             </ul>
 
             <br>
 
-            <button> By Date </button>
+            <button v-on:click="dateslice"> By Date </button>
             <br> <br>
-            <button> By Week </button>
+            <button v-on:click="weekslice"> By Week </button>
         </div>
 
         <div id=sort>
@@ -32,13 +55,10 @@
         </div>
 
     </div>
-
-
 </template>
 
 <script>
-
-import piechart from '../TimePieChart.js'
+import piechart from '../TimePieChart_NEW.js'
 import database from '../firebase.js'
 
 export default {
@@ -48,27 +68,136 @@ export default {
 
     data(){
         return {
-            items:[]
+            nusnet: "e1234567a", //hardcoded but can be passed as prop from login
+            entry: {
+                nusnet: "",
+                title: "",
+                category: "",
+                date:'', //using YYYYMMDD because idk how to use timestamp in firebase 
+                start:'',
+                end:'',
+            },
+            form: false,
+            categories: [],
+            agg: [],
+            datacollection: {
+                labels: [],
+                datasets: [{
+                    backgroundColor: ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey'],
+                    data: [],
+                    borderWidth: 0.5
+                }]
+            },
         }
     },
 
     methods: {
+        showform: function() {
+            this.form = !this.form
+        },
+        sub: function() {
+            this.entry.nusnet = this.nusnet
+            database.collection("time").add(this.entry)
+            this.entry.title=""
+            this.entry.category=""
+            this.entry.date=''
+            this.entry.start=''
+            this.entry.end=''
+            this.form = !this.form
+        },
         fetchItems: function() {
-            database.collection('time').get().then((querySnapShot)=>{
-                let item = {}
-                querySnapShot.forEach(doc=> {
-                    item=doc.data()
-                    this.items.push(item)
+            database.collection('time').get().then((querySnapShot) => {
+                querySnapShot.forEach(doc => {
+                    if (doc.data().nusnet == this.nusnet) {
+                        let curr = doc.data()
+                        let label = curr.category
+                        let idx = this.categories.indexOf(label)
+                        //conversion to minutes
+                        let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
+                        let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
+                        //conversion to hours
+                        let currSum = (((end-start)/60))
+                        if (idx == '-1') {
+                            this.categories.push(curr.category)
+                            this.agg.push(currSum)
+                        } else {
+                            this.agg[idx] += currSum
+                        }
+                    }
                 })
             })
-        }
+            this.datacollection.datasets[0].data = this.agg
+            this.datacollection.labels = this.categories
+        },
+        dateslice: function() {
+            //reset
+            this.categories = []
+            this.agg = []
+            //getting today's date value
+            let today = new Date()
+            let tdy = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
+            database.collection('time').get().then((querySnapShot) => {
+                querySnapShot.forEach(doc => {
+                    if (doc.data().nusnet == this.nusnet && doc.data().date == tdy) {
+                        let curr = doc.data()
+                        let label = curr.category
+                        let idx = this.categories.indexOf(label)
+                        //conversion to minutes
+                        let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
+                        let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
+                        //conversion to hours
+                        let currSum = (((end-start)/60))
+                        if (idx == '-1') {
+                            this.categories.push(curr.category)
+                            this.agg.push(currSum)
+                        } else {
+                            this.agg[idx] += currSum
+                        }
+                    }
+                })
+            })
+            this.datacollection.datasets[0].data = this.agg
+            this.datacollection.labels = this.categories
+        },
+        weekslice: function() {
+            //reset
+            this.categories = []
+            this.agg = []
+            //getting today's date value
+            let today = new Date()
+            let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
+            let tdymin = tdymax - 7
+            database.collection('time').get().then((querySnapShot) => {
+                querySnapShot.forEach(doc => {
+                    if (doc.data().nusnet == this.nusnet && (doc.data().date <= tdymax && doc.data().date >= tdymin)) {
+                        let curr = doc.data()
+                        let label = curr.category
+                        let idx = this.categories.indexOf(label)
+                        //conversion to minutes
+                        let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
+                        let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
+                        //conversion to hours
+                        let currSum = (((end-start)/60))
+                        if (idx == '-1') {
+                            this.categories.push(curr.category)
+                            this.agg.push(currSum)
+                        } else {
+                            this.agg[idx] += currSum
+                        }
+                    }
+                })
+            })
+            this.datacollection.datasets[0].data = this.agg
+            this.datacollection.labels = this.categories
+        },
     },
 
+    
     created() {
         this.fetchItems()
     }
-    
 }
+
 </script>
 
 <style scoped>
@@ -76,6 +205,7 @@ export default {
     padding:20px;
     float:left;
     width:40%;
+    display:inline;
 }
 
 #data {
@@ -142,3 +272,4 @@ button:hover {
 }
 
 </style>
+

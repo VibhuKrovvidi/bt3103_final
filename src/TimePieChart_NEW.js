@@ -1,19 +1,10 @@
 import {Pie} from 'vue-chartjs'
-import database from './firebase.js'
 
 export default{
     extends: Pie,
+    props: ['chartdata'],
     data: function() {
         return {
-            datacollection: {
-                labels: [],
-                datasets: [{
-                    backgroundColor: ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise'],
-                    data: [],
-                    borderWidth: 0.5
-                }]
-            },
-
             options: {
                 legend: {
                     display: true,
@@ -39,23 +30,14 @@ export default{
 
                 responsive: true,
                 maintainAspectRatio: false
-            }
+            },
         }
     },
 
     methods: {
-        fetchItems: function() {
-            database.collection('time').get().then(querySnapShot => {
-                querySnapShot.forEach(doc => {
-                    this.datacollection.labels.push(doc.data().category)
-                    this.datacollection.datasets[0].data.push(doc.data().hours)
-                })
-                this.renderChart(this.datacollection, this.options)
-            })
-        }
     },
 
-    created(){
-        this.fetchItems()
+    mounted(){
+        this.renderChart(this.chartdata, this.options)
     }
 }
