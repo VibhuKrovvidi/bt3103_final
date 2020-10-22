@@ -4,12 +4,16 @@
     <div id="container">
         <div id="first" @mouseover="hover1 = true" @mouseleave="hover1 = false">
             <h3 id='component_header' > Take Control Of Your Time </h3>
-                <p id='time_content' v-if="hover1">fkejajkanjkanna</p>
+                <p id='time_content' v-if="hover1">
+                    fkejajkanjkanna
+                </p>
 
         </div>
         <div id="second" @mouseover="hover2 = true" @mouseleave="hover2 = false">
             <h3 id='component_header'> Information at your fingertips </h3>
-            <p id='nus_content' v-if="hover2">ffkejajkanjkanna</p>
+            <p id='nus_content' v-if="hover2">
+                ffkejajkanjkanna
+            </p>
 
         </div>
         
