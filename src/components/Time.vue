@@ -27,7 +27,7 @@
         </form>
 
         <div id=chart>
-            <piechart v-bind:chartdata = "datacollection" ></piechart>
+            <piechart v-bind:chartData = "datacollection"></piechart>
         </div>
 
         <div id=data>
@@ -73,7 +73,7 @@ export default {
                 nusnet: "",
                 title: "",
                 category: "",
-                date:'', //using YYYYMMDD because idk how to use timestamp in firebase 
+                date:'',  
                 start:'',
                 end:'',
             },
@@ -118,7 +118,7 @@ export default {
                         //conversion to hours
                         let currSum = (((end-start)/60))
                         if (idx == '-1') {
-                            this.categories.push(curr.category)
+                            this.categories.push(label)
                             this.agg.push(currSum)
                         } else {
                             this.agg[idx] += currSum
@@ -148,7 +148,7 @@ export default {
                         //conversion to hours
                         let currSum = (((end-start)/60))
                         if (idx == '-1') {
-                            this.categories.push(curr.category)
+                            this.categories.push(label)
                             this.agg.push(currSum)
                         } else {
                             this.agg[idx] += currSum
@@ -179,7 +179,7 @@ export default {
                         //conversion to hours
                         let currSum = (((end-start)/60))
                         if (idx == '-1') {
-                            this.categories.push(curr.category)
+                            this.categories.push(label)
                             this.agg.push(currSum)
                         } else {
                             this.agg[idx] += currSum
@@ -205,7 +205,6 @@ export default {
     padding:20px;
     float:left;
     width:40%;
-    display:inline;
 }
 
 #data {
