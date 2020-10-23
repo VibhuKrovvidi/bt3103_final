@@ -2,7 +2,7 @@ import {Pie} from 'vue-chartjs'
 
 export default{
     extends: Pie,
-    props: ['chartdata'],
+    props: ['chartData'],
     data: function() {
         return {
             options: {
@@ -33,11 +33,19 @@ export default{
             },
         }
     },
-
     methods: {
     },
-
     mounted(){
-        this.renderChart(this.chartdata, this.options)
+        this.renderChart(this.chartData, this.options)
+    },
+    //watcher to render chart reactively to chartData changes (infinite loop warning)
+    watch: {
+        chartData: {
+            handler: function() {
+                this.renderChart(this.chartData, this.options)
+            },
+            //labels and data are deep inside chartData hence need watch deep elements!
+            deep: true,
+        }
     }
 }
