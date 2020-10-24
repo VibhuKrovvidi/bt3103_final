@@ -3,28 +3,7 @@
         <h1> Time </h1>
         <h3> Good afternoon. Here is a breakdown and analysis of your time spent yesterday.</h3>
 
-        <button v-show="!form" v-on:click="showform"> Add Item </button>
-
-        <form v-show="form">
-            <label>Event Name</label>
-            <input type="text" v-model="entry.title"/>
-            <label>Category</label>
-            <select v-model="entry.category">
-                <option value="work">Work</option>
-                <option value="social">Social</option>
-                <option value="exercise">Exercise</option>
-                <option value="sleep">Sleep</option>
-                <option value="idle">Idle</option>
-                <option value="others">Others</option>
-            </select>
-            <label>Date</label>
-            <input type="number" v-model.number="entry.date" placeholder="YYYYMMDD"/>
-            <label>Start Time</label>
-            <input type="number" v-model.number="entry.start" placeholder="HHMM"/>
-            <label>End Time</label>
-            <input type="number" v-model.number="entry.end" placeholder="HHMM"/>
-            <button v-on:click.prevent="sub" > Submit </button>
-        </form>
+        <button v-on:click= "redirectToForm()"> Add Event</button>
 
         <div id=chart>
             <piechart v-bind:chartData = "datacollection"></piechart>
@@ -69,15 +48,6 @@ export default {
     data(){
         return {
             nusnet: "e1234567a", //hardcoded but can be passed as prop from login
-            entry: {
-                nusnet: "",
-                title: "",
-                category: "",
-                date:'',  
-                start:'',
-                end:'',
-            },
-            form: false,
             categories: [],
             agg: [],
             datacollection: {
@@ -92,19 +62,11 @@ export default {
     },
 
     methods: {
-        showform: function() {
-            this.form = !this.form
+
+        redirectToForm() {
+            this.$router.push({ path: '/time/form'});
         },
-        sub: function() {
-            this.entry.nusnet = this.nusnet
-            database.collection("time").add(this.entry)
-            this.entry.title=""
-            this.entry.category=""
-            this.entry.date=''
-            this.entry.start=''
-            this.entry.end=''
-            this.form = !this.form
-        },
+
         fetchItems: function() {
             database.collection('time').get().then((querySnapShot) => {
                 querySnapShot.forEach(doc => {

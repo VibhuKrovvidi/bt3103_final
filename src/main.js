@@ -10,6 +10,7 @@ import FAQ from './components/FAQ.vue'
 import Feedback from './components/Feedback.vue'
 import Modules from './components/Modules.vue'
 import Time from './components/Time.vue'
+import TimeForm from './components/TimeForm.vue'
 import Zoning from './components/Zoning.vue'
 
 Vue.use(VueRouter)
@@ -29,6 +30,7 @@ Vue.component('faq', FAQ)
 Vue.component('feedback', Feedback)
 Vue.component('modules', Modules)
 Vue.component('time', Time)
+Vue.component('timeform', TimeForm)
 Vue.component('zoning', Zoning)
 
 new Vue({
