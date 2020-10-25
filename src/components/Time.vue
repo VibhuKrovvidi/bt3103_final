@@ -47,7 +47,7 @@ export default {
 
     data(){
         return {
-            nusnet: "e1234567a", //hardcoded but can be passed as prop from login
+            nusnet: "e1234567a", //hardcoded but can be passed as prop from login,
             categories: [],
             agg: [],
             datacollection: {

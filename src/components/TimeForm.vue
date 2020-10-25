@@ -40,6 +40,7 @@ import database from '../firebase.js'
 export default {
     data(){
         return {
+            nusnet: "e1234567a", //hardcoded but can be passed as prop from login
             entry: {
                 nusnet: "",
                 title: "",
