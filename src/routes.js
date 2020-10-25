@@ -5,6 +5,7 @@ import FAQ from './components/FAQ.vue'
 import Feedback from './components/Feedback.vue'
 import Modules from './components/Modules.vue'
 import Time from './components/Time.vue'
+import TimeForm from './components/TimeForm.vue'
 import Zoning from './components/Zoning.vue'
 
 
@@ -17,6 +18,7 @@ export default[
     { path: '/feedback', component: Feedback},
     { path: '/modules', component: Modules},
     { path: '/time', component: Time},
+    { path: '/time/form', component: TimeForm},
     { path: '/zoning', component: Zoning}
     
      
