@@ -1,5 +1,6 @@
 <template>
     <div>
+        <navi></navi>
         <h1> Time </h1>
         <h3> Good afternoon. Here is a breakdown and analysis of your time spent yesterday.</h3>
 

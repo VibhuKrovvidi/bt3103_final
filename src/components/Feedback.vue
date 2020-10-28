@@ -2,6 +2,7 @@
 
 <template>
     <div class="page"> 
+        <navi></navi>
         <h1 class = "pagehead">  Feedback  </h1>
         <div class = "content"> 
             <body>

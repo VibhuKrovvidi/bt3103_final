@@ -1,5 +1,6 @@
 <template>
     <div class="page"> 
+        <navi></navi>
         <h1>  Admin  </h1>
         <div class = "content"> 
             <body>
