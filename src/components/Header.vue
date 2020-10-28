@@ -2,10 +2,18 @@
 <template>
   <div class="navbar">
       <div class = "logo">
-          MySID
-          </div>
-    <nav class="pagecontents">
-            <router-link class="custom-nav-item" to="/" exact>About Us</router-link>
+        MySID
+        
+      </div>
+      <div class="logout_btn">
+            <p> {{currentUser.email}} 
+            <button class = "btn" @click="logoutUser"> Logout </button>
+            </p>
+        </div> <br><br>
+      
+        <nav class="pagecontents">
+            
+            <router-link class="custom-nav-item" to="/aboutus" exact>About Us</router-link>
             <router-link class="custom-nav-item" to="/admin" exact>Admin</router-link>
             <router-link class="custom-nav-item" to="/dashboard" exact>Dashboard</router-link>
             <router-link class="custom-nav-item" to="/faq" exact>FAQ</router-link>
@@ -21,8 +29,34 @@
 
 
 <script>
+import firebase from 'firebase'
 export default {
-    
+    data:function() {
+        return {
+            isLoggedIn: false,
+            currentUser : false
+        }
+    },
+    created:function() {
+        if(firebase.auth().currentUser) {
+            this.isLoggedIn = true;
+            this.currentUser = firebase.auth().currentUser;
+        }
+
+    },
+
+    methods: {
+        logoutUser() {
+            firebase.auth().signOut().then(function() {
+            // Sign-out successful.
+            }).catch(function(error) {
+            alert(error)
+            });
+
+            this.$router.push('/')
+        },
+        
+    }
 }
 </script>
 
@@ -32,7 +66,7 @@ export default {
         color : #003D7C;
         text-align: left;
         float: left;
-        width: 100%;
+        width: 40%;
         padding-left: 20px;
     }
     .logo:after {
@@ -41,14 +75,13 @@ export default {
         clear: both;
     }
     
-    
     .custom-nav-item {
-        font-size: 1.5em;
+        font-size: 1.3em;
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         font-weight: bold;
         color:#003D7C;
-        letter-spacing: 1px;
-        margin-left: 10px;
+        letter-spacing: 0.75px;
+        margin-left: 0px;
         text-decoration: none;
         padding-right: 20px;
     }
@@ -62,7 +95,7 @@ export default {
     }
 
     .pagecontents {
-        margin-top: 20px;
+        
         width: 100%;
         text-align:right;
         float: right;
@@ -73,6 +106,52 @@ export default {
         display: table;
         clear: both;
     }
-    
+/*
+    .logout_btn {
+        float: right;
+        padding: 5px;
+        margin-right: 25px;
+        font-size: 1.25em ;
+        color:  #003D7C;
+        
+    }
+
+    .logout_btn:hover {
+        color: #EF7C00;
+        cursor: pointer;
+    }
+*/
+    .logout_btn {
+        text-decoration: none;
+        float: right;
+        padding: 12px;
+        margin: 15px;
+        
+        color: #EF7C00;
+        width: 200px;
+        background-color: white;
+        transition: width .35s;
+        -webkit-transition: width .35s;
+        overflow: hidden;
+        position: relative;
+    }    
+
+    .logout_btn:hover {
+        width: 250px;
+    }
+
+    .btn {
+        font-size: .8em;
+        font-family: 'Oswald', sans-serif;
+            position: relative;
+        right: -18px;
+        bottom: -4px;
+        overflow: hidden;
+        letter-spacing: 3px;
+        opacity: 100%;
+        transition: opacity .45s;
+        -webkit-transition: opacity .35s;
+        color:#EF7C00;
+    }
 
 </style>

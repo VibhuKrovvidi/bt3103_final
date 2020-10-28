@@ -1,5 +1,6 @@
 <template>
 <div class="app">
+    <navi></navi>
     <h1> About Us </h1>
     <div id="container">
         <div id="first" @mouseover="hover1 = true" @mouseleave="hover1 = false">
@@ -55,6 +56,7 @@ export default {
     #first:hover {
         background-color:#003D7C;
         color:white;
+        height: 600px;
     }
     
     #second {
@@ -68,6 +70,7 @@ export default {
     #second:hover{
         background-color: #EF7C00;
         color: white;
+        height: 600px;
     }
     
     #component_header {

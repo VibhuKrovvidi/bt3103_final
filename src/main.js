@@ -12,6 +12,9 @@ import Modules from './components/Modules.vue'
 import Time from './components/Time.vue'
 import TimeForm from './components/TimeForm.vue'
 import Zoning from './components/Zoning.vue'
+import Header from './components/Header.vue'
+import firebase from 'firebase'
+
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -23,6 +26,32 @@ const myRouter = new VueRouter({
   mode: 'history'
 });
 
+//NavGuards
+myRouter.beforeEach((to, from, next) => {
+  //Check if authentication required to move forward
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    //Check if user is not logged in
+    if(!firebase.auth().currentUser) {
+      next({
+        path: '/',
+        query: {
+          redirect: to.fullPath
+        }
+      })
+    } else { //Means we are logged in
+      //Allow them to move forward
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+
+
+
+
+
 Vue.component('aboutus', AboutUs)
 Vue.component('admin', Admin)
 Vue.component('dash', Dashboard)
@@ -32,10 +61,20 @@ Vue.component('modules', Modules)
 Vue.component('time', Time)
 Vue.component('timeform', TimeForm)
 Vue.component('zoning', Zoning)
+Vue.component('navi', Header)
 
-new Vue({
-  render: h => h(App),
-  router:myRouter
-}).$mount('#app')
+let app;
+firebase.auth().onAuthStateChanged(() => {
+  if(!app) {
+    app = new Vue({
+      render: h => h(App),
+      router:myRouter
+    }).$mount('#app')
+  }
+})
+
+
+
+
 
 

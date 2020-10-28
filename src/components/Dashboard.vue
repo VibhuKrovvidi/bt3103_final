@@ -1,5 +1,6 @@
 <template>
     <div class="app">
+        <navi></navi>
     <div id="container">
         <div id="first">
             <p id='personal_message'> Welcome back, John Doe </p>
