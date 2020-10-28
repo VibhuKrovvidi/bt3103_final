@@ -44,7 +44,7 @@ export default {
       firebase.auth().createUserWithEmailAndPassword(this.emailLogin, this.passwordLogin)
       .then(user => { 
         console.log(user.emailLogin)
-        this.$router.push('/login')
+        this.$router.push({ path: '/'})
       },
       err => {
         alert(err.message)
