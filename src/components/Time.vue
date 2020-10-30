@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import piechart from '../TimePieChart_NEW.js'
+import piechart from '../TimePieChart.js'
 import database from '../firebase.js'
 
 export default {
