@@ -37,7 +37,7 @@
 
         <div id=insights>
             <h2>Insights</h2>
-            <h4>You’ve have spent {{Math.round(this.work*100/this.total)}}% on work and 
+            <h4 v-show="!(this.total==0)">You’ve have spent {{Math.round(this.work*100/this.total)}}% on work and 
             {{Math.round(this.sleep*100/this.total)}}% on sleep.
             </h4>
             <h3 id=recommend>{{this.rec()}}</h3>
@@ -273,8 +273,10 @@ export default {
                 }
             } else if (slp < 25) {
                 return "Try to improve sleep!"
+            } else if (this.total == 0) {
+                return "Log your schedule to receive inisghts!"
             } else {
-                return "You are good to go! :)"
+                return "You are good to go!"
             }
         },
     }, 
