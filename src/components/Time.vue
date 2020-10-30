@@ -279,10 +279,7 @@ export default {
         },
     }, 
     created() {
-        this.fetchItems()
-        console.log(this.total)
-        console.log(this.work)
-        console.log(this.leisure)
+        this.fetchItems() 
         var tdy = new Date()
         var yr = tdy.getFullYear()*10000
         var mth = (tdy.getMonth()+1)*100
