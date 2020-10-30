@@ -19,7 +19,14 @@
 
             <br>
 
-            <button v-on:click="dateslice"> By Date </button>
+            <button v-on:click="historical"> Historical </button>
+            <br> <br>
+            <button v-on:click="showinput" v-show="!dteSel"> By Date </button>
+            <div v-show="dteSel">
+            Enter Date (YYYYMMDD): 
+                <input type="number" v-model.number="dateSelected" min="0" required />
+                <button v-on:click="dateslice"> Slice Date </button>
+            </div>
             <br> <br>
             <button v-on:click="weekslice"> By Week </button>
         </div>
@@ -30,8 +37,10 @@
 
         <div id=insights>
             <h2>Insights</h2>
-            <h4>For the past one week, you’ve have spent 75% on work, left the house 2 times and slept an average of 7.1 hours a month. </h4>
-            <h3 id=recommend>Improve Sleep</h3>
+            <h4>You’ve have spent {{Math.round(this.work*100/this.total)}}% on work and 
+            {{Math.round(this.sleep*100/this.total)}}% on sleep.
+            </h4>
+            <h3 id=recommend>{{this.rec()}}</h3>
         </div>
 
     </div>
@@ -40,6 +49,7 @@
 <script>
 import piechart from '../TimePieChart.js'
 import database from '../firebase.js'
+import firebase from 'firebase'
 
 export default {
     components: {
@@ -48,7 +58,14 @@ export default {
 
     data(){
         return {
-            nusnet: "e1234567a", //hardcoded but can be passed as prop from login,
+            usr: firebase.auth().currentUser.email,
+            dteSel: false,
+            dateSelected: '',
+            //counts for insights (cannot extract data from observer)
+            total: 0,
+            work: 0,
+            sleep: 0,
+            leisure: 0, //anything that is not work & sleep
             categories: [],
             agg: [],
             datacollection: {
@@ -67,25 +84,75 @@ export default {
         redirectToForm() {
             this.$router.push({ path: '/time/form'});
         },
-
+        showinput: function() {
+            this.dteSel = !this.dteSel
+        },
         fetchItems: function() {
-            database.collection('time').get().then((querySnapShot) => {
+            database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 querySnapShot.forEach(doc => {
-                    if (doc.data().nusnet == this.nusnet) {
-                        let curr = doc.data()
-                        let label = curr.category
-                        let idx = this.categories.indexOf(label)
-                        //conversion to minutes
-                        let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
-                        let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
-                        //conversion to hours
-                        let currSum = (((end-start)/60))
-                        if (idx == '-1') {
-                            this.categories.push(label)
-                            this.agg.push(currSum)
-                        } else {
-                            this.agg[idx] += currSum
-                        }
+                    let curr = doc.data()
+                    let label = curr.category
+                    let idx = this.categories.indexOf(label)
+                    //conversion to minutes
+                    let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
+                    let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
+                    //conversion to hours
+                    let currSum = (((end-start)/60))
+                    if (idx == '-1') {
+                        this.categories.push(label)
+                        this.agg.push(currSum)
+                    } else {
+                        this.agg[idx] += currSum
+                    }
+                    //data for recommendations
+                    if (label == "work") {
+                        this.total += currSum
+                        this.work += currSum
+                    } else if (label == "sleep") {
+                        this.total += currSum
+                        this.sleep += currSum
+                    } else {
+                        this.total += currSum
+                        this.leisure += currSum
+                    }
+                })
+            })
+            this.datacollection.datasets[0].data = this.agg
+            this.datacollection.labels = this.categories
+        },
+        historical: function() {
+            this.categories = []
+            this.agg = []
+            this.total = 0
+            this.sleep = 0
+            this.leisure = 0
+            this.work = 0
+            database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
+                querySnapShot.forEach(doc => {
+                    let curr = doc.data()
+                    let label = curr.category
+                    let idx = this.categories.indexOf(label)
+                    //conversion to minutes
+                    let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
+                    let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
+                    //conversion to hours
+                    let currSum = (((end-start)/60))
+                    if (idx == '-1') {
+                        this.categories.push(label)
+                        this.agg.push(currSum)
+                    } else {
+                        this.agg[idx] += currSum
+                    }
+                    //data for recommendations
+                    if (label == "work") {
+                        this.total += currSum
+                        this.work += currSum
+                    } else if (label == "sleep") {
+                        this.total += currSum
+                        this.sleep += currSum
+                    } else {
+                        this.total += currSum
+                        this.leisure += currSum
                     }
                 })
             })
@@ -93,46 +160,75 @@ export default {
             this.datacollection.labels = this.categories
         },
         dateslice: function() {
-            //reset
-            this.categories = []
-            this.agg = []
-            //getting today's date value
-            let today = new Date()
-            let tdy = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
-            database.collection('time').get().then((querySnapShot) => {
-                querySnapShot.forEach(doc => {
-                    if (doc.data().nusnet == this.nusnet && doc.data().date == tdy) {
-                        let curr = doc.data()
-                        let label = curr.category
-                        let idx = this.categories.indexOf(label)
-                        //conversion to minutes
-                        let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
-                        let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
-                        //conversion to hours
-                        let currSum = (((end-start)/60))
-                        if (idx == '-1') {
-                            this.categories.push(label)
-                            this.agg.push(currSum)
-                        } else {
-                            this.agg[idx] += currSum
+            //Data Validation
+            if (this.dateSelected <= 19000101) { //minimum date 1900/01/01
+                alert("Invalid Date!")
+            } else if (this.dateSelected > 99999999 || this.dateSelected <= 9999999) {
+                alert("Date must contain exactly 8 characters!")
+            } else if (Math.floor((this.dateSelected%10000)/100) > 12) {
+                alert("Month cannot be over 12!")
+            } else if (this.dateSelected%100 > 31) {
+                alert("Day cannot be over 31!")
+            } else {
+                this.dteSel = !this.dteSel
+                //reset
+                this.categories = []
+                this.agg = []
+                this.total = 0
+                this.sleep = 0
+                this.leisure = 0
+                this.work = 0
+                //getting today's date value
+                database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
+                    querySnapShot.forEach(doc => {
+                        if (doc.data().date == this.dateSelected) {
+                            let curr = doc.data()
+                            let label = curr.category
+                            let idx = this.categories.indexOf(label)
+                            //conversion to minutes
+                            let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
+                            let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
+                            //conversion to hours
+                            let currSum = (((end-start)/60))
+                            if (idx == '-1') {
+                                this.categories.push(label)
+                                this.agg.push(currSum)
+                            } else {
+                                this.agg[idx] += currSum
+                            }
+                            //data for recommendations
+                            if (label == "work") {
+                                this.total += currSum
+                                this.work += currSum
+                            } else if (label == "sleep") {
+                                this.total += currSum
+                                this.sleep += currSum
+                            } else {
+                                this.total += currSum
+                                this.leisure += currSum
+                            }
                         }
-                    }
+                    })
                 })
-            })
-            this.datacollection.datasets[0].data = this.agg
-            this.datacollection.labels = this.categories
+                this.datacollection.datasets[0].data = this.agg
+                this.datacollection.labels = this.categories
+            }
         },
         weekslice: function() {
             //reset
             this.categories = []
             this.agg = []
+            this.total = 0
+            this.sleep = 0
+            this.leisure = 0
+            this.work = 0
             //getting today's date value
             let today = new Date()
             let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
             let tdymin = tdymax - 7
-            database.collection('time').get().then((querySnapShot) => {
+            database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 querySnapShot.forEach(doc => {
-                    if (doc.data().nusnet == this.nusnet && (doc.data().date <= tdymax && doc.data().date >= tdymin)) {
+                    if (doc.data().date <= tdymax && doc.data().date >= tdymin) {
                         let curr = doc.data()
                         let label = curr.category
                         let idx = this.categories.indexOf(label)
@@ -147,18 +243,53 @@ export default {
                         } else {
                             this.agg[idx] += currSum
                         }
+                        //data for recommendations
+                        if (label == "work") {
+                            this.total += currSum
+                            this.work += currSum
+                        } else if (label == "sleep") {
+                            this.total += currSum
+                            this.sleep += currSum
+                        } else {
+                            this.total += currSum
+                            this.leisure += currSum
+                        }
                     }
                 })
             })
             this.datacollection.datasets[0].data = this.agg
             this.datacollection.labels = this.categories
         },
-    },
-
-    
+        rec: function() {
+            //An individual should sleep at least 6hrs (25%)
+            //Work should not exceed 10hours (41%)
+            let wk = Math.round(this.work*100/this.total)
+            let slp = Math.round(this.sleep*100/this.total)
+            if (wk >= 40) {
+                if (slp < 25) {
+                    return "Try to reduce work and improve sleep!"
+                } else {
+                    return "Try to reduce work!"
+                }
+            } else if (slp < 25) {
+                return "Try to improve sleep!"
+            } else {
+                return "You are good to go! :)"
+            }
+        },
+    }, 
     created() {
         this.fetchItems()
-    }
+        console.log(this.total)
+        console.log(this.work)
+        console.log(this.leisure)
+        var tdy = new Date()
+        var yr = tdy.getFullYear()*10000
+        var mth = (tdy.getMonth()+1)*100
+        var day = (tdy.getDate())
+        var final = yr+mth+day
+        this.dateSelected = final
+    },
 }
 
 </script>
@@ -181,7 +312,6 @@ ul {
     border-width: 2px;
     list-style-type: none;
     text-align: left;
-
 }
 
 #circle {
