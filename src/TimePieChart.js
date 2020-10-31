@@ -1,4 +1,8 @@
 import {Pie} from 'vue-chartjs'
+import Vue from 'vue'
+
+//supress deep watcher inf loop warning: chartData is supposed to be busy waiting for changes by user
+Vue.config.silent = true
 
 export default{
     extends: Pie,
@@ -27,7 +31,13 @@ export default{
                         bottom:0
                     }
                 },
-
+                tooltips: {
+                    callbacks: {
+                        label(tooltipItem, data) {
+                            return `${data.labels[tooltipItem.index]}: ${Math.round(data.datasets[0].data[tooltipItem.index])} Hours`;
+                        }
+                    }
+                },
                 responsive: true,
                 maintainAspectRatio: false
             },
