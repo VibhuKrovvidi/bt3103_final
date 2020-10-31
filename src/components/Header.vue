@@ -1,16 +1,14 @@
 
 <template>
   <div class="navbar">
-      <div class = "logo">
-        MySID
-        
-      </div>
-      <div class="logout_btn">
+      <div class = "topHead">
+        <div class = "logo"> MySID </div>
+        <div class="logout_btn">
             <p> {{currentUser.email}} 
             <button class = "btn" @click="logoutUser"> Logout </button>
             </p>
-        </div> <br><br>
-      
+        </div> 
+      </div>
         <nav class="pagecontents">
             
             <router-link class="custom-nav-item" to="/aboutus" exact>About Us</router-link>
@@ -61,6 +59,11 @@ export default {
 </script>
 
 <style scoped>
+    .topHead:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
     .logo {
         font-size: 3em;
         color : #003D7C;
@@ -69,11 +72,11 @@ export default {
         width: 40%;
         padding-left: 20px;
     }
-    .logo:after {
+    /*.logo:after {
         content: "";
         display: table;
         clear: both;
-    }
+    }*/
     
     .custom-nav-item {
         font-size: 1.3em;
