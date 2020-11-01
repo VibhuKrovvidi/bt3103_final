@@ -3,8 +3,9 @@
     <div class = "logo">
                 MySID
       </div>
-    <h1> Register </h1>
+    
     <form class="form-group">
+      <h1> Register </h1>
             Enter Your NUS Email: <br>
             <input v-model="emailLogin" type="email" class="form-control" placeholder="Email" required> <br> <br>
             
@@ -54,7 +55,7 @@
 
             
             
-            <input type="submit" @click="registerUser($event)">
+            <input class="box" type="submit" @click="registerUser($event)">
 
         </form>
   </div>
@@ -108,6 +109,7 @@ export default {
 
       
     },
+
     
   }
 }
@@ -144,5 +146,36 @@ select {
 
 input {
   width : 150px;
+}
+
+form {
+  padding: 30px;
+  margin-top: 8%;
+  width: 500px;
+  position: fixed;
+  float: center;
+  margin-right: 300px;
+  margin-left:500px;
+  border-radius: 20px;
+  background:#ebf1faff;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+}
+
+.box {
+  
+  width: 180px;
+  height: 50px;
+  border-radius: 20px;
+  background:#ebf1faff;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  
+}
+
+.box:hover {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
 }
 </style>

@@ -11,7 +11,7 @@
       </div>
         <nav class="pagecontents">
             
-            <router-link class="custom-nav-item" to="/aboutus" exact>About Us</router-link>
+            
             <router-link class="custom-nav-item" to="/admin" exact>Admin</router-link>
             <router-link class="custom-nav-item" to="/dashboard" exact>Dashboard</router-link>
             <router-link class="custom-nav-item" to="/faq" exact>FAQ</router-link>

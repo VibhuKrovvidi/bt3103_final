@@ -22,7 +22,7 @@ import Register from './components/Register.vue'
 export default[
 
     { 
-        path: '/aboutus', 
+        path: '/', 
         component: AboutUs
     },
     { 
@@ -131,7 +131,7 @@ export default[
         }
     },
     { 
-        path: '/', 
+        path: '/login', 
         component: Login,
         meta : {
             requiresGuest: true
