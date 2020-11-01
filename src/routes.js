@@ -7,6 +7,9 @@ import Modules from './components/Modules.vue'
 import Time from './components/Time.vue'
 import TimeForm from './components/TimeForm.vue'
 import Zoning from './components/Zoning.vue'
+import ZoningPolicies from './components/ZoningPolicies.vue'
+import ZoningDeclaration from './components/ZoningDeclaration.vue'
+import ZoningResources from './components/ZoningResources.vue'
 import Login from './components/Login.vue'
 import Register from './components/Register.vue'
 
@@ -78,6 +81,27 @@ export default[
     { 
         path: '/zoning', 
         component: Zoning,
+        meta : {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/zoning/policies', 
+        component: ZoningPolicies,
+        meta : {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/zoning/declaration', 
+        component: ZoningDeclaration,
+        meta : {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/zoning/resources', 
+        component: ZoningResources,
         meta : {
             requiresAuth: true
         }
