@@ -3,50 +3,42 @@
 <template>
     <div class="page"> 
         <navi></navi>
-        <h1 class = "pagehead">  Feedback  </h1>
-        <div class = "content"> 
-            <body>
-                <b>Give the University Administration your feedback. Fill up the form below and click submit to provide the feedback. </b>
-            </body>
-            <form class = "feedback_form">
-                <label for="category"> Select Category: </label> <br>
-                <select id="category" name="category" style="font-size:1em; color:#003D7C" @change="onChange($event)" v-model="cat">
-                    <option value="faculty"> Faculty </option>
-                    <option value="resid"> Residential </option>
-                    <option value="activity"> Activities Related </option>
-                    <option value="mysid"> MySID </option>
+        <h1> Feedback </h1>
+        <h3>Give the University Administration your feedback. Fill up the form below and click submit to provide the feedback.</h3> 
+        
+        <form class=form>
+            <label for="category"> Select Category: </label> <br>
+            <select id="category" name="category" style="font-size:1em; color:#003D7C" @change="onChange($event)" v-model="cat">
+                <option value="faculty"> Faculty </option>
+                <option value="resid"> Residential </option>
+                <option value="activity"> Activities Related </option>
+                <option value="mysid"> MySID </option>
+                <option value="others">Others</option>
                     
-                </select> <br> <br>
-                <div class="details" v-if="this.cat == 'resid'">
-                    <label for="select_resid"> Please Select Your Residency </label> <br>
-                    <select id="select_resid" name="select_resid" style="font-size:1em; color:#003D7C" 
-                    @change="selectResidency($event)" v-model="residency">
-                        <option value="cinnamon"> Cinnamon College </option>
-                        <option value="tembusu"> Tembusu College </option>
-                        <option value="rc4"> RC4 </option>
-                        <option value="capt"> College of Alice & Peter Tan </option>
-                        <option value="utr"> UTown Residences </option>
+            </select> <br> <br>
+            <div class="details" v-if="this.cat == 'resid'">
+                <label for="select_resid"> Please Select Your Residency </label> <br>
+                <select id="select_resid" name="select_resid" style="font-size:1em; color:#003D7C" 
+                @change="selectResidency($event)" v-model="residency">
+                    <option value="cinnamon"> Cinnamon College </option>
+                    <option value="tembusu"> Tembusu College </option>
+                    <option value="rc4"> RC4 </option>
+                    <option value="capt"> College of Alice & Peter Tan </option>
+                    <option value="utr"> UTown Residences </option>       
+                </select> <br><br>
+            </div>
 
-                    </select> <br><br>
-                </div> 
+            <label for="fback"> Enter Feedback: </label> <br>
+            <textarea id="fback" name="fback" rows="10" cols="50" style="font-size:1em; color:#003D7C" 
+            @change="enterFeedback($event)" v-model="txtfback">
+                Enter Feedback Here
+            </textarea> <br><br>
 
-                <label for="fback"> Enter Feedback: </label> <br>
-                <textarea id="fback" name="fback" rows="10" cols="50" style="font-size:1em; color:#003D7C" 
-                @change="enterFeedback($event)" v-model="txtfback">
-                    Enter Feedback Here
-                </textarea> <br><br>
+            <input id=submit type="submit" @click="submitForm($event)">
 
-                <input type="submit" @click="submitForm($event)">
-
-                
-
-
-
-            </form>
-            *This form is completely anonymous.
-        </div>
+            <p>*This form is completely anonymous.</p>
+        </form>
     </div>
-    
 </template>
 
 <script>
@@ -93,32 +85,42 @@ export default {
 </script>
 
 <style scoped>
-.page {
-
-    font-size: 1em;
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    color:#003D7C;
-    text-decoration: none;
-    
+textarea, select  {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
-body {
-    font-size: 1.5em;
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    color:#003D7C;
-    text-decoration: none;
-    text-align: center;
-    padding-left: 8%;
-    padding-right: 8%;
-
+.form {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 30px;
+    position: relative;
+    margin: auto;
+    text-align: left;
+    font-size: 18px;
+    width: 60%;
 }
 
-.pagehead {
-    text-decoration: underline;
+p {
+    font-size: 14px;
 }
 
-.feedback_form {
-    font-size: 1.5em;
+#submit {
+  background-color: orange;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#submit:hover {
+  background-color: orangered;
 }
 
 </style>

@@ -1,5 +1,8 @@
 import AboutUs from './components/AboutUs.vue'
 import Admin from './components/Admin.vue'
+import AdminPolicies from './components/AdminPolicies.vue'
+import AdminFAQ from './components/AdminFAQ.vue'
+import AdminFeedback from './components/AdminFeedback.vue'
 import Dashboard from './components/Dashboard.vue'
 import FAQ from './components/FAQ.vue'
 import Feedback from './components/Feedback.vue'
@@ -25,6 +28,27 @@ export default[
     { 
         path: '/admin', 
         component: Admin,
+        meta : {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/admin/policies', 
+        component: AdminPolicies,
+        meta : {
+            requiresAuth: true
+        } 
+    },
+    {
+        path: '/admin/FAQ', 
+        component: AdminFAQ,
+        meta : {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/admin/Feedback', 
+        component: AdminFeedback,
         meta : {
             requiresAuth: true
         }

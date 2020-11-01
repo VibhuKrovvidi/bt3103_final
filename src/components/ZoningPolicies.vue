@@ -5,10 +5,10 @@
         <h3>Zoning Policies</h3>
         <h3> Filter By:
             <select v-model="selectedoption">
-                <option value="Campus Policies">Campus Policies </option>
+                <option value="Campus Policies">Campus Policies</option>
                 <option value="Visitor Policies">Visitor Policies</option>
                 <option value="Student Life and CCA Activities">Student Life and CCA Activities</option>
-                <option value="Visitor Policies">Visitor Policies</option>
+                <option value="Residential Policies">Residential Policies</option>
                 <option value="Other Policies">Other Policies</option>
             </select></h3>
         
@@ -25,9 +25,8 @@
             </tr>
         </table>
 
-
-
         <button id=back v-on:click="redirectToZoning()"> Back </button>
+        
     </div>
 </template>
 

@@ -57,7 +57,10 @@ export default {
   font-size: 18px;
 }
 
-
+.box:hover {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
 
 p {
     font-size: 16px;
