@@ -3,7 +3,7 @@
         <navi></navi>
     <div id="container">
         <div id="first">
-            <p id='personal_message'> Welcome back, John Doe </p>
+            <p id='personal_message'> Welcome back, {{userName}} </p>
         </div>
         <div id="second">
             <p id='school_term'> 
@@ -39,8 +39,42 @@
 </template>
 
 <script>
+import database from '../firebase.js'
+import firebase from 'firebase'
+
 export default {
-    
+    data:function() {
+        return {
+            userName : ""
+        }
+        
+    },
+
+    methods: {
+        getUserName() {
+            var emailadd = firebase.auth().currentUser.email
+            database.collection("users").doc(emailadd).collection("profile").get().then(
+                (querySnapShot) => {
+                querySnapShot.forEach(doc => {
+                    console.log(doc.data())
+                    var usrname = doc.data().name
+                    this.userName = usrname
+                }
+            )
+            
+            //console.log(usr)
+        }
+        ).catch(function(error) {
+            console.log(error)
+        })
+        
+        }
+    },
+
+    created : function(){
+        this.getUserName()
+
+    }
 }
 </script>
 
