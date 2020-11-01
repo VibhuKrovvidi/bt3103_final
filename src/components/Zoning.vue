@@ -10,22 +10,17 @@
 
         <div class=box>
             <i class="fas fa-university"></i>
-            <p class=title v-on:click="redirectToUniPolicies()">University Policies</p>
-        </div>
-      
-        <div class=box>
-            <i class="fas fa-swimmer"></i>
-            <p class=title >Student Life and CCA Activities Policies</p>
+            <p class=title v-on:click="redirectToZoningPolicies()">University Policies</p>
         </div>
 
         <div class=box>
             <i class="fas fa-heartbeat"></i>
-            <p class=title>Health and Travel Declarations</p>
+            <p class=title v-on:click="redirectToZoningDeclaration()">Health and Travel Declarations</p>
         </div>
 
         <div class=box>
             <i class="fas fa-info"></i>
-            <p class=title>Other Resources</p>
+            <p class=title v-on:click="redirectToZoningResources()">External Resources</p>
         </div>
     </div>
 </template>
@@ -41,10 +36,20 @@ export default {
         document.head.appendChild(recaptchaScript)
     },
     methods: {
-    redirectToUniPolicies() {
-      this.$router.push({path: 'zoning/unipolicies'});
-    }
-    }
+      redirectToZoningPolicies() {
+        this.$router.push({path:'zoning/policies'});
+      },
+
+      redirectToZoningDeclaration() {
+        this.$router.push({path:'zoning/declaration'});
+      },
+
+      redirectToZoningResources() {
+        this.$router.push({path:'zoning/resources'});
+      }
+
+
+      }
     
 }
 </script>
@@ -58,13 +63,12 @@ export default {
 
 .box {
   padding: 30px;
-  width: 18%;
-  height: 100px;
+  width: 22%;
   position: relative;
   overflow: hidden;
   float: left;
   border-radius: 20px;
-  margin: 0 18px 40px 30px;
+  margin: 0 20px 10px 80px;
   background:#ebf1faff;
   transition: all 0.3s ease-in-out;
   text-align: center;

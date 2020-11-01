@@ -112,7 +112,6 @@ input[type=text], select, input[type=number]  {
   background-color: orange;
   color: white;
   padding: 14px 20px;
-  margin: 8px 0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -125,7 +124,7 @@ input[type=text], select, input[type=number]  {
 form {
   border-radius: 5px;
   background-color: #f2f2f2;
-  padding: 20px;
+  padding: 30px;
   position: relative;
   margin: auto;
   text-align: left;
