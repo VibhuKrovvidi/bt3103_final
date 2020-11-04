@@ -29,7 +29,8 @@ export default[
         path: '/admin', 
         component: Admin,
         meta : {
-            requiresAuth: true
+            requiresAuth: true,
+            requiresAdmin: true
         }
     },
     {
