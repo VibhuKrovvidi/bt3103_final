@@ -3,8 +3,10 @@
   <div class="navbar">
       <div class = "topHead">
         <div class = "logo"> MySID </div>
-        <div class="logout_btn">
-            <p> {{currentUser.email}} 
+        <div>
+            
+            <p class="logout_btn"> {{currentUser.email}}
+            
             <button class = "btn" @click="logoutUser"> Logout </button>
             </p>
         </div> 
@@ -109,7 +111,7 @@ export default {
         display: table;
         clear: both;
     }
-/*
+
     .logout_btn {
         float: right;
         padding: 5px;
@@ -123,7 +125,22 @@ export default {
         color: #EF7C00;
         cursor: pointer;
     }
-*/
+
+    .btn {
+        background-color: orange;
+        color: white;
+        padding: 7px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+
+/*
     .logout_btn {
         text-decoration: none;
         float: right;
@@ -156,5 +173,5 @@ export default {
         -webkit-transition: opacity .35s;
         color:#EF7C00;
     }
-
+*/
 </style>

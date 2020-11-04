@@ -3,9 +3,9 @@
     <div class = "logo">
                 MySID
       </div>
-    
-    <form class="form-group">
-      <h1> Register </h1>
+    <h1> Register </h1>
+    <form class="form">
+      
             Enter Your NUS Email: <br>
             <input v-model="emailLogin" type="email" class="form-control" placeholder="Email" required> <br> <br>
             
@@ -55,7 +55,7 @@
 
             
             
-            <input class="box" type="submit" @click="registerUser($event)">
+            <input class="box" id="submit" type="submit" @click="registerUser($event)">
 
         </form>
   </div>

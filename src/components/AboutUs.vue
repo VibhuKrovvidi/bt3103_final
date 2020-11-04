@@ -1,12 +1,16 @@
 <template>
 <div class="app">
     <div class = "logo"> MySID </div>
-    <h1> About Us </h1>
+    
     <div id="container">
+        
         <div id="login">
-            <button class="redirector" @click="redirect($event)"> 
-                <img class="nuslogo" src="http://www.nus.edu.sg/images/default-source/identity-images/nus-logo-blue_vertical.jpg">
-                <br>Go to Login Page 
+            
+            <button class="redirector" @click="redirect($event)"  @mouseover="hover3 = true" @mouseleave="hover3 = false"> 
+                <h4 v-if="!hover3"> MySID: The Student Information Dashboard </h4>
+                <h4 v-if="hover3"> Login </h4>
+                <img class="nuslogo" src="../assets/nuslogo.png">
+                
                 
                 </button>
         </div>
@@ -36,7 +40,8 @@ export default {
     data () {
         return {
             hover1 : false,
-            hover2 : false
+            hover2 : false,
+            hover3 : false
         }
         
     },
@@ -97,8 +102,10 @@ export default {
     }
 
     .nuslogo {
-        width: 400px;
-        height: 400px;
+        width: 340px;
+        height: 340px;
+        object-fit: cover;
+        
     }
 
     .redirector {
@@ -107,12 +114,24 @@ export default {
         background: white;
         color: #003D7C;
         font-size: 30px;
-        border-color: white;
+        border: none;
+        cursor:pointer
 
     }
 
     .redirector:hover {
         background: whitesmoke;
+    }
+
+
+    h4 {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        font-weight: bold;
+        color:#003D7C;
+        letter-spacing: 0.75px;
+        margin-left: 0px;
+        text-decoration: none;
+        padding-right: 0px;
     }
 
 </style>
