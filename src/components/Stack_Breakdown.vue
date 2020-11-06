@@ -255,6 +255,7 @@ export default {
             this.work = 0
             //getting today's date value
             let today = new Date()
+            let y = today.getFullYear()
             let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
             let tdymin = 0
             if (today.getDate() >= 7) {
@@ -264,16 +265,17 @@ export default {
                 let prev_m = 0
                 if (m==1) { //jan corner case
                     prev_m = 12
+                    y = y-1
                 } else {
                     prev_m = m-1
                 }
                 let dd = 6-today.getDate()
                 if (this.mth31.includes(prev_m)) {
-                    tdymin = (today.getFullYear()*10000) + ((prev_m)*100) + (31-dd)
+                    tdymin = (y*10000) + ((prev_m)*100) + (31-dd)
                 } else if (this.mth30.includes(prev_m)) {
-                    tdymin = (today.getFullYear()*10000) + ((prev_m)*100) + (30-dd)
+                    tdymin = (y*10000) + ((prev_m)*100) + (30-dd)
                 } else {
-                    tdymin = (today.getFullYear()*10000) + ((prev_m)*100) + (28-dd)
+                    tdymin = (y*10000) + ((prev_m)*100) + (28-dd)
                 }
             }
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {

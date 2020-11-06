@@ -43,14 +43,14 @@ export default {
     data(){
         return {
             usr: firebase.auth().currentUser.email,
+            mth31: [1,3,5,7,8,10,12],
+            mth30: [4,6,9,11],
             entry: {
                 title: "",
                 category: "work", //default value for dropdown
                 date:'', //default populated with today in created hook 
                 start:'',
                 end:'',
-                mth31: [1,3,5,7,8,10,12],
-                mth30: [4,6,9,11],
             },
         }
     },
@@ -64,9 +64,9 @@ export default {
                 alert("Date must contain exactly 8 characters!")
             } else if (Math.floor((this.entry.date%10000)/100) > 12) {
                 alert("Month cannot be over 12!")
-            } else if (this.entry.mth31.includes((Math.floor(this.entry.date/100))%100) && this.entry.date%100 > 31) {
+            } else if (this.mth31.includes((Math.floor(this.entry.date/100))%100) && this.entry.date%100 > 31) {
                 alert("Invalid Date, Month only has 31 days!")
-            } else if (this.entry.mth30.includes((Math.floor(this.entry.date/100))%100) && this.entry.date%100 > 30) {
+            } else if (this.mth30.includes((Math.floor(this.entry.date/100))%100) && this.entry.date%100 > 30) {
                 alert("Invalid Date, Month only has 30 days!")
             } else if ((Math.floor(this.entry.date/100))%100==2 && (Math.floor(this.entry.date/10000))%4==0 && this.entry.date%100 > 29) {
                 alert("Invalid Date, Month only has 29 days!")

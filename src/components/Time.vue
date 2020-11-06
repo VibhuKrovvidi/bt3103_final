@@ -2,7 +2,6 @@
     <div>
         <navi></navi>
         <h1> Time </h1>
-        <br>
         <div id=top>
             <h2 style="text-align:left" id=left_top>Good {{timeOfDay()}}!</h2>
             <div id=right_top>
@@ -12,18 +11,31 @@
         </div>
         <br>
         <hr color="lightgrey">
+        <mmt></mmt>
+        <hr color="lightgrey">
         <s1></s1>
+        <hr color="lightgrey">
+        <s2></s2>
+        <hr color="lightgrey">
+        <s3></s3>
     </div>
 </template>
 
 <script>
 //NEW
+import momentum from './Stack_Momentum.vue'
 import stack1 from './Stack_Breakdown.vue'
+import stack2 from './Stack_CategoryCompare.vue'
+import stack3 from './Stack_TimeOfDay.vue'
+
 import firebase from 'firebase'
 
 export default {
     components: {
+        'mmt': momentum,
         's1': stack1,
+        's2': stack2,
+        's3': stack3,
     },
 
     data(){
@@ -54,7 +66,6 @@ export default {
 
 <style scoped>
     #left_top {
-        font-size: 30px;
         float: left;
     }
 
