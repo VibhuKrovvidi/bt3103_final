@@ -17,14 +17,19 @@
         <div id="first" @mouseover="hover1 = true" @mouseleave="hover1 = false">
             <h3 id='component_header' > Take Control Of Your Time </h3>
                 <p id='time_content' v-if="hover1">
-                    fkejajkanjkanna
+                    Track how much time you spend on work, sleep and your social life. 
+                    Gain insights into achieving the best balance as you work from home. 
+                    Compare your schedule to those of the average user and find out how you can rebalance your life!
                 </p>
 
         </div>
         <div id="second" @mouseover="hover2 = true" @mouseleave="hover2 = false">
             <h3 id='component_header'> Information at your fingertips </h3>
             <p id='nus_content' v-if="hover2">
-                ffkejajkanjkanna
+                Living on campus but can't seem to handle all the information from NUS' COVID response?
+                MySID allows you to keep up to date with the latest rules and policies, allows you to submit
+                feedback to the University administrators, understand your class schedule and close the information loop between
+                your residency, faculty and administrators!
             </p>
 
         </div>
@@ -73,11 +78,7 @@ export default {
         background-color:#526C80;
         border-color: white;
     }
-    #first:hover {
-        background-color:#003D7C;
-        color:white;
-        height: 600px;
-    }
+    
     
     #second {
         width: 500px;
@@ -90,9 +91,20 @@ export default {
     #second:hover{
         background-color: #EF7C00;
         color: white;
-        height: 600px;
+        height: 300px;
+        font-size: 1.15em;
+        
     }
     
+    #first:hover {
+        background-color:#003D7C;
+        color:white;
+        height: 300px;
+        font-size: 1.15em;
+        
+    }
+
+
     #component_header {
         color: whitesmoke;
         font-size: 30px;
