@@ -2,43 +2,23 @@
 <div>
     <navi></navi>
     <h1> Modules </h1>
-    <h2> test</h2>
-    is it lagging my why
+    <h2> Hello name, which modules are you interested in exploring?</h2>
     <br>
 
     <input type="text" v-model="query">
+    {{ query }}
     <br>
     <button v-on:click="loadNews">Submit</button>
+
     <br>
-    {{ posts }}
+    {{ selected_module }}
     <br>
-    <ul>
-        <li v-for="module in posts" v-bind:key="module"> 
-            {{ module.moduleCode }} 
-        </li>
-    
+
+    <ul class="list-group">
+        <li v-for="responder in required_data.data" v-bind:key="responder">
+            {{ responder.acadYear }}</li>
     </ul>
-    <!--
-    <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>Module Code</th>
-                    <th>Module Name</th>
-                    <th>Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="module in posts.slice(0,5)" v-bind:key="module"> 
-                    <td>{{module.moduleCode}} </td>
-                    <td>{{module.title}}</td>
-                    <td>{{module.semesters}}</td>
-                </tr>
-            </tbody>
-        </table>
-        -->
-    <div class="search-wrapper">
-        <input type='text' v-model="search" placeholder="Search module"/>
-    </div>
+
     
 
 </div>
@@ -50,22 +30,25 @@ export default {
     data(){
         return {
             info:null,
-            query:''
+            selected_module:[],
+            query:'',
+            required_data:[],
         }
     },
-    /*
-    The following block pulls a list of all the modules in a 
-    particular date range from nusmods api
-    */
-        mounted () {
-            axios.get('https://api.nusmods.com/v2/2018-2019/moduleList.json')
-        .then(response => (this.posts = response.data))
-        .catch(error => console.log(error))
+        created: function() {
+            this.loadNews();
         },
-        loadNews () {
+        methods: {
+            loadNews: function() {
             axios.get('https://api.nusmods.com/v2/2018-2019/modules/'+this.query + '.json')
-            .then(response => (this.posts = response.data))
+            .then(response => (this.selected_module = response.data))
+            .then(response => (this.required_data = response))
             .catch(error => console.log(error))
+            },
+            cleaning_api_data: function() {
+
+
+            }
         }
         
 
