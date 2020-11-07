@@ -1,18 +1,23 @@
 <template>
     <div> 
         <navi></navi>
-        <h1> Admin </h1>
-        <br><br>
-        
-        <div class=box v-on:click="redirectToPolicies()">
-            <h4>Update Policies</h4>
-        </div>
 
-        <div class=box v-on:click="redirectToFAQ()">
-            <h4>Update FAQ</h4>
-        </div>
-        <div class=box v-on:click="redirectToFeedback()">
-            <h4>View Feedback</h4>
+        <div class="blocks">
+        <h1> Admin Dashboard </h1>
+        <br><br>
+            <div class="usersplot">
+                USER PLOT
+            </div>
+            <div class=box v-on:click="redirectToPolicies()">
+                <h4>Update Policies</h4>
+            </div>
+
+            <div class=box v-on:click="redirectToFAQ()">
+                <h4>Update FAQ</h4>
+            </div>
+            <div class=box v-on:click="redirectToFeedback()">
+                <h4>View Feedback</h4>
+            </div>
         </div>
     </div>
 </template>
@@ -56,4 +61,6 @@ export default {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+
 </style>

@@ -3,7 +3,7 @@
         <navi></navi>
         <h1> Time </h1>
         <div id=top>
-            <h2 style="text-align:left" id=left_top>Good {{timeOfDay()}}!</h2>
+            <h2 style="text-align:left" id=left_top>Good {{timeOfDay()}}, {{userName}}!</h2>
             <div id=right_top>
                 <p> <i>Log your daily events here!</i> </p>
                 <button v-on:click= "redirectToForm()"> Add Event</button>
@@ -28,6 +28,7 @@ import stack1 from './Stack_Breakdown.vue'
 import stack2 from './Stack_CategoryCompare.vue'
 import stack3 from './Stack_TimeOfDay.vue'
 
+import database from '../firebase.js'
 import firebase from 'firebase'
 
 export default {
@@ -41,6 +42,7 @@ export default {
     data(){
         return {
             usr: firebase.auth().currentUser.email, //get name later
+            userName : ""
         }
     },
 
@@ -58,8 +60,31 @@ export default {
             } else {
                 return "Evening"
             }
+        },
+        getUserName() {
+            var emailadd = firebase.auth().currentUser.email
+            database.collection("users").doc(emailadd).collection("profile").get().then(
+                (querySnapShot) => {
+                querySnapShot.forEach(doc => {
+                    console.log(doc.data())
+                    var usrname = doc.data().name
+                    this.userName = usrname
+                }
+            )
+            
+            //console.log(usr)
         }
-    }, 
+        ).catch(function(error) {
+            console.log(error)
+        })
+        }
+    },
+
+    created : function(){
+        this.getUserName()
+
+    },
+
 }
 
 </script>
