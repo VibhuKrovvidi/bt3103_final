@@ -117,7 +117,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .logo {
         font-size: 3em;
         color : #003D7C;
