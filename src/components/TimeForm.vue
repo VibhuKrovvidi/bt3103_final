@@ -43,6 +43,8 @@ export default {
     data(){
         return {
             usr: firebase.auth().currentUser.email,
+            mth31: [1,3,5,7,8,10,12],
+            mth30: [4,6,9,11],
             entry: {
                 title: "",
                 category: "work", //default value for dropdown
@@ -62,8 +64,14 @@ export default {
                 alert("Date must contain exactly 8 characters!")
             } else if (Math.floor((this.entry.date%10000)/100) > 12) {
                 alert("Month cannot be over 12!")
-            } else if (this.entry.date%100 > 31) {
-                alert("Day cannot be over 31!")
+            } else if (this.mth31.includes((Math.floor(this.entry.date/100))%100) && this.entry.date%100 > 31) {
+                alert("Invalid Date, Month only has 31 days!")
+            } else if (this.mth30.includes((Math.floor(this.entry.date/100))%100) && this.entry.date%100 > 30) {
+                alert("Invalid Date, Month only has 30 days!")
+            } else if ((Math.floor(this.entry.date/100))%100==2 && (Math.floor(this.entry.date/10000))%4==0 && this.entry.date%100 > 29) {
+                alert("Invalid Date, Month only has 29 days!")
+            } else if ((Math.floor(this.entry.date/100))%100==2 && (Math.floor(this.entry.date/10000))%4!=0 && this.entry.date%100 > 28) {
+                alert("Invalid Date, Month only has 28 days!")
             } else if (this.entry.start >= this.entry.end) {
                 alert("Invalid start/end, end must be after start!")
             } else if (this.entry.start%100 >= 60) {
@@ -112,7 +120,6 @@ input[type=text], select, input[type=number]  {
   background-color: orange;
   color: white;
   padding: 14px 20px;
-  margin: 8px 0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -125,7 +132,7 @@ input[type=text], select, input[type=number]  {
 form {
   border-radius: 5px;
   background-color: #f2f2f2;
-  padding: 20px;
+  padding: 30px;
   position: relative;
   margin: auto;
   text-align: left;

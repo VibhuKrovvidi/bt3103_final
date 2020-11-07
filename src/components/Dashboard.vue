@@ -3,7 +3,7 @@
         <navi></navi>
     <div id="container">
         <div id="first">
-            <p id='personal_message'> Welcome back, John Doe </p>
+            <p id='personal_message'> Welcome back, {{userName}} </p>
         </div>
         <div id="second">
             <p id='school_term'> 
@@ -28,7 +28,14 @@
              </div>
             <div id="fourth">
                 <div id="rcorners2">
-
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
                 </div>
             </div>
         </div>
@@ -39,8 +46,46 @@
 </template>
 
 <script>
+import database from '../firebase.js'
+import firebase from 'firebase'
+import UpdateBox from './UpdateBox.vue'
+
 export default {
-    
+    data:function() {
+        return {
+            userName : ""
+        }
+        
+    },
+
+    methods: {
+        getUserName() {
+            var emailadd = firebase.auth().currentUser.email
+            database.collection("users").doc(emailadd).collection("profile").get().then(
+                (querySnapShot) => {
+                querySnapShot.forEach(doc => {
+                    console.log(doc.data())
+                    var usrname = doc.data().name
+                    this.userName = usrname
+                }
+            )
+            
+            //console.log(usr)
+        }
+        ).catch(function(error) {
+            console.log(error)
+        })
+        
+        }
+    },
+
+    created : function(){
+        this.getUserName()
+
+    },
+    components : {
+        updatebox : UpdateBox
+    }
 }
 </script>
 
@@ -104,11 +149,21 @@ export default {
     }
 
     #rcorners2 {
-        border-radius: 25px;
-        border: 2px solid red;
-        padding: 20px;
-        width: 1000px;
-        height: 300px;
-}
+        margin:4px, 4px; 
+        padding:4px; 
+        
+        width: 1000px; 
+        height: 400px; 
+        background-color: coral;
+        border-color: black;
+        overflow-x: hidden; 
+        overflow-y: auto; 
+        text-align:justify;
+        
+    }      
+
+    .ubox {
+        
+    } 
 
 </style>

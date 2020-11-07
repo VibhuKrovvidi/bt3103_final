@@ -3,15 +3,19 @@
         <div class = "logo">
                 MySID
         </div>
+       
         <h1>Login</h1>
-        <form class="form-group">
+        <form class="form">
+            Email Address: <br>
             <input v-model="emailLogin" type="email" class="form-control" placeholder="Email" required> <br> <br>
+            Password: <br>
             <input v-model="passwordLogin" type="password" class="form-control" placeholder="Password" required> <br> <br>
-            <input type="submit" @click="doLogin($event)">
+            <input type="submit" id="submit" @click="doLogin($event)">
             <p>Don't have an account? <a href="/register">Sign up here</a>
             </p>
             
         </form>
+        
         
     </div>
           
@@ -73,5 +77,35 @@ h1 {
     content: "";
     display: table;
     clear: both;
+}
+
+.form-control {
+    font-size: 1em;
+    width: 260px;
+}
+
+.form {
+   border-radius: 5px;
+    background-color: #ebf1faff;
+    padding: 30px;
+    position: relative;
+    margin: auto;
+    text-align: center;
+    font-size: 18px;
+    width: 30%;
+}
+
+
+#submit {
+  background-color: orange;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#submit:hover {
+  background-color: orangered;
 }
 </style>

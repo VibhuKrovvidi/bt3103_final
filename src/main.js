@@ -32,6 +32,7 @@ myRouter.beforeEach((to, from, next) => {
   if(to.matched.some(record => record.meta.requiresAuth)) {
     //Check if user is not logged in
     if(!firebase.auth().currentUser) {
+      
       next({
         path: '/',
         query: {
@@ -39,7 +40,18 @@ myRouter.beforeEach((to, from, next) => {
         }
       })
     } else { //Means we are logged in
-      //Allow them to move forward
+      if(to.matched.some(record => record.meta.requiresAdmin)) {
+        if(!(firebase.auth().currentUser.email == "admin@nus.com")) {
+          next({
+            path: '/',
+            query: {
+              redirect: to.fullPath
+            }
+          })
+        } else {
+          next();
+        }
+      }
       next();
     }
   } else {

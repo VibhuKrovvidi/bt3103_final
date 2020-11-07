@@ -3,22 +3,24 @@
   <div class="navbar">
       <div class = "topHead">
         <div class = "logo"> MySID </div>
-        <div class="logout_btn">
-            <p> {{currentUser.email}} 
+        <div>
+            
+            <p class="logout_btn"> {{currentUser.email}}
+            
             <button class = "btn" @click="logoutUser"> Logout </button>
             </p>
         </div> 
       </div>
         <nav class="pagecontents">
             
-            <router-link class="custom-nav-item" to="/aboutus" exact>About Us</router-link>
-            <router-link class="custom-nav-item" to="/admin" exact>Admin</router-link>
-            <router-link class="custom-nav-item" to="/dashboard" exact>Dashboard</router-link>
-            <router-link class="custom-nav-item" to="/faq" exact>FAQ</router-link>
-            <router-link class="custom-nav-item" to="/feedback" exact>Feedback</router-link>
-            <router-link class="custom-nav-item" to="/modules" exact>Modules</router-link>
-            <router-link class="custom-nav-item" to="/time" exact>Time</router-link>
-            <router-link class="custom-nav-item" to="/zoning" exact>Zoning</router-link>
+            
+            <router-link class="custom-nav-item" to="/dashboard" exact>Home</router-link>
+            <router-link v-if="isAdmin" class="custom-nav-item" to="/admin" exact>Admin Dashboard </router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/faq" exact>FAQ</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/feedback" exact>Feedback</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/modules" exact>Modules</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/time" exact>Time</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/zoning" exact>Zoning</router-link>
             
             
         </nav> 
@@ -32,13 +34,18 @@ export default {
     data:function() {
         return {
             isLoggedIn: false,
-            currentUser : false
+            currentUser : false,
+            isAdmin: false
         }
     },
     created:function() {
         if(firebase.auth().currentUser) {
             this.isLoggedIn = true;
             this.currentUser = firebase.auth().currentUser;
+            if(this.currentUser.email == "admin@nus.com") {
+                this.isAdmin = true;
+                console.log("Admin Account Logged In")
+            }
         }
 
     },
@@ -109,7 +116,7 @@ export default {
         display: table;
         clear: both;
     }
-/*
+
     .logout_btn {
         float: right;
         padding: 5px;
@@ -123,7 +130,22 @@ export default {
         color: #EF7C00;
         cursor: pointer;
     }
-*/
+
+    .btn {
+        background-color: orange;
+        color: white;
+        padding: 7px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+
+/*
     .logout_btn {
         text-decoration: none;
         float: right;
@@ -156,5 +178,5 @@ export default {
         -webkit-transition: opacity .35s;
         color:#EF7C00;
     }
-
+*/
 </style>
