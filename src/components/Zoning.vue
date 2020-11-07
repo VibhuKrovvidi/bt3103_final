@@ -4,7 +4,8 @@
         
         <h1> Zoning </h1>
         
-        <h3> {{userName}}, your Activity Zone is <span class=info> {{act_zone}}</span> and your Residential Zone is <span class=info> {{res_zone}} </span> </h3>  <!-- this info will be retrieved from firebase -->
+        <h3> Hi {{userName}}! </h3>
+        <h3> Activity Zone: <span class=info> {{act_zone}}</span> Residential Zone: <span class=info> {{res_zone}} </span> </h3>
 
         <br><br>
 
@@ -129,6 +130,7 @@ export default {
 
 .info {
   font-size: 40px;
+  margin-right: 40px;
 
 }
 
@@ -153,6 +155,7 @@ export default {
 i {
   font-size: 36px;
   line-height: 1;
+  
 }
 
 .title {

@@ -9,11 +9,11 @@
         <form>
             <label>Policy Category</label>
             <select v-model="entry.category" required>
-                <option value="Residential">Residential Policies</option>
-                <option value="Health">Health Policies</option>
-                <option value="Zoning">Zoning Policies</option>
-                <option value="Student Services">Student Services</option>
-                <option value="Others">Others</option>
+                <option value="zoning">Zoning Policies</option>
+                <option value="health">Health Policies</option>
+                <option value="residential">Residential Policies</option>
+                <option value="studentServices">Student Services</option>
+                <option value="others">Others</option>
             </select>
 
             <br><br>
