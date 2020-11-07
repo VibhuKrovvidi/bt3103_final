@@ -28,7 +28,14 @@
              </div>
             <div id="fourth">
                 <div id="rcorners2">
-
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
+                    <updatebox class="ubox"> </updatebox><br>
                 </div>
             </div>
         </div>
@@ -41,6 +48,7 @@
 <script>
 import database from '../firebase.js'
 import firebase from 'firebase'
+import UpdateBox from './UpdateBox.vue'
 
 export default {
     data:function() {
@@ -74,6 +82,9 @@ export default {
     created : function(){
         this.getUserName()
 
+    },
+    components : {
+        updatebox : UpdateBox
     }
 }
 </script>
@@ -138,11 +149,21 @@ export default {
     }
 
     #rcorners2 {
-        border-radius: 25px;
-        border: 2px solid red;
-        padding: 20px;
-        width: 1000px;
-        height: 300px;
-}
+        margin:4px, 4px; 
+        padding:4px; 
+        
+        width: 1000px; 
+        height: 400px; 
+        background-color: coral;
+        border-color: black;
+        overflow-x: hidden; 
+        overflow-y: auto; 
+        text-align:justify;
+        
+    }      
+
+    .ubox {
+        
+    } 
 
 </style>

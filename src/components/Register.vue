@@ -105,11 +105,13 @@ export default {
         this.entry
       )
 
-      //console.log(this.entry)
 
+      //console.log(this.entry)
+      
       
     },
 
+    
     
   }
 }

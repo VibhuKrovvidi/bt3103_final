@@ -29,7 +29,7 @@
             <br><br>
 
             <label>Content</label>
-            <textarea v-model="entry.content"></textarea>
+            <textarea v-model="entry.content" rows=15></textarea>
 
             <br><br>
 

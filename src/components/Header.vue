@@ -14,13 +14,13 @@
         <nav class="pagecontents">
             
             
-            <router-link v-if="isAdmin" class="custom-nav-item" to="/admin" exact>Admin</router-link>
-            <router-link class="custom-nav-item" to="/dashboard" exact>Dashboard</router-link>
-            <router-link class="custom-nav-item" to="/faq" exact>FAQ</router-link>
-            <router-link class="custom-nav-item" to="/feedback" exact>Feedback</router-link>
-            <router-link class="custom-nav-item" to="/modules" exact>Modules</router-link>
-            <router-link class="custom-nav-item" to="/time" exact>Time</router-link>
-            <router-link class="custom-nav-item" to="/zoning" exact>Zoning</router-link>
+            <router-link class="custom-nav-item" to="/dashboard" exact>Home</router-link>
+            <router-link v-if="isAdmin" class="custom-nav-item" to="/admin" exact>Admin Dashboard </router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/faq" exact>FAQ</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/feedback" exact>Feedback</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/modules" exact>Modules</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/time" exact>Time</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/zoning" exact>Zoning</router-link>
             
             
         </nav> 

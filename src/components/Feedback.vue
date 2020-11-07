@@ -77,8 +77,10 @@ export default {
                 residency: this.residency,
                 feedback: this.txtfback
             });
-            this.router.push({path: '/feedback'})
             
+            alert("Thanks for submitting your feedback!")
+            this.$router.push('/dashboard')
+
             
         }
     }

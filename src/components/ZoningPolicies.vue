@@ -40,7 +40,7 @@ export default {
 
     methods: {
         redirectToZoning() {
-            this.$router.push({path: '/zoning'})
+            this.$router.push({path: '/admin'})
         }
     }
 
