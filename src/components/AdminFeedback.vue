@@ -8,7 +8,11 @@
     <h2 class=category> A. Faculty </h2>
     <ul>
         <li v-for="fb in faculty" v-bind:key="fb.feedback">
-            <h4> {{fb.feedback}} </h4>
+            <div class=feedback> <p>{{fb.feedback}}</p></div>
+            <div class=reviewed> <p>{{fb.review}}</p> </div>
+
+            <br><br><br><br>
+            
         </li>
     </ul>
     
@@ -16,28 +20,41 @@
     <ul>
         <li v-for="fb in resid" v-bind:key="fb.feedback">  
             <h3> {{fb.residency}} </h3>
-            <p> {{fb.feedback}} </p>
+            <div class=feedback> <p>{{fb.feedback}}</p></div>
+            <div class=reviewed> <p>{{fb.review}}</p> </div>
+
+            <br><br><br><br>
+            
         </li>
     </ul>
         
     <h2 class=category> C. Activities Related </h2>
     <ul>
         <li v-for="fb in activity" v-bind:key="fb.feedback">
-            <p> {{fb.feedback}} </p>
+            <div class=feedback> <p>{{fb.feedback}}</p></div>
+            <div class=reviewed> <p>{{fb.review}}</p> </div>
+
+            <br><br><br><br>
         </li>
     </ul>
 
     <h2 class=category> D. MySID </h2>
     <ul>
         <li v-for="fb in mysid" v-bind:key="fb.feedback">
-            <p> {{fb.feedback}} </p>
+            <div class=feedback> <p>{{fb.feedback}}</p></div>
+            <div class=reviewed> <p>{{fb.review}}</p> </div>
+
+            <br><br><br><br>
         </li>
     </ul>
 
     <h2 class=category> E. Others </h2>
     <ul>
         <li v-for="fb in others" v-bind:key="fb.feedback">
-            <p> {{fb.feedback}} </p>
+            <div class=feedback> <p>{{fb.feedback}}</p></div>
+            <div class=reviewed  @click="reviewed(fb.id)"> <p>{{fb.review}}</p> </div>
+
+            <br><br><br><br>
         </li>
     </ul>
 </div>
@@ -58,10 +75,14 @@ export default {
     },
 
     methods: {
+        reviewed(id) {
+            database.collection("feedback_forms").doc(id).delete()
+        },
+        
         getFaculty() {
-            database.collection("feedback_forms").where("category", "==", "faculty").get().then((querySnapShot) => {
+            database.collection("feedback_forms").where("category", "==", "faculty").get().then((queryDocumentSnapShot) => {
                     let fb = {}
-                    querySnapShot.forEach(doc => {
+                    queryDocumentSnapShot.forEach(doc => {
                         fb = doc.data()
                         console.log(fb)
                         this.faculty.push(fb)
@@ -107,9 +128,9 @@ export default {
         },
 
          getOthers() {
-            database.collection("feedback_forms").where("category", "==", "others").get().then((querySnapShot) => {           
+            database.collection("feedback_forms").where("category", "==", "others").get().then((queryDocumentSnapShot) => {           
                     let fb = {}         
-                    querySnapShot.forEach(doc => {  
+                    queryDocumentSnapShot.forEach(doc => {  
                         fb = doc.data()
                         console.log(fb)
                         this.others.push(fb)
@@ -152,8 +173,28 @@ ul {
 
 p {
     font-size: 18px;
-    background-color: lightgrey;
-    padding: 20px;
 }
+
+
+.feedback {
+    float: left;
+    position: relative;
+    width: 80%;
+    background-color: lightgrey;
+    padding-left: 20px;
+    padding-right: 20px;
+     
+}
+.reviewed {
+    float: left;
+    background-color: #003D7C;
+    position: relative;
+    width: 15%;
+    padding-left: 0px;
+    text-align: center;
+    color: white;
+
+}
+
 
 </style>

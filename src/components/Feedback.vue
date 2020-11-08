@@ -75,13 +75,12 @@ export default {
             database.collection('feedback_forms').add({
                 category: this.cat,
                 residency: this.residency,
-                feedback: this.txtfback
+                feedback: this.txtfback,
+                review: "To be reviewed"
             });
             
             alert("Thanks for submitting your feedback!")
-            this.$router.push('/dashboard')
-
-            
+            this.$router.push('/dashboard')     
         }
     }
 }
