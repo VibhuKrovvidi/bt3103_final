@@ -5,11 +5,19 @@
         <div id=chart>
             <groupedbar v-bind:chartData = "datacollection" :options = "chartOptions"></groupedbar>
         </div>
+        <div id=warn v-show="warn()">
+            <h4> 
+            *Comparison may be inaccurate. Try logging more events to get a more accurate comparison. 
+            </h4>
+        </div>
+        <button v-on:click="tdyslice"> Today </button>
+        <div class="divider"/>
         <button v-on:click="weekslice"> Past Week </button>
         <div class="divider"/>
         <button v-on:click="monthslice"> Past Month </button>
         <div id=right_seg>
             <div id=data>
+                <h4> Difference from recommendations </h4>
                 <ul>
                 <li  v-for="lab in labs" v-bind:key="lab">
                     <h3>  {{lab}} <span id=circle> {{diff_txt[labs.indexOf(lab)]}} hours</span> </h3>
@@ -68,10 +76,8 @@ export default {
                 },
                 title: {
                     display: true,
-                    text: "",
+                    text: [],
                     fontSize: 20,
-                    fontColor: "black"
-                    
                 },
                 layout:{
                     padding:{
@@ -130,35 +136,96 @@ export default {
                 let dates = new Set()
                 querySnapShot.forEach(doc => {
                     if (doc.data().date <= tdymax && doc.data().date >= tdymin) {
-                        this.total++
                         let curr = doc.data()
-                        dates.add(curr.date)
                         //conversion to minutes
                         let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
                         let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
                         //conversion to hours
                         let currSum = (((end-start)/60))
                         if (curr.category == "work") {
+                            this.total++
+                            dates.add(curr.date)
                             work += currSum
                         } else if (curr.category == "social") {
+                            this.total++
+                            dates.add(curr.date)
                             soc += currSum
                         } else if (curr.category == "exercise") {
+                            this.total++
+                            dates.add(curr.date)
                             exe += currSum
                         } else if (curr.category == "sleep") {
+                            this.total++
+                            dates.add(curr.date)
                             slp += currSum
                         }
                     }
                 })
                 let denom = dates.size
                 let res = [work,soc,exe,slp].map(function(x) { return x/denom; })
-                this.datacollection.datasets[0].data = res
+                let rec = [7.5,1.5,0.5,6]
                 if (this.total == 0) {
                     this.datacollection.datasets[1].data = []
+                    this.chartOptions.title.text = ["Time Spent Comparison","No Data"]
                 } else {
-                    this.datacollection.datasets[1].data = [7.5,1.5,0.5,6]
+                    this.datacollection.datasets[1].data = rec
+                    this.datacollection.datasets[0].data = res
+                    this.chartOptions.title.text = ["Time Spent Comparison","Week's Average"]
                     this.getDiff()
                 }
-                this.chartOptions.title.text = "Week's Average"
+            })
+        },
+        tdyslice: function () {
+            this.total=0
+            //getting today's date value
+            let today = new Date()
+            let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
+            //collect user's total
+            database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
+                let work = 0
+                let soc = 0
+                let exe = 0
+                let slp = 0
+                let dates = new Set()
+                querySnapShot.forEach(doc => {
+                    if (doc.data().date == tdymax) {
+                        let curr = doc.data()
+                        //conversion to minutes
+                        let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
+                        let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
+                        //conversion to hours
+                        let currSum = (((end-start)/60))
+                        if (curr.category == "work") {
+                            this.total++
+                            dates.add(curr.date)
+                            work += currSum
+                        } else if (curr.category == "social") {
+                            this.total++
+                            dates.add(curr.date)
+                            soc += currSum
+                        } else if (curr.category == "exercise") {
+                            this.total++
+                            dates.add(curr.date)
+                            exe += currSum
+                        } else if (curr.category == "sleep") {
+                            this.total++
+                            dates.add(curr.date)
+                            slp += currSum
+                        }
+                    }
+                })
+                let denom = dates.size
+                let res = [work,soc,exe,slp].map(function(x) { return x/denom; })
+                let rec = [7.5,1.5,0.5,6]
+                if (this.total == 0) {
+                    this.datacollection.datasets[1].data = []
+                    this.chartOptions.title.text = ["Time Spent Comparison","No Data"]
+                } else {
+                    this.datacollection.datasets[1].data = rec
+                    this.datacollection.datasets[0].data = res
+                    this.chartOptions.title.text = ["Time Spent Comparison","Today"]
+                    this.getDiff()
+                }
             })
         },
         weekslice: function() {
@@ -197,35 +264,48 @@ export default {
                 let dates = new Set()
                 querySnapShot.forEach(doc => {
                     if (doc.data().date <= tdymax && doc.data().date >= tdymin) {
-                        this.total++
                         let curr = doc.data()
-                        dates.add(curr.date)
                         //conversion to minutes
                         let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
                         let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
                         //conversion to hours
                         let currSum = (((end-start)/60))
                         if (curr.category == "work") {
+                            this.total++
+                            dates.add(curr.date)
                             work += currSum
                         } else if (curr.category == "social") {
+                            this.total++
+                            dates.add(curr.date)
                             soc += currSum
                         } else if (curr.category == "exercise") {
+                            this.total++
+                            dates.add(curr.date)
                             exe += currSum
                         } else if (curr.category == "sleep") {
+                            this.total++
+                            dates.add(curr.date)
                             slp += currSum
                         }
                     }
                 })
                 let denom = dates.size
                 let res = [work,soc,exe,slp].map(function(x) { return x/denom; })
-                this.datacollection.datasets[0].data = res
-                this.getDiff()
-                this.chartOptions.title.text = "Week's Average"
+                let rec = [7.5,1.5,0.5,6]
+                if (this.total == 0) {
+                    this.datacollection.datasets[1].data = []
+                    this.chartOptions.title.text = ["Time Spent Comparison","No Data"]
+                } else {
+                    this.datacollection.datasets[1].data = rec
+                    this.datacollection.datasets[0].data = res
+                    this.chartOptions.title.text = ["Time Spent Comparison","Week's Average"]
+                    this.getDiff()
+                }
             })
         },
         monthslice: function() {
             this.total=0
-            //getting today's date value
+             //getting today's date value
             let today = new Date()
             let y = (today.getFullYear())
             let m = (today.getMonth()+1)
@@ -245,30 +325,43 @@ export default {
                 let dates = new Set()
                 querySnapShot.forEach(doc => {
                     if (doc.data().date <= tdymax && doc.data().date >= tdymin) {
-                        this.total++
                         let curr = doc.data()
-                        dates.add(curr.date)
                         //conversion to minutes
                         let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
                         let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
                         //conversion to hours
                         let currSum = (((end-start)/60))
                         if (curr.category == "work") {
+                            this.total++
+                            dates.add(curr.date)
                             work += currSum
                         } else if (curr.category == "social") {
+                            this.total++
+                            dates.add(curr.date)
                             soc += currSum
                         } else if (curr.category == "exercise") {
+                            this.total++
+                            dates.add(curr.date)
                             exe += currSum
                         } else if (curr.category == "sleep") {
+                            this.total++
+                            dates.add(curr.date)
                             slp += currSum
                         }
                     }
                 })
                 let denom = dates.size
                 let res = [work,soc,exe,slp].map(function(x) { return x/denom; })
-                this.datacollection.datasets[0].data = res
-                this.getDiff()
-                this.chartOptions.title.text = "Month's Average"
+                let rec = [7.5,1.5,0.5,6]
+                if (this.total == 0) {
+                    this.datacollection.datasets[1].data = []
+                    this.chartOptions.title.text = ["Time Spent Comparison","No Data"]
+                } else {
+                    this.datacollection.datasets[1].data = rec
+                    this.datacollection.datasets[0].data = res
+                    this.chartOptions.title.text = ["Time Spent Comparison","Month's Average"]
+                    this.getDiff()
+                }
             })
         },
         getDiff: function() {
@@ -290,9 +383,17 @@ export default {
             });
             this.diff_txt = dtxt
         },
+        warn: function() {
+            if (this.total != 0) {
+                let d = this.datacollection.datasets[0].data
+                let curr = d.reduce((x,y) => x+y,0)
+                return (curr <= 7)  //users should log a reasonable amount of events
+                                    //to make reasonable comparisons
+            }
+        },
         rec1: function() {
             let arr = this.diff_val
-            if (arr[0]!=0 || arr[1]!=0 || arr[2]!=0 || arr[3]!=0) {
+            if (arr[0]>0 || arr[1]<0 || arr[2]<0 || arr[3]<0) {
                 return "Your categories could benefit from some reblancing to meet MySID's recommendations!"
             } else if (this.total == 0) {
                 return "Log your schedule to receive inisghts!"
@@ -450,5 +551,9 @@ export default {
         content: "";
         display: table;
         clear: both;
+    }
+
+    #warn {
+        color: brown;
     }
 </style>

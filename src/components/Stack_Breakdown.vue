@@ -20,9 +20,10 @@
 
         <div id=right_seg>
             <div id=data>
+                <h4> Summary (hours) </h4>
                 <ul>
                 <li  v-for="cat in categories" v-bind:key="cat">
-                    <h3>  {{cat}} <span id=circle> {{Math.round(agg[categories.indexOf(cat)])}} hours</span> </h3>
+                    <h3>  {{cat}} <span id=circle> {{Math.ceil(agg[categories.indexOf(cat)])}} hours</span> </h3>
                 </li>
                 </ul>
             </div>
@@ -62,6 +63,17 @@ export default {
             leisure: 0, //anything that is not work & sleep
             categories: [],
             agg: [],
+            //callback pie label formats for with data & no data cases
+            form: {
+                label(tooltipItem, data) {
+                    return `${data.labels[tooltipItem.index]}: ${Math.round(data.datasets[0].data[tooltipItem.index])} Hours`;
+                }
+            },
+            dummy: {
+                label(tooltipItem, data) {
+                    return `${data.labels[tooltipItem.index]}: No Data`;
+                }
+            },
             datacollection: {
                 labels: [],
                 datasets: [{
@@ -80,7 +92,7 @@ export default {
 
                 title: {
                     display: true,
-                    text: [],
+                    text: ["Time Spent Breakdown",""],
                     fontSize: 20,
                     
                 },
@@ -93,11 +105,13 @@ export default {
                     }
                 },
                 tooltips: {
+                    callbacks: {}
+                    /*
                     callbacks: {
                         label(tooltipItem, data) {
                             return `${data.labels[tooltipItem.index]}: ${Math.round(data.datasets[0].data[tooltipItem.index])} Hours`;
                         }
-                    }
+                    }*/
                 },
                 responsive: true,
                 maintainAspectRatio: false
@@ -138,10 +152,20 @@ export default {
                         this.leisure += currSum
                     }
                 })
+                if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","(Historical)"]
+                    this.datacollection.datasets[0].data = this.agg
+                    this.datacollection.labels = this.categories
+                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
+                    this.chartOptions.tooltips.callbacks = this.form
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data"]
+                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
+                    this.datacollection.labels = ["","","","","",""]
+                    this.datacollection.datasets[0].backgroundColor = []
+                    this.chartOptions.tooltips.callbacks = this.dummy
+                }
             })
-            this.datacollection.datasets[0].data = this.agg
-            this.datacollection.labels = this.categories
-            this.chartOptions.title.text = ["Time Spent","(Historical)"]
         },
         historical: function() {
             this.categories = []
@@ -178,10 +202,20 @@ export default {
                         this.leisure += currSum
                     }
                 })
+                if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","(Historical)"]
+                    this.datacollection.datasets[0].data = this.agg
+                    this.datacollection.labels = this.categories
+                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
+                    this.chartOptions.tooltips.callbacks = this.form
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data"]
+                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
+                    this.datacollection.labels = ["","","","","",""]
+                    this.datacollection.datasets[0].backgroundColor = []
+                    this.chartOptions.tooltips.callbacks = this.dummy
+                }
             })
-            this.datacollection.datasets[0].data = this.agg
-            this.datacollection.labels = this.categories
-            this.chartOptions.title.text = ["Time Spent","(Historical)"]
         },
         dateslice: function() {
             //Data Validation
@@ -239,10 +273,20 @@ export default {
                             }
                         }
                     })
+                    if (this.total != 0) {
+                        this.chartOptions.title.text = ["Time Spent Breakdown","(On " + this.dateSelected.toString()+")"]
+                        this.datacollection.datasets[0].data = this.agg
+                        this.datacollection.labels = this.categories
+                        this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
+                        this.chartOptions.tooltips.callbacks = this.form
+                    } else {
+                        this.chartOptions.title.text = ["Time Spent Breakdown","No Data for " +  this.dateSelected.toString()]
+                        this.datacollection.datasets[0].data = [1,1,1,1,1,1]
+                        this.datacollection.labels = ["","","","","",""]
+                        this.datacollection.datasets[0].backgroundColor = []
+                        this.chartOptions.tooltips.callbacks = this.dummy
+                    }
                 })
-                this.datacollection.datasets[0].data = this.agg
-                this.datacollection.labels = this.categories
-                this.chartOptions.title.text = ["Time Spent", "on " + this.dateSelected.toString()]
             }
         },
         weekslice: function() {
@@ -308,10 +352,20 @@ export default {
                         }
                     }
                 })
+                if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","(Week)"]
+                    this.datacollection.datasets[0].data = this.agg
+                    this.datacollection.labels = this.categories
+                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
+                    this.chartOptions.tooltips.callbacks = this.form
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data"]
+                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
+                    this.datacollection.labels = ["","","","","",""]
+                    this.datacollection.datasets[0].backgroundColor = []
+                    this.chartOptions.tooltips.callbacks = this.dummy
+                }
             })
-            this.datacollection.datasets[0].data = this.agg
-            this.datacollection.labels = this.categories
-            this.chartOptions.title.text = ["Time Spent","(Week)"]
         },
         rec: function() {
             //An individual should sleep at least 6hrs (25%)

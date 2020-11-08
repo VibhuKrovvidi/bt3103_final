@@ -5,6 +5,9 @@
         <div id=chart>
             <linechart v-bind:chartData = "datacollection" :options = "chartOptions"></linechart>
         </div>
+        <div id=warn v-show="warn()">
+            <h4> *You seem to have logged concurrent {{this.currSlice}} events over the past week. </h4>
+        </div>
         <button v-on:click="workslice"> Work </button>
         <div class="divider"/>
         <button v-on:click="sleepslice"> Sleep </button>
@@ -13,6 +16,7 @@
 
         <div id=right_seg>
             <div id=data>
+                <h4> Timeload by period (%) </h4>
                 <ul>
                 <li  v-for="period in summaryLab" v-bind:key="period">
                     <h3>  {{period}} <span id=circle> {{currSummary[summaryLab.indexOf(period)]}}%</span> </h3>
@@ -21,7 +25,8 @@
             </div>
             <div id=insights>
                 <h2>Insights</h2>
-                <h4 v-show="!(this.total==0)"> Your timeload for {{this.currSlice}} peaks at {{this.datacollection.labels[this.getPeakIdx()]}} hours.
+                <h4 v-show="!(this.total==0)"> 
+                Your time spent on {{this.currSlice}} peaks at {{this.datacollection.labels[this.getPeakIdx()]}} hours.
                 </h4>
                 <h3 id=recommend>{{this.rec()}}</h3>
             </div>
@@ -60,7 +65,15 @@ export default {
                     borderWidth: 0.5,
                     fill:true,
                     pointRadius:1,
-                }]
+                },
+                {
+                    data: [60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60],
+                    fill: false,
+                    pointRadius: 0,
+                    borderColor: "brown",
+                    borderWidth: 0.8,
+                }
+                ]
             },
             chartOptions: {
                 legend: {
@@ -69,7 +82,7 @@ export default {
 
                 title: {
                     display: true,
-                    text: ["Timeload","(Work)"],
+                    text: ["Time Spent Distribution","No Data"],
                     fontSize: 20,
                     
                 },
@@ -84,8 +97,7 @@ export default {
                 scales: {
                     yAxes: [{
                         ticks:{
-                            min:0,
-                            max: 60
+                            min: 0,
                         }
                     }]
                 },
@@ -102,10 +114,10 @@ export default {
                 let dates = new Set()
                 querySnapShot.forEach(doc => {
                     if (doc.data().date <= this.tdymax && doc.data().date >= this.tdymin) {
-                        this.total++
                         let curr = doc.data()
-                        dates.add(curr.date)
                         if (curr.category == "work") {
+                            this.total++
+                            dates.add(curr.date)
                             let strt_hr = Math.floor(curr.start/100)
                             let end_hr = Math.floor(curr.end/100)
                             let strt_min = curr.start%100
@@ -123,22 +135,28 @@ export default {
                 let res = vals.map(function(x) { return Math.round(x/denom); })
                 this.datacollection.datasets[0].data = res
                 if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Distribution","Average work over the past week"]
                     this.updateSummary()
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Distribution","No Data"]
                 }
-                this.chartOptions.title.text = ["Timeload (Work)","Average over the past week"]
             })
         },
         workslice: function() {
+            this.datacollection.datasets[0].data = []
+            this.total = 0
+            this.summaryLab = []
+            this.currSummary = []
             this.currSlice="work"
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 let vals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
                 let dates = new Set()
                 querySnapShot.forEach(doc => {
                     if (doc.data().date <= this.tdymax && doc.data().date >= this.tdymin) {
-                        this.total++
                         let curr = doc.data()
-                        dates.add(curr.date)
                         if (curr.category == "work") {
+                            this.total++
+                            dates.add(curr.date)
                             let strt_hr = Math.floor(curr.start/100)
                             let end_hr = Math.floor(curr.end/100)
                             let strt_min = curr.start%100
@@ -156,22 +174,28 @@ export default {
                 let res = vals.map(function(x) { return Math.round(x/denom); })
                 this.datacollection.datasets[0].data = res
                 if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Distribution","Average work over the past week"]
                     this.updateSummary()
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Distribution","No Data"]
                 }
-                this.chartOptions.title.text = ["Timeload (Work)","Average over the past week"]
             })
         },
         sleepslice: function() {
+            this.datacollection.datasets[0].data = []
+            this.total = 0
+            this.summaryLab = []
+            this.currSummary = []
             this.currSlice="sleep"
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 let vals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
                 let dates = new Set()
                 querySnapShot.forEach(doc => {
                     if (doc.data().date <= this.tdymax && doc.data().date >= this.tdymin) {
-                        this.total++
                         let curr = doc.data()
-                        dates.add(curr.date)
                         if (curr.category == "sleep") {
+                            this.total++
+                            dates.add(curr.date)
                             let strt_hr = Math.floor(curr.start/100)
                             let end_hr = Math.floor(curr.end/100)
                             let strt_min = curr.start%100
@@ -189,22 +213,28 @@ export default {
                 let res = vals.map(function(x) { return Math.round(x/denom); })
                 this.datacollection.datasets[0].data = res
                 if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Distribution","Average sleep over the past week"]
                     this.updateSummary()
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Distribution","No Data"]
                 }
-                this.chartOptions.title.text = ["Timeload (Sleep)","Average over the past week"]
             })
         },
         socialslice: function() {
+            this.datacollection.datasets[0].data = []
+            this.total = 0
+            this.summaryLab = []
+            this.currSummary = []
             this.currSlice="social"
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 let vals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
                 let dates = new Set()
                 querySnapShot.forEach(doc => {
                     if (doc.data().date <= this.tdymax && doc.data().date >= this.tdymin) {
-                        this.total++
                         let curr = doc.data()
-                        dates.add(curr.date)
                         if (curr.category == "social") {
+                            this.total++
+                            dates.add(curr.date)
                             let strt_hr = Math.floor(curr.start/100)
                             let end_hr = Math.floor(curr.end/100)
                             let strt_min = curr.start%100
@@ -222,18 +252,20 @@ export default {
                 let res = vals.map(function(x) { return Math.round(x/denom); })
                 this.datacollection.datasets[0].data = res
                 if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Distribution","Average social activity over the past week"]
                     this.updateSummary()
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Distribution","No Data"]
                 }
-                this.chartOptions.title.text = ["Timeload (Social Activity)","Average over the past week"]
             })
         },
         updateSummary: function() {
             this.summaryLab = ["0000 to 0600", "0600 to 1200", "1200 to 1800", "1800 to 0000"]
             let v = this.datacollection.datasets[0].data
-            let v1 = Math.round(((v[0] + v[1] + v[2] + v[3] + v[4] + v[5])/360)*100)
-            let v2 = Math.round(((v[6] + v[7] + v[8] + v[9] + v[10] + v[11])/360)*100)
-            let v3 = Math.round(((v[12] + v[13] + v[14] + v[15] + v[16] + v[17])/360)*100)
-            let v4 = Math.round(((v[18] + v[19] + v[20] + v[21] + v[22] + v[23])/360)*100)
+            let v1 = Math.ceil(((v[0] + v[1] + v[2] + v[3] + v[4] + v[5])/360)*100)
+            let v2 = Math.ceil(((v[6] + v[7] + v[8] + v[9] + v[10] + v[11])/360)*100)
+            let v3 = Math.ceil(((v[12] + v[13] + v[14] + v[15] + v[16] + v[17])/360)*100)
+            let v4 = Math.ceil(((v[18] + v[19] + v[20] + v[21] + v[22] + v[23])/360)*100)
             this.currSummary = [v1,v2,v3,v4]
             //console.log(this.currSummary)
         },
@@ -249,33 +281,50 @@ export default {
             }
             return maxIdx
         }, 
+        warn: function() {
+            let v  = this.datacollection.datasets[0].data
+            let m = v[this.getPeakIdx()]
+            return (m>60)
+        },
         rec: function() {
             let v = this.datacollection.datasets[0].data
             let idx = this.getPeakIdx()
             if (this.total == 0) {
-                return "Log your schedule to receive inisghts!"
+                return "Log some " + this.currSlice + " events to receive inisghts!"
             } else if (this.currSlice == "work") {
                 //Logic: Normal people should not be working through the night
+                //Mean work hours from 0000 to 0500 should not be >= 30% of an individual's peak
                 let nightWork = (v[0] + v[1] + v[2] + v[3] + v[4] + v[5])/6
                 let percWk = nightWork/v[idx]
-                if (percWk >= 0.25) {
+                if (percWk >= 0.30) {
                     return "You seem to be working late through the night, make sure you are getting sufficient rest!"
                 } else {
-                    return "Your work timeload seems reasonable."
+                    let tot = this.currSummary.reduce((x,y) => x+y, 0)
+                    //work should not be >= 40% of a day
+                    if (tot >= 160) {
+                        return "Your time spent on work seems a little high."
+                    } else {
+                        return "Your time spent on work seems reasonable."
+                    }
                 }
             } else if (this.currSlice == "sleep") {
-                //Logic: Most sleep should be clock in the first 10 hours of a day
+                //Logic: Most sleep should be clocked from 10pm to 10am
                 let sum = v.reduce((x,y) => x+y,0)
-                let nightSleep = (v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9] + v[10])
+                let nightSleep = (v[22] + v[23] + v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9] + v[10])
                 let percSlp = nightSleep/sum
-                if (percSlp <= 0.50) {
+                if (percSlp <= 0.80) {
                     return "Your circadian rhythm seems off. Take note of this if you have commitments in the morning!"
                 } else {
                     return "Your circadian rhythm seems reasonable."
                 }
             } else {
-                //No logical recommendations for social
-                return "Work hard and play hard!"
+                let socSum = v.reduce((x,y) => x+y, 0)
+                //an individual should spend on average 1 hour a day socialising
+                if (socSum <= 60) {
+                    return "Try to get out there and socialise!"
+                } else {
+                    return "Doing good! Remember to work hard and play harder! :)"
+                }
             }
         },
     }, 
@@ -408,5 +457,9 @@ export default {
         content: "";
         display: table;
         clear: both;
+    }
+
+    #warn {
+        color: brown;
     }
 </style>
