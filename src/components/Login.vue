@@ -41,7 +41,12 @@ export default {
             firebase.auth().signInWithEmailAndPassword(this.emailLogin, this.passwordLogin).then(
                 user => { 
             console.log(user.emailLogin)
-            this.$router.push('/dashboard')
+            if(this.emailLogin == 'admin@nus.com') {
+                this.$router.push('/admin')
+            } else {
+                this.$router.push('/dashboard')
+            }
+            
             },
             err => {
                 alert(err.message)

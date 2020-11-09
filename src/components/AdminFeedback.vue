@@ -18,7 +18,7 @@
     
     <h2 class=category> B. Residential </h2>
     <ul>
-        <li v-for="fb in resid" v-bind:key="fb.feedback">  
+        <li v-for="fb in resid" v-bind:key="fb.feedback" >  
             <h3> {{fb.residency}} </h3>
             <div class=feedback> <p>{{fb.feedback}}</p></div>
             <div class=reviewed> <p>{{fb.review}}</p> </div>

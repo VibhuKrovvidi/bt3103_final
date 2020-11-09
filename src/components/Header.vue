@@ -14,7 +14,7 @@
         <nav class="pagecontents">
             
             
-            <router-link class="custom-nav-item" to="/dashboard" exact>Home</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/dashboard" exact>Home</router-link>
             <router-link v-if="isAdmin" class="custom-nav-item" to="/admin" exact>Admin Dashboard </router-link>
             <router-link v-if="!isAdmin" class="custom-nav-item" to="/faq" exact>FAQ</router-link>
             <router-link v-if="!isAdmin" class="custom-nav-item" to="/feedback" exact>Feedback</router-link>
