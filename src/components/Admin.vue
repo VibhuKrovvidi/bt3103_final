@@ -1,12 +1,12 @@
 <template>
     <div> 
         <navi></navi>
-
         <div class="blocks">
         <h1> Admin Dashboard </h1>
         <br><br>
-            <div class="usersplot">
-                USER PLOT
+            <div class="chart">
+                <login></login>
+                
             </div>
             <div class=box v-on:click="redirectToPolicies()">
                 <h4>Update Policies</h4>
@@ -23,7 +23,13 @@
 </template>
 
 <script>
+import LoginLine from '../LoginLine.js'
+
 export default {
+    components: {
+        'login': LoginLine,
+    },
+
     methods: {
         redirectToPolicies() {
             this.$router.push('/admin/policies')
@@ -43,6 +49,12 @@ export default {
 </script>
 
 <style scoped>
+
+.chart {
+    width: 40%;
+    padding: 20px;
+
+}
 
 .box {
   padding: 20px;

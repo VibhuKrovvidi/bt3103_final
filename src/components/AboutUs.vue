@@ -71,21 +71,24 @@ export default {
         background-color:white;
         margin: auto;
     }
+    
     #first {
-        width: 500px;
+        width: 450px;
         float: left;
         height: 300px;
         background-color:#526C80;
         border-color: white;
+        padding: 25px;
     }
     
     
     #second {
-        width: 500px;
+        width: 450px;
         float: left;
         height: 300px;
         background-color: #F5AD69;
         border-color: white;
+        padding: 25px;
     }
 
     #second:hover{
