@@ -24,6 +24,7 @@
 
 <script>
 import firebase from 'firebase';
+import database from '../firebase.js'
 
 export default {
     data:function(){
@@ -46,6 +47,20 @@ export default {
             } else {
                 this.$router.push('/dashboard')
             }
+            var date = new Date()            
+            var dateString = date.getFullYear() + "-" + date.getMonth() + "-" + (date.getDate()+1);
+            console.log(dateString)
+            database.collection("login").doc(dateString).get().then(doc => {
+                if (doc.exists) {
+                    var count = doc.data().count
+                    var x = count + 1
+                    database.collection("login").doc(dateString).update({count: x})
+                } else {
+                    database.collection("login").doc(dateString).set({
+                        count: 1
+                    })
+                }
+            })
             
             },
             err => {
