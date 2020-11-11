@@ -48,7 +48,7 @@ export default {
                 this.$router.push('/dashboard')
             }
             var date = new Date()            
-            var dateString = date.getFullYear() + "-" + date.getMonth() + "-" + (date.getDate()+1);
+            var dateString = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
             console.log(dateString)
             database.collection("login").doc(dateString).get().then(doc => {
                 if (doc.exists) {
