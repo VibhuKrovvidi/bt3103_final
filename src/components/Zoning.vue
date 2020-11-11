@@ -9,19 +9,19 @@
 
         <br><br>
 
-        <div class=box>
+        <div class=box v-on:click="redirectToZoningPolicies()">
             <i class="fas fa-university"></i>
-            <p class=title v-on:click="redirectToZoningPolicies()">University Policies</p>
+            <p class=title>University Policies</p>
         </div>
 
-        <div class=box>
+        <div class=box v-on:click="redirectToZoningDeclaration()">
             <i class="fas fa-heartbeat"></i>
-            <p class=title v-on:click="redirectToZoningDeclaration()">Health and Travel Declarations</p>
+            <p class=title>Health and Travel Declarations</p>
         </div>
 
-        <div class=box>
+        <div class=box v-on:click="redirectToZoningResources()">
             <i class="fas fa-info"></i>
-            <p class=title v-on:click="redirectToZoningResources()">External Resources</p>
+            <p class=title>External Resources</p>
         </div>
     </div>
 </template>
@@ -139,17 +139,24 @@ export default {
   width: 22%;
   position: relative;
   overflow: hidden;
-  float: left;
+  float: center;
   border-radius: 20px;
-  margin: 0 20px 10px 80px;
+  margin: 0% 1.5%;
   background:#ebf1faff;
   transition: all 0.3s ease-in-out;
   text-align: center;
+  display: inline-block;
 }
 
 .box:hover {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.box:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 i {
