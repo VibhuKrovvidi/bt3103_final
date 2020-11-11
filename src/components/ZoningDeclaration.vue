@@ -8,14 +8,13 @@
 
         <div class=box v-on:click="redirectToHealth()">
             <h4>Health Declaration</h4>
-            <p>All students who come to campus, and students staying in hostels must declare your temperature twice a day.</p>
+            <p>All students who come to campus, and students staying in hostels must declare your temperature twice a day.<br><br></p>
         </div>
 
         <div class=box v-on:click="redirectToTravel()">
             <h4>Travel Declaration</h4>
             <p>In the light of the current public health concern relating to COVID-19, you are required to declare your travel plans if you have not previously done so.</p>
         </div>
-
 
         <button id=back v-on:click="redirectToZoning()"> Back </button>
 
@@ -48,18 +47,26 @@ export default {
   padding: 20px;
   width: 24%;
   position: relative;
-  float: left;
+  overflow: hidden;
+  float: center;
   border-radius: 20px;
-  margin: 0 5px 10px 250px;
+  margin: 0% 2%;
   background:#ebf1faff;
   text-align: center;
   font-weight: 700;
   font-size: 18px;
+  display: inline-block;
 }
 
 .box:hover {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.box:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 p {

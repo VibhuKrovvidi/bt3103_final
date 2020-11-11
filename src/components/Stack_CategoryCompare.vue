@@ -7,7 +7,7 @@
         </div>
         <div id=warn v-show="warn()">
             <h4> 
-            *Comparison may be inaccurate. Try logging more events to get a more accurate comparison. 
+            *Comparison may be inaccurate. Try logging more events in the selected period to get a more accurate comparison. 
             </h4>
         </div>
         <button v-on:click="tdyslice"> Today </button>
@@ -17,7 +17,7 @@
         <button v-on:click="monthslice"> Past Month </button>
         <div id=right_seg>
             <div id=data>
-                <h4> Difference from recommendations </h4>
+                <h4> Difference from Recommendations <br> (Rounded Nett Differences) </h4>
                 <ul>
                 <li  v-for="lab in labs" v-bind:key="lab">
                     <h3>  {{lab}} <span id=circle> {{diff_txt[labs.indexOf(lab)]}} hours</span> </h3>
@@ -177,6 +177,7 @@ export default {
         },
         tdyslice: function () {
             this.total=0
+            this.datacollection.datasets[0].data = []
             //getting today's date value
             let today = new Date()
             let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
@@ -230,6 +231,7 @@ export default {
         },
         weekslice: function() {
             this.total=0
+            this.datacollection.datasets[0].data = []
             //getting today's date value
             let today = new Date()
             let y = today.getFullYear()
@@ -305,6 +307,7 @@ export default {
         },
         monthslice: function() {
             this.total=0
+            this.datacollection.datasets[0].data = []
              //getting today's date value
             let today = new Date()
             let y = (today.getFullYear())
@@ -315,7 +318,7 @@ export default {
                 y = y-1
                 m = 12
             }
-            let tdymin = y*10000 + m*100 + d
+            let tdymin = y*10000 + (m-1)*100 + d
             //collect user's total
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 let work = 0

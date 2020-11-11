@@ -40,7 +40,7 @@ export default {
 
     methods: {
         redirectToZoning() {
-            this.$router.push({path: '/admin'})
+            this.$router.push({path: '/zoning'})
         }
     }
 
@@ -52,18 +52,18 @@ export default {
 
 <style scoped>
 button {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        font-size: 16px;
-        margin: 20px;
-        text-align:'center';
-        width: 100px;
-        height: 40px;
-        background: orange;
-        color: white;
-        background-color: #EF7C00;
-        border-radius: 4px;
-        float: center;
-    }
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    margin: 20px;
+    text-align:'center';
+    width: 100px;
+    height: 40px;
+    background: orange;
+    color: white;
+    background-color: #EF7C00;
+    border-radius: 4px;
+    float: center;
+}
 
 button:hover {
     background-color: orangered;
@@ -78,20 +78,28 @@ button:hover {
 }
 
 table {
-        border-collapse:collapse;
-        margin-left: auto;
-        margin-right: auto;
-        width: 80%;   
-      }
+    border-collapse:collapse;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    /*display: inline-block;*/
+    float: center
+}
+
+table:after {
+    content: "";
+    display: table;
+    clear: both;
+}
 
 td, th {
-        border: 1px solid black;
-        padding: 8px;
-      }
+    border: 1px solid black;
+    padding: 8px;
+}
 
 tr:nth-child(even){
-        background-color: #ebf1faff;
-      }
+    background-color: #ebf1faff;
+}
 
 </style>
 

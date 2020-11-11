@@ -13,7 +13,7 @@
 
         <div class=box v-on:click="redirectToMFA()">
             <h4>Ministry of Foreign Affairs (MFA)</h4>
-            <p>Travel Advisories</p>
+            <p>Travel Advisories <br><br></p>
         </div>
 
 
@@ -48,18 +48,26 @@ export default {
   padding: 20px;
   width: 24%;
   position: relative;
-  float: left;
+  overflow: hidden;
+  float: center;
   border-radius: 20px;
-  margin: 0 5px 10px 250px;
+  margin: 0% 2%;
   background:#ebf1faff;
   text-align: center;
   font-weight: 700;
   font-size: 18px;
+  display: inline-block;
 }
 
 .box:hover {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.box:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 p {

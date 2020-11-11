@@ -16,7 +16,7 @@
 
         <div id=right_seg>
             <div id=data>
-                <h4> Timeload by period (%) </h4>
+                <h4> Timeload by period <br> (Rounded %) </h4>
                 <ul>
                 <li  v-for="period in summaryLab" v-bind:key="period">
                     <h3>  {{period}} <span id=circle> {{currSummary[summaryLab.indexOf(period)]}}%</span> </h3>
