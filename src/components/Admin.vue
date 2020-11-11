@@ -6,6 +6,7 @@
         <br><br>
             <div class="chart">
                 <login></login>
+                <user></user>
                 
             </div>
             <div class=box v-on:click="redirectToPolicies()">
@@ -24,10 +25,12 @@
 
 <script>
 import LoginLine from '../LoginLine.js'
+import UserPie from '../UserPie.js'
 
 export default {
     components: {
         'login': LoginLine,
+        'user': UserPie
     },
 
     methods: {
