@@ -6,9 +6,17 @@
         <br><br>
             <div class="chart">
                 <login></login>
-                <user></user>
-                
             </div>
+
+            <div class="chart">
+                <user></user>
+            </div>
+
+            <div class="chart">
+                <aggtime></aggtime>
+            </div>
+
+
             <div class=box v-on:click="redirectToPolicies()">
                 <h4>Update Policies</h4>
             </div>
@@ -16,6 +24,7 @@
             <div class=box v-on:click="redirectToFAQ()">
                 <h4>Update FAQ</h4>
             </div>
+
             <div class=box v-on:click="redirectToFeedback()">
                 <h4>View Feedback</h4>
             </div>
@@ -26,11 +35,13 @@
 <script>
 import LoginLine from '../LoginLine.js'
 import UserPie from '../UserPie.js'
+import Time from '../AggregateTime.js'
 
 export default {
     components: {
         'login': LoginLine,
-        'user': UserPie
+        'user': UserPie,
+        'aggtime': Time
     },
 
     methods: {
@@ -54,9 +65,9 @@ export default {
 <style scoped>
 
 .chart {
-    width: 40%;
+    width: 30%;
     padding: 20px;
-
+    float: left;
 }
 
 .box {
