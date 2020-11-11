@@ -1,6 +1,7 @@
 <template>
 <div>
     <navi></navi>
+    <br><br>
     <h1> Admin </h1>
     <h3> Feedback </h3>
 
@@ -145,13 +146,14 @@ export default {
 
 <style scoped>
 .category {
-  padding: 30px;
-  width: 80%;
+  padding: 2.5%;
+  width: 90%;
   position: relative;
+  overflow: hidden;
   border-radius: 20px;
-  margin: auto;
-  margin-bottom: 20px;
+  margin: 0 2.5% 2% 2.5%;
   background:#ebf1faff;
+  transition: all 0.3s ease-in-out;
   text-align: left;
 }
 
@@ -173,8 +175,8 @@ p {
     position: relative;
     width: 80%;
     background-color: lightgrey;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 2%;
+    padding-right: 2%;
      
 }
 .reviewed {

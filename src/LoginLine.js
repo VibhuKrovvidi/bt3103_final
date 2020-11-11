@@ -21,7 +21,8 @@ export default {
             },
 
 
-            responsive: true
+            responsive: true,
+            maintainAspectRatio: false
         }       
     }),
 

@@ -3,6 +3,7 @@
 <template>
     <div class="page"> 
         <navi></navi>
+        <br><br>
         <h1> Feedback </h1>
         <h3>Give the University Administration your feedback. Fill up the form below and click submit to provide the feedback.</h3> 
         

@@ -8,7 +8,7 @@
         <div id="second">
             <p id='school_term'> 
                 <br>
-                AY20/21 Semester 1, Week 13 </p>
+                AY20/21 Semester 1, {{this.wk}} </p>
         </div>
         
     </div>
@@ -81,7 +81,11 @@ export default {
             hover3 : false,
             hover4 : false,
             policies: [],
-            showcontents: false
+            showcontents: false,
+            //hardcoded for AY20/21 Sem 1
+            semStart: "2020-8-11", //used to compute week
+            wk: '',
+            weeks: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Recess Week", "Week 7", "Week 8", "Week 9", "Week 10", "Week 11", "Week 12", "Week 13", "Reading Week", "Exam Week 1", "Exam Week 2", "Vacation"],
         }
         
     },
@@ -144,9 +148,17 @@ export default {
     },
 
     created : function(){
-        this.getUserName(),
+        this.getUserName()
         this.get_policies()
-
+        var curr = new Date() //Today
+        var strt = new Date("2020-08-10") //sem start
+        var d = (curr.getTime()-strt.getTime()) / (1000*3600*24)
+        var n = Math.floor(d/7)
+        if (n>=17) {
+            this.wk = "Vacation"
+        } else {
+            this.wk = this.weeks[n]
+        }
     },
     components : {
         //updatebox : UpdateBox
@@ -160,17 +172,30 @@ export default {
         background-color:white;
         margin: auto;
     }
+
+    #container:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
     #first {
-        width: 600px;
+        width: auto;
         float: left;
         height: 100px;
-        align-content: left ;
+        margin-top: 0px;
+        margin-left: 25px;
+        padding-left: 0px;
+        padding-top: 0px;
     }
     #second {
-        width: 500px;
+        width: auto;
         float: right;
         height: 100px;
-
+        margin-top: 0px;
+        margin-right: 25px;
+        padding-right: 0px;
+        padding-top: 0px;
     }
 
     #personal_message {
@@ -204,15 +229,16 @@ export default {
         margin-left: 0px;
         text-decoration: none;
         padding-right: 0px;
+
     }
 
 
     #bx1 {
         position: absolute;
         height: 300px;
-        width: 600px;
+        width: 500px;
         top: 0;
-        left: 0;
+        left: 25px;
         background-color:#526C80;
         border: none;
         color: white;
@@ -230,7 +256,7 @@ export default {
         height: 300px;
         width: 300px;
         top: 0px;
-        left: 600px;
+        left: 525px;
         background-color: #F5AD69;
         border: none;
         color: white;
@@ -247,7 +273,7 @@ export default {
         height: 300px;
         width: 300px;
         top: 300px;
-        left: 0;
+        left: 25px;
         background-color: #F5AD69;
         border: none;
         color: white;
@@ -262,9 +288,9 @@ export default {
     #bx4 {
         position: absolute;
         height: 300px;
-        width: 600px;
+        width: 500px;
         top: 300px;
-        left: 300px;
+        left: 325px;
         background-color:#526C80;
         border: none;
         color: white;
@@ -278,12 +304,13 @@ export default {
 
     #bx5 {
         position: absolute;
-        height: 600px;
-        width: 600px;
+        height: 560px;
+        width: auto;
         top: 0;
-        left: 900px;
+        left: 825px;
         border: none;
         overflow: auto;
+        margin-right: 25px;
     }
 
     .category {
