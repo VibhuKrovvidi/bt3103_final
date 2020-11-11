@@ -16,7 +16,8 @@ export default {
         options: {
             title: {
                 display: true,
-                text: "Number of logins per day"
+                text: "Number of logins per day",
+                fontSize: 14
             },
 
 
@@ -26,7 +27,7 @@ export default {
 
     methods: {
         fetchItems: function() {
-            database.collection('login').get().then (querySnapShot => {
+            database.collection('login').get().then(querySnapShot => {
                 querySnapShot.forEach(doc => {                   
                     var date = doc.id
                     this.datacollection.labels.push(date)
