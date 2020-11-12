@@ -105,7 +105,6 @@ export default {
       //Update user's profile details.
       database.collection("users").doc(this.emailLogin).set({
           //user doucment require a field to exist
-          dummy: "x",
       })
       database.collection("users").doc(this.emailLogin).collection("profile").add(
         this.entry

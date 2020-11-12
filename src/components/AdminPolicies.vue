@@ -1,6 +1,7 @@
 <template>
     <div>
         <navi></navi>
+        <br><br>
         <h1> Admin </h1>
         <h3> Policies </h3>
 
