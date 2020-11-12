@@ -7,9 +7,9 @@
         </div>
 
         <div v-show="dteSel">
-        Enter Date (YYYYMMDD):
+        Enter Date:
             <br>
-            <input type="number" v-model.number="dateSelected" min="0" required/>
+            <input type=date v-model="dateSelected" required/>
         </div>
         <button v-on:click="historical"> Historical </button>
         <div class="divider"/>
@@ -20,9 +20,10 @@
 
         <div id=right_seg>
             <div id=data>
+                <h4> Summary <br> (Rounded Hours) </h4>
                 <ul>
                 <li  v-for="cat in categories" v-bind:key="cat">
-                    <h3>  {{cat}} <span id=circle> {{Math.round(agg[categories.indexOf(cat)])}} hours</span> </h3>
+                    <h3>  {{cat}} <span id=circle> {{Math.ceil(agg[categories.indexOf(cat)])}} hours</span> </h3>
                 </li>
                 </ul>
             </div>
@@ -52,7 +53,7 @@ export default {
         return {
             usr: firebase.auth().currentUser.email,
             dteSel: false,
-            dateSelected: '',
+            dateSelected: new Date(),
             mth31: [1,3,5,7,8,10,12],
             mth30: [4,6,9,11],
             //counts for insights (cannot extract data from observer)
@@ -62,6 +63,17 @@ export default {
             leisure: 0, //anything that is not work & sleep
             categories: [],
             agg: [],
+            //callback pie label formats for with data & no data cases
+            form: {
+                label(tooltipItem, data) {
+                    return `${data.labels[tooltipItem.index]}: ${Math.round(data.datasets[0].data[tooltipItem.index])} Hours`;
+                }
+            },
+            dummy: {
+                label(tooltipItem, data) {
+                    return `${data.labels[tooltipItem.index]}: No Data`;
+                }
+            },
             datacollection: {
                 labels: [],
                 datasets: [{
@@ -80,7 +92,7 @@ export default {
 
                 title: {
                     display: true,
-                    text: [],
+                    text: ["Time Spent Breakdown",""],
                     fontSize: 20,
                     
                 },
@@ -93,11 +105,13 @@ export default {
                     }
                 },
                 tooltips: {
+                    callbacks: {}
+                    /*
                     callbacks: {
                         label(tooltipItem, data) {
                             return `${data.labels[tooltipItem.index]}: ${Math.round(data.datasets[0].data[tooltipItem.index])} Hours`;
                         }
-                    }
+                    }*/
                 },
                 responsive: true,
                 maintainAspectRatio: false
@@ -138,10 +152,20 @@ export default {
                         this.leisure += currSum
                     }
                 })
+                if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","(Historical)"]
+                    this.datacollection.datasets[0].data = this.agg
+                    this.datacollection.labels = this.categories
+                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
+                    this.chartOptions.tooltips.callbacks = this.form
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data"]
+                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
+                    this.datacollection.labels = ["","","","","",""]
+                    this.datacollection.datasets[0].backgroundColor = []
+                    this.chartOptions.tooltips.callbacks = this.dummy
+                }
             })
-            this.datacollection.datasets[0].data = this.agg
-            this.datacollection.labels = this.categories
-            this.chartOptions.title.text = ["Time Spent","(Historical)"]
         },
         historical: function() {
             this.categories = []
@@ -178,72 +202,77 @@ export default {
                         this.leisure += currSum
                     }
                 })
+                if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","(Historical)"]
+                    this.datacollection.datasets[0].data = this.agg
+                    this.datacollection.labels = this.categories
+                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
+                    this.chartOptions.tooltips.callbacks = this.form
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data"]
+                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
+                    this.datacollection.labels = ["","","","","",""]
+                    this.datacollection.datasets[0].backgroundColor = []
+                    this.chartOptions.tooltips.callbacks = this.dummy
+                }
             })
-            this.datacollection.datasets[0].data = this.agg
-            this.datacollection.labels = this.categories
-            this.chartOptions.title.text = ["Time Spent","(Historical)"]
         },
         dateslice: function() {
-            //Data Validation
-            if (this.dateSelected <= 19000101) { //minimum date 1900/01/01
-                alert("Invalid Date!")
-            } else if (this.dateSelected > 99999999 || this.dateSelected <= 9999999) {
-                alert("Date must contain exactly 8 characters!")
-            } else if (Math.floor((this.dateSelected%10000)/100) > 12) {
-                alert("Month cannot be over 12!")
-            } else if (this.mth31.includes((Math.floor(this.dateSelected/100))%100) && this.dateSelected%100 > 31) {
-                alert("Invalid Date, Month only has 31 days!")
-            } else if (this.mth30.includes((Math.floor(this.dateSelected/100))%100) && this.dateSelected%100 > 30) {
-                alert("Invalid Date, Month only has 30 days!")
-            } else if ((Math.floor(this.dateSelected/100))%100==2 && (Math.floor(this.dateSelected/10000))%4==0 && this.dateSelected%100 > 29) {
-                alert("Invalid Date, Month only has 29 days!")
-            } else if ((Math.floor(this.dateSelected/100))%100==2 && (Math.floor(this.dateSelected/10000))%4!=0 && this.dateSelected%100 > 28) {
-                alert("Invalid Date, Month only has 28 days!")
-            } else {
-                this.dteSel = !this.dteSel
-                //reset
-                this.categories = []
-                this.agg = []
-                this.total = 0
-                this.sleep = 0
-                this.leisure = 0
-                this.work = 0
-                //getting today's date value
-                database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
-                    querySnapShot.forEach(doc => {
-                        if (doc.data().date == this.dateSelected) {
-                            let curr = doc.data()
-                            let label = curr.category
-                            let idx = this.categories.indexOf(label)
-                            //conversion to minutes
-                            let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
-                            let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
-                            //conversion to hours
-                            let currSum = (((end-start)/60))
-                            if (idx == '-1') {
-                                this.categories.push(label)
-                                this.agg.push(currSum)
-                            } else {
-                                this.agg[idx] += currSum
-                            }
-                            //data for recommendations
-                            if (label == "work") {
-                                this.total += currSum
-                                this.work += currSum
-                            } else if (label == "sleep") {
-                                this.total += currSum
-                                this.sleep += currSum
-                            } else {
-                                this.total += currSum
-                                this.leisure += currSum
-                            }
+            var sel = new Date(this.dateSelected)
+            var dte = (sel.getFullYear()*10000) + ((sel.getMonth()+1)*100) + (sel.getDate())
+            this.dteSel = !this.dteSel
+            //reset
+            this.categories = []
+            this.agg = []
+            this.total = 0
+            this.sleep = 0
+            this.leisure = 0
+            this.work = 0
+            //getting today's date value
+            database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
+                querySnapShot.forEach(doc => {
+                    if (doc.data().date == dte) {
+                        let curr = doc.data()
+                        let label = curr.category
+                        let idx = this.categories.indexOf(label)
+                        //conversion to minutes
+                        let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
+                        let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
+                        //conversion to hours
+                        let currSum = (((end-start)/60))
+                        if (idx == '-1') {
+                            this.categories.push(label)
+                            this.agg.push(currSum)
+                        } else {
+                            this.agg[idx] += currSum
                         }
-                    })
+                        //data for recommendations
+                        if (label == "work") {
+                            this.total += currSum
+                            this.work += currSum
+                        } else if (label == "sleep") {
+                            this.total += currSum
+                            this.sleep += currSum
+                        } else {
+                            this.total += currSum
+                            this.leisure += currSum
+                        }
+                    }
                 })
-                this.datacollection.datasets[0].data = this.agg
-                this.datacollection.labels = this.categories
-                this.chartOptions.title.text = ["Time Spent", "on " + this.dateSelected.toString()]
-            }
+                if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","(On " + dte.toString()+")"]
+                    this.datacollection.datasets[0].data = this.agg
+                    this.datacollection.labels = this.categories
+                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
+                    this.chartOptions.tooltips.callbacks = this.form
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data for " +  dte.toString()]
+                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
+                    this.datacollection.labels = ["","","","","",""]
+                    this.datacollection.datasets[0].backgroundColor = []
+                    this.chartOptions.tooltips.callbacks = this.dummy
+                }
+            })
         },
         weekslice: function() {
             //reset
@@ -308,10 +337,20 @@ export default {
                         }
                     }
                 })
+                if (this.total != 0) {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","(Week)"]
+                    this.datacollection.datasets[0].data = this.agg
+                    this.datacollection.labels = this.categories
+                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
+                    this.chartOptions.tooltips.callbacks = this.form
+                } else {
+                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data"]
+                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
+                    this.datacollection.labels = ["","","","","",""]
+                    this.datacollection.datasets[0].backgroundColor = []
+                    this.chartOptions.tooltips.callbacks = this.dummy
+                }
             })
-            this.datacollection.datasets[0].data = this.agg
-            this.datacollection.labels = this.categories
-            this.chartOptions.title.text = ["Time Spent","(Week)"]
         },
         rec: function() {
             //An individual should sleep at least 6hrs (25%)
@@ -334,13 +373,13 @@ export default {
         },
     }, 
     created() {
-        this.fetchItems() 
         var tdy = new Date()
-        var yr = tdy.getFullYear()*10000
-        var mth = (tdy.getMonth()+1)*100
+        var yr = tdy.getFullYear()
+        var mth = (tdy.getMonth()+1)
         var day = (tdy.getDate())
-        var final = yr+mth+day
+        var final = yr.toString() + "-" + mth.toString() + "-" + day.toString()
         this.dateSelected = final
+        this.fetchItems() 
     },
 }
 </script>
@@ -367,18 +406,22 @@ export default {
     }
 
     #chart {
-        padding:20px;
+        padding: 1%;
         float:left;
         width:40%;
     }
 
     #data {
         float: left;
-        width:20%;
-        padding:20px;
+        width:25%;
+        padding:1%;
     }
 
     ul {
+        /*
+        padding-top: 20px;
+        padding-bottom: 20px;
+        */
         border-style: dotted;
         border-width: 2px;
         list-style-type: none;
@@ -403,7 +446,7 @@ export default {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         font-size: 20px;
         text-align:'center';
-        width: 200px;
+        width: 15%;
         height: 50px;
         background: orange;
         color: white;
@@ -417,7 +460,7 @@ export default {
     }
 
     .divider{
-        width:20px;
+        width:1%;
         height:auto;
         display:inline-block;
     }
@@ -429,7 +472,7 @@ export default {
         margin-top: 30px;
         margin-right: 30px;
         border-radius: 16px;
-        padding: 20px;
+        padding: 1%;
         color: white;
         background-color: #EF7C00;
     }

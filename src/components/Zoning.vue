@@ -1,27 +1,29 @@
 <template>
     <div>
         <navi></navi>
-        
+        <br><br>
         <h1> Zoning </h1>
         
         <h3> Hi {{userName}}! </h3>
-        <h3> Activity Zone: <span class=info> {{act_zone}}</span> Residential Zone: <span class=info> {{res_zone}} </span> </h3>
+        <h3> Activity Zone: <span class=info>{{act_zone}}</span> Residential Zone: <span class=info>{{res_zone}} </span> </h3>
 
         <br><br>
 
-        <div class=box>
-            <i class="fas fa-university"></i>
-            <p class=title v-on:click="redirectToZoningPolicies()">University Policies</p>
-        </div>
+        <div class=row>
+            <div class=box v-on:click="redirectToZoningPolicies()">
+                <i class="fas fa-university"></i>
+                <p class=title>University Policies</p>
+            </div>
 
-        <div class=box>
-            <i class="fas fa-heartbeat"></i>
-            <p class=title v-on:click="redirectToZoningDeclaration()">Health and Travel Declarations</p>
-        </div>
+            <div class=box v-on:click="redirectToZoningDeclaration()">
+                <i class="fas fa-heartbeat"></i>
+                <p class=title>Health and Travel Declarations</p>
+            </div>
 
-        <div class=box>
-            <i class="fas fa-info"></i>
-            <p class=title v-on:click="redirectToZoningResources()">External Resources</p>
+            <div class=box v-on:click="redirectToZoningResources()">
+                <i class="fas fa-info"></i>
+                <p class=title>External Resources</p>
+            </div>
         </div>
     </div>
 </template>
@@ -139,17 +141,25 @@ export default {
   width: 22%;
   position: relative;
   overflow: hidden;
-  float: left;
+  float: center;
   border-radius: 20px;
-  margin: 0 20px 10px 80px;
+  margin: 0% 1.5%;
   background:#ebf1faff;
   transition: all 0.3s ease-in-out;
   text-align: center;
+  display: inline-block;
+  cursor: pointer;
 }
 
 .box:hover {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 i {

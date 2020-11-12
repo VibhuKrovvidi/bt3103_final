@@ -3,6 +3,7 @@
 <template>
     <div class="page"> 
         <navi></navi>
+        <br><br>
         <h1> Feedback </h1>
         <h3>Give the University Administration your feedback. Fill up the form below and click submit to provide the feedback.</h3> 
         
@@ -75,13 +76,12 @@ export default {
             database.collection('feedback_forms').add({
                 category: this.cat,
                 residency: this.residency,
-                feedback: this.txtfback
+                feedback: this.txtfback,
+                review: "To be reviewed"
             });
             
             alert("Thanks for submitting your feedback!")
-            this.$router.push('/dashboard')
-
-            
+            this.$router.push('/dashboard')     
         }
     }
 }

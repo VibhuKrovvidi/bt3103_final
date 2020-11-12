@@ -1,6 +1,7 @@
 <template>
     <div>
         <navi></navi>
+        <br><br>
         <h1> Time </h1>
         <div id=top>
             <h2 style="text-align:left" id=left_top>Good {{timeOfDay()}}, {{userName}}!</h2>
@@ -10,14 +11,14 @@
             </div> 
         </div>
         <br>
-        <hr color="lightgrey">
-        <mmt></mmt>
-        <hr color="lightgrey">
-        <s1></s1>
-        <hr color="lightgrey">
-        <s2></s2>
-        <hr color="lightgrey">
-        <s3></s3>
+        <hr>
+        <mmt id=stackItem></mmt>
+        <hr>
+        <s1 id=stackItem></s1>
+        <hr>
+        <s2 id=stackItem></s2>
+        <hr>
+        <s3 id=stackItem></s3>
     </div>
 </template>
 
@@ -90,6 +91,13 @@ export default {
 </script>
 
 <style scoped>
+
+    hr {
+        width: 98%;
+        margin: 0 1% 0 1%;
+        color: lightgrey;
+    }
+
     #left_top {
         float: left;
     }
@@ -98,6 +106,15 @@ export default {
         float: right;
     }
 
+    #top {
+        width: 95%;
+        margin: 0 2.5% 0 2.5%;
+    }
+
+    #stackItem {
+        width: 95%;
+        margin: 0 2.5% 0 2.5%;
+    }
     /*
     #top {
         border-style: solid;

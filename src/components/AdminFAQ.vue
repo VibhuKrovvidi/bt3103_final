@@ -1,6 +1,7 @@
 <template>
     <div>
         <navi></navi>
+        <br><br>
         <h1> Admin </h1>
         <h3> FAQs </h3>
 
@@ -84,7 +85,6 @@ input[type=text], select, textarea  {
   background-color: orange;
   color: white;
   padding: 14px 20px;
-  
   border: none;
   border-radius: 4px;
   cursor: pointer;

@@ -71,21 +71,24 @@ export default {
         background-color:white;
         margin: auto;
     }
+    
     #first {
-        width: 500px;
+        width: 45%;
         float: left;
         height: 300px;
         background-color:#526C80;
         border-color: white;
+        padding: 25px;
     }
     
     
     #second {
-        width: 500px;
+        width: 45%;
         float: left;
         height: 300px;
         background-color: #F5AD69;
         border-color: white;
+        padding: 25px;
     }
 
     #second:hover{
@@ -121,7 +124,7 @@ export default {
     }
 
     .redirector {
-        width: 1000px;
+        width: 100%;
         height: 500px;
         background: white;
         color: #003D7C;
@@ -144,6 +147,18 @@ export default {
         margin-left: 0px;
         text-decoration: none;
         padding-right: 0px;
+    }
+
+    .logo {
+        font-size: 3em;
+        color : #003D7C;
+        text-align: left;
+        float: left;
+        width: 40%;
+        margin-top: 10px;
+        margin-left: 25px;
+        padding-left: 0px;
+        padding-top: 0px;
     }
 
 </style>
