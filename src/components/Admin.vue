@@ -5,22 +5,7 @@
         <br><br>
         <h1> Admin Dashboard </h1>
         <br><br> 
-            
-            <!-- Didnt catch, wanna move these buttons to navi or top row like this?-->
-            <div class=row>
-                <div class=box v-on:click="redirectToPolicies()">
-                    <h4>Update Policies</h4>
-                </div>
-
-                <div class=box v-on:click="redirectToFAQ()">
-                    <h4>Update FAQ</h4>
-                </div>
-
-                <div class=box v-on:click="redirectToFeedback()">
-                    <h4>View Feedback</h4>
-                </div>
-            </div>
-
+      
             <div class=row>
                 <div class="chart">
                     <login></login>
@@ -52,17 +37,7 @@ export default {
     },
 
     methods: {
-        redirectToPolicies() {
-            this.$router.push('/admin/policies')
-        },
-
-        redirectToFAQ() {
-            this.$router.push('/admin/FAQ')
-        },
-
-        redirectToFeedback() {
-            this.$router.push('/admin/feedback')
-        }
+       
 
     }
     

@@ -32,7 +32,7 @@ export default {
 
                 title: {
                     display: true,
-                    text: "Breakdown of Activity and Residential Zones",
+                    text: "Breakdown of Users By Activity and Residential Zones",
                     fontSize: 14
                     
                 },
