@@ -1,6 +1,7 @@
 <template>
 <div>
     <navi></navi>
+    <br><br>
     <h1> Modules </h1>
     <h2> Hello name, which modules are you interested in exploring?</h2>
     <br>

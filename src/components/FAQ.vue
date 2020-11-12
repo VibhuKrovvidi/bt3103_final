@@ -1,8 +1,9 @@
 <template>
 <div id ="FAQ">
     <navi></navi>
-    <h1> FAQ </h1>
     <br><br>
+    <h1> FAQ </h1>
+    <br>
 
     <h2 class=category> A. Zoning Policies </h2>
     <ul>
@@ -144,13 +145,12 @@ export default {
 
 <style scoped>
 .category {
-  padding: 30px;
+  padding: 2.5%;
   width: 90%;
   position: relative;
   overflow: hidden;
-  float: left;
   border-radius: 20px;
-  margin: 0 100px 30px 50px;
+  margin: 0 2.5% 2% 2.5%;
   background:#ebf1faff;
   transition: all 0.3s ease-in-out;
   text-align: left;
@@ -159,7 +159,7 @@ export default {
 ul {
     list-style-type: none;
     text-align: left;
-    margin: 0 0 0 50px;
+    margin: 0 0 0 5%;
 }
 
 p {

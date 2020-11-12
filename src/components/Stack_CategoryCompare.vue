@@ -477,18 +477,22 @@ export default {
     }
 
     #chart {
-        padding:20px;
+        padding: 1%;
         float:left;
         width:40%;
     }
 
     #data {
         float: left;
-        width:20%;
-        padding:20px;
+        width:25%;
+        padding:1%;
     }
 
     ul {
+        /*
+        padding-top: 20px;
+        padding-bottom: 20px;
+        */
         border-style: dotted;
         border-width: 2px;
         list-style-type: none;
@@ -513,7 +517,7 @@ export default {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         font-size: 20px;
         text-align:'center';
-        width: 200px;
+        width: 15%;
         height: 50px;
         background: orange;
         color: white;
@@ -527,7 +531,7 @@ export default {
     }
 
     .divider{
-        width:20px;
+        width:1%;
         height:auto;
         display:inline-block;
     }
@@ -539,7 +543,7 @@ export default {
         margin-top: 30px;
         margin-right: 30px;
         border-radius: 16px;
-        padding: 20px;
+        padding: 1%;
         color: white;
         background-color: #EF7C00;
     }

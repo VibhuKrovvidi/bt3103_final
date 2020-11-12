@@ -1,7 +1,7 @@
 <template>
     <div>
         <navi></navi>
-        
+        <br><br>
         <h1> Zoning </h1>
         
         <h3> Hi {{userName}}! </h3>
@@ -9,19 +9,21 @@
 
         <br><br>
 
-        <div class=box v-on:click="redirectToZoningPolicies()">
-            <i class="fas fa-university"></i>
-            <p class=title>University Policies</p>
-        </div>
+        <div class=row>
+            <div class=box v-on:click="redirectToZoningPolicies()">
+                <i class="fas fa-university"></i>
+                <p class=title>University Policies</p>
+            </div>
 
-        <div class=box v-on:click="redirectToZoningDeclaration()">
-            <i class="fas fa-heartbeat"></i>
-            <p class=title>Health and Travel Declarations</p>
-        </div>
+            <div class=box v-on:click="redirectToZoningDeclaration()">
+                <i class="fas fa-heartbeat"></i>
+                <p class=title>Health and Travel Declarations</p>
+            </div>
 
-        <div class=box v-on:click="redirectToZoningResources()">
-            <i class="fas fa-info"></i>
-            <p class=title>External Resources</p>
+            <div class=box v-on:click="redirectToZoningResources()">
+                <i class="fas fa-info"></i>
+                <p class=title>External Resources</p>
+            </div>
         </div>
     </div>
 </template>
@@ -153,7 +155,7 @@ export default {
   transform: scale(1.1);
 }
 
-.box:after {
+.row:after {
   content: "";
   display: table;
   clear: both;

@@ -1,7 +1,9 @@
 <template>
    <div class="login">
+        <div class="head">
         <div class = "logo">
                 MySID
+        </div>
         </div>
        
         <h1>Login</h1>
@@ -93,7 +95,7 @@ h1 {
         width: 100%;
         padding-left: 20px;
     }
-.logo:after {
+.head:after {
     content: "";
     display: table;
     clear: both;
