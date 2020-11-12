@@ -6,14 +6,16 @@
         
         <br><br>
         
-        <div class=box v-on:click="redirectToMOH()">
-            <h4>Ministry of Health (MOH)</h4>
-            <p>Latest information on the COVID-19 situation in Singapore</p>
-        </div>
+        <div class=row>
+            <div class=box v-on:click="redirectToMOH()">
+                <h4>Ministry of Health (MOH)</h4>
+                <p>Latest information on the COVID-19 situation in Singapore</p>
+            </div>
 
-        <div class=box v-on:click="redirectToMFA()">
-            <h4>Ministry of Foreign Affairs (MFA)</h4>
-            <p>Travel Advisories</p>
+            <div class=box v-on:click="redirectToMFA()">
+                <h4>Ministry of Foreign Affairs (MFA)</h4>
+                <p>Travel Advisories <br><br></p>
+            </div>
         </div>
 
 
@@ -48,18 +50,26 @@ export default {
   padding: 20px;
   width: 24%;
   position: relative;
-  float: left;
+  overflow: hidden;
+  float: center;
   border-radius: 20px;
-  margin: 0 5px 10px 250px;
+  margin: 0% 2%;
   background:#ebf1faff;
   text-align: center;
   font-weight: 700;
   font-size: 18px;
+  display: inline-block;
 }
 
 .box:hover {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 p {

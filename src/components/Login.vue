@@ -1,7 +1,9 @@
 <template>
    <div class="login">
+        <div class="head">
         <div class = "logo">
                 MySID
+        </div>
         </div>
        
         <h1>Login</h1>
@@ -24,6 +26,7 @@
 
 <script>
 import firebase from 'firebase';
+import database from '../firebase.js'
 
 export default {
     data:function(){
@@ -41,7 +44,26 @@ export default {
             firebase.auth().signInWithEmailAndPassword(this.emailLogin, this.passwordLogin).then(
                 user => { 
             console.log(user.emailLogin)
-            this.$router.push('/dashboard')
+            if(this.emailLogin == 'admin@nus.com') {
+                this.$router.push('/admin')
+            } else {
+                this.$router.push('/dashboard')
+            }
+            var date = new Date()            
+            var dateString = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+            console.log(dateString)
+            database.collection("login").doc(dateString).get().then(doc => {
+                if (doc.exists) {
+                    var count = doc.data().count
+                    var x = count + 1
+                    database.collection("login").doc(dateString).update({count: x})
+                } else {
+                    database.collection("login").doc(dateString).set({
+                        count: 1
+                    })
+                }
+            })
+            
             },
             err => {
                 alert(err.message)
@@ -73,7 +95,7 @@ h1 {
         width: 100%;
         padding-left: 20px;
     }
-.logo:after {
+.head:after {
     content: "";
     display: table;
     clear: both;

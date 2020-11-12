@@ -4,7 +4,8 @@
                 MySID
       </div>
     <h1> Register </h1>
-    <form class="form">
+    <div class="form">
+      <form>
       
             Enter Your NUS Email: <br>
             <input v-model="emailLogin" type="email" class="form-control" placeholder="Email" required> <br> <br>
@@ -58,6 +59,7 @@
             <input class="box" id="submit" type="submit" @click="registerUser($event)">
 
         </form>
+      </div>
   </div>
 </template>
 
@@ -101,6 +103,9 @@ export default {
       
 
       //Update user's profile details.
+      database.collection("users").doc(this.emailLogin).set({
+          //user doucment require a field to exist
+      })
       database.collection("users").doc(this.emailLogin).collection("profile").add(
         this.entry
       )
@@ -150,14 +155,12 @@ input {
   width : 150px;
 }
 
-form {
+#form {
   padding: 30px;
-  margin-top: 8%;
-  width: 500px;
-  position: fixed;
-  float: center;
-  margin-right: 300px;
-  margin-left:500px;
+  width: 40%;
+  position: relative;
+  float: left;
+  margin: auto;
   border-radius: 20px;
   background:#ebf1faff;
   transition: all 0.2s ease-in-out;

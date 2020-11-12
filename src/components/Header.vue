@@ -14,8 +14,11 @@
         <nav class="pagecontents">
             
             
-            <router-link class="custom-nav-item" to="/dashboard" exact>Home</router-link>
+            <router-link v-if="!isAdmin" class="custom-nav-item" to="/dashboard" exact>Home</router-link>
             <router-link v-if="isAdmin" class="custom-nav-item" to="/admin" exact>Admin Dashboard </router-link>
+            <router-link v-if="isAdmin" class="custom-nav-item" to='/admin/policies'> Update Policies </router-link>
+            <router-link v-if="isAdmin" class="custom-nav-item" to='/admin/FAQ'> Update FAQ </router-link>
+            <router-link v-if="isAdmin" class="custom-nav-item" to='/admin/feedback'> View Feedback </router-link>
             <router-link v-if="!isAdmin" class="custom-nav-item" to="/faq" exact>FAQ</router-link>
             <router-link v-if="!isAdmin" class="custom-nav-item" to="/feedback" exact>Feedback</router-link>
             <router-link v-if="!isAdmin" class="custom-nav-item" to="/modules" exact>Modules</router-link>
@@ -65,7 +68,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<!-- Need to removed scoped here to remove the white borders around our navi bar -->
+<style>
+    body {
+        margin: 0 !important;
+    }
+
+    .navbar {
+        background-color: whitesmoke;
+        margin: 0 !important;
+    }
+
     .topHead:after {
         content: "";
         display: table;
@@ -77,7 +90,10 @@ export default {
         text-align: left;
         float: left;
         width: 40%;
-        padding-left: 20px;
+        margin-top: 10px;
+        margin-left: 25px;
+        padding-left: 0px;
+        padding-top: 0px;
     }
     /*.logo:after {
         content: "";
@@ -105,11 +121,16 @@ export default {
     }
 
     .pagecontents {
-        
+        background-color: whitesmoke; 
         width: 100%;
         text-align:right;
         float: right;
         padding-bottom: 20px;
+        margin: 0 !important;
+        margin-top: 15px;
+        margin-right: 25px;
+        padding-right: 0px;
+        padding-top: 0px;
     }
     .pagecontents:after {
         content: "";
@@ -119,10 +140,12 @@ export default {
 
     .logout_btn {
         float: right;
-        padding: 5px;
-        margin-right: 25px;
         font-size: 1.25em ;
         color:  #003D7C;
+        margin-top: 20px;
+        margin-right: 28px;
+        padding-right: 0px;
+        padding-top: 0px;
         
     }
 

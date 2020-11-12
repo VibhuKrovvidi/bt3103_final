@@ -20,8 +20,8 @@
                 <option value="others">Others</option>
             </select>
             <br><br>
-            <label>Date (YYYYMMDD)</label>
-            <input type="number" v-model.number="entry.date" min="0" required />
+            <label>Date</label><br>
+            <input type=date v-model="entry.date" required />
             <br><br>
             <label>Start Time (HHMM) </label>
             <input type="number" v-model.number="entry.start" placeholder="HHMM" min="0" max="2359" required />
@@ -45,10 +45,11 @@ export default {
             usr: firebase.auth().currentUser.email,
             mth31: [1,3,5,7,8,10,12],
             mth30: [4,6,9,11],
+            tdy: '',
             entry: {
                 title: "",
                 category: "work", //default value for dropdown
-                date:'', //default populated with today in created hook 
+                date: new Date(), //default populated with today in created hook 
                 start:'',
                 end:'',
             },
@@ -58,21 +59,10 @@ export default {
     methods: {
         sub: function() {
             //Data validation
-            if (this.entry.date <= 19000101) { //minimum date 1900/01/01
-                alert("Invalid Date!")
-            } else if (this.entry.date > 99999999 || this.entry.date <= 9999999) {
-                alert("Date must contain exactly 8 characters!")
-            } else if (Math.floor((this.entry.date%10000)/100) > 12) {
-                alert("Month cannot be over 12!")
-            } else if (this.mth31.includes((Math.floor(this.entry.date/100))%100) && this.entry.date%100 > 31) {
-                alert("Invalid Date, Month only has 31 days!")
-            } else if (this.mth30.includes((Math.floor(this.entry.date/100))%100) && this.entry.date%100 > 30) {
-                alert("Invalid Date, Month only has 30 days!")
-            } else if ((Math.floor(this.entry.date/100))%100==2 && (Math.floor(this.entry.date/10000))%4==0 && this.entry.date%100 > 29) {
-                alert("Invalid Date, Month only has 29 days!")
-            } else if ((Math.floor(this.entry.date/100))%100==2 && (Math.floor(this.entry.date/10000))%4!=0 && this.entry.date%100 > 28) {
-                alert("Invalid Date, Month only has 28 days!")
-            } else if (this.entry.start >= this.entry.end) {
+            var sel = new Date(this.entry.date)
+            var dte = (sel.getFullYear()*10000) + ((sel.getMonth()+1)*100) + (sel.getDate())
+            console.log(dte)
+            if (this.entry.start >= this.entry.end) {
                 alert("Invalid start/end, end must be after start!")
             } else if (this.entry.start%100 >= 60) {
                 alert("Start time: Minutes cannot be more than 59")
@@ -81,10 +71,16 @@ export default {
             } else if (this.entry.start >= 2400 || this.entry.end >= 2400) {
                 alert("Start and end time cannot be more than 2400hrs!")
             } else {
-                database.collection("users").doc(this.usr).collection("time").add(this.entry)
+                database.collection("users").doc(this.usr).collection("time").add({
+                    title: this.entry.title,
+                    category: this.entry.category, 
+                    date: dte,  
+                    start: this.entry.start,
+                    end:this.entry.end,
+                })
                 this.entry.title=""
                 this.entry.category=""
-                this.entry.date=''
+                this.entry.date= this.tdy
                 this.entry.start=''
                 this.entry.end=''
                 this.$router.push({ path: '/time'});
@@ -95,10 +91,11 @@ export default {
     created: function() {
         //inserting default date as today
         var tdy = new Date()
-        var yr = tdy.getFullYear()*10000
-        var mth = (tdy.getMonth()+1)*100
+        var yr = tdy.getFullYear()
+        var mth = (tdy.getMonth()+1)
         var day = (tdy.getDate())
-        var final = yr+mth+day
+        var final = yr.toString() + "-" + mth.toString() + "-" + day.toString()
+        this.tdy = final
         this.entry.date = final
     },
 }
