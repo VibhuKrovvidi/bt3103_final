@@ -15,13 +15,13 @@
 
 
     <h3> Module Description </h3>
-    {{ module_description }}
+    {{ entire_json.description }}
     
     <h3> Module Faculty </h3>
-    {{ module_faculty  }}
+    {{ entire_json.faculty }}
 
     <h3> Module PreReq </h3>
-    {{ prereqTree }}
+    {{ entire_json.prerequisite }}
 
     
     
@@ -35,7 +35,7 @@ export default {
     data(){
         return {
             info:null,
-            entire_json:[],
+            entire_json:{},
             query:'',
             module_description:'',
             module_faculty:'',
