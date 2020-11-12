@@ -41,9 +41,14 @@
     <button v-on:click="testingAPI">Takes in module input and searches api </button>
 
     <div v-for="items in this.modulesTaken" v-bind:key="items">
-        {{ items.fulfillRequirements }}
+        {{ items }}
     </div>
     
+    <br>
+    test bro
+    <br>
+    <button v-on:click="checkIfModCanTake('BT2101')">Testing </button>
+
 
 </div>
 </template>
@@ -54,30 +59,17 @@ export default {
     data(){
         return {
             selected:'',
-            info:null,
-            entire_json:{},
-            query:'',
-            module_description:'',
-            module_faculty:'',
-            prereqTree:'',
             Y1S1_modules:[],
             test:'xx',
             modulesTaken:[],
 
         }
     },
-        created: function() {
-            this.loadNews();
-        },
+        
         methods: {
-            loadNews: function() {
-            axios.get('https://api.nusmods.com/v2/2018-2019/modules/'+this.query + '.json')
-            .then(response => (this.entire_json = response.data))
-            .catch(error => console.log(error))
-            .then(console.log("Module Data Pulled"))
-            },
-            
-            parseInputList: function(){
+           parseInputList: function(){
+                // This function takes in the string input by the user
+                // splits it up to return a list of the modules taken, trimmed
                 var list_of_modules_taken = this.Y1S1_modules.split(",");
                 var list_trimmed = []
                 var i;
@@ -87,20 +79,33 @@ export default {
                 return list_trimmed;
             },
             axiostest: function(moduleCode) {
+                // takes in a moduleCode and pulls data from NUSMODSapi
                 return axios.get('https://api.nusmods.com/v2/2018-2019/modules/'+moduleCode + '.json')
                 .then(response => response.data)
             },
             testingAPI: async function() {
+                // Takes in the list of modules that have been input by the user
+                // provides the information to our thismodulestaken
                 var listOfModules = this.parseInputList();
                 console.log(listOfModules);
-
                 var i;
                 for (i = 0; i<listOfModules.length; i++){
                     let json_module = await this.axiostest(listOfModules[i]);
                     this.modulesTaken.push(json_module)
                 }
-                
+            },
+            getModulePreReq: async function(modCode) {
+                // takes in a modcode and gets the required pre-req
+                return axios.get('https://api.nusmods.com/v2/2018-2019/modules/'+modCode + '.json')
+                .then(response => response.data.prerequisite)
+            },
+
+            checkIfModCanTake: async function(modCode){
+                let preReqs = await this.getModulePreReq(modCode);
+                console.log(preReqs);
             }
+
+
         }
     }
 </script>
