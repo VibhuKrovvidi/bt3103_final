@@ -50,10 +50,8 @@ export default {
             loadNews: function() {
             axios.get('https://api.nusmods.com/v2/2018-2019/modules/'+this.query + '.json')
             .then(response => (this.entire_json = response.data))
-            .then(response => (this.module_description = response.description))
-            .then(response => (this.module_faculty = response.faculty))
             .catch(error => console.log(error))
-            .then(console.log(this.module_description))
+            .then(console.log("Module Data Pulled"))
             }
         }
         
