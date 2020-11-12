@@ -65,7 +65,6 @@ export default {
                 qss1.forEach(doc1 => {
                     database.collection("users").doc(doc1.id).collection("time").get().then((qss2) => {
                         if (!qss2.empty) {
-                            denom++
                             let work = 0
                             let soc = 0
                             let exe = 0
