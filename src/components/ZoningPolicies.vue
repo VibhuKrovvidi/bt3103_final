@@ -160,7 +160,7 @@ tr:nth-child(even){
 
 .cont {
     position: absolute;
-    height: 300px;
+    height: 440px;
     width: 720px;
     top: 0;
     left: 20%;
@@ -170,6 +170,7 @@ tr:nth-child(even){
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     cursor: pointer;
     text-align: left;
+    overflow: auto;
     }
 
     .category {

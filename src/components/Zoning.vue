@@ -5,7 +5,7 @@
         <h1> Zoning </h1>
         
         <h3> Hi {{userName}}! </h3>
-        <h3> Activity Zone: <span class=info> {{act_zone}}</span> Residential Zone: <span class=info> {{res_zone}} </span> </h3>
+        <h3> Activity Zone: <span class=info>{{act_zone}}</span> Residential Zone: <span class=info>{{res_zone}} </span> </h3>
 
         <br><br>
 
@@ -148,6 +148,7 @@ export default {
   transition: all 0.3s ease-in-out;
   text-align: center;
   display: inline-block;
+  cursor: pointer;
 }
 
 .box:hover {
