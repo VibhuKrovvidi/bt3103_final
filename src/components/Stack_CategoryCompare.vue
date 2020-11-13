@@ -178,6 +178,9 @@ export default {
         tdyslice: function () {
             this.total=0
             this.datacollection.datasets[0].data = []
+            this.diff_txt = []
+            this.diff_val=[]
+            this.labs=[]
             //getting today's date value
             let today = new Date()
             let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
@@ -232,6 +235,9 @@ export default {
         weekslice: function() {
             this.total=0
             this.datacollection.datasets[0].data = []
+            this.diff_txt = []
+            this.diff_val=[]
+            this.labs=[]
             //getting today's date value
             let today = new Date()
             let y = today.getFullYear()
@@ -308,6 +314,9 @@ export default {
         monthslice: function() {
             this.total=0
             this.datacollection.datasets[0].data = []
+            this.diff_txt = []
+            this.diff_val=[]
+            this.labs=[]
              //getting today's date value
             let today = new Date()
             let y = (today.getFullYear())
