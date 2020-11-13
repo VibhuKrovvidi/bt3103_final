@@ -4,7 +4,7 @@
         <div class="blocks">
         <br><br>
         <h1> Admin Dashboard </h1>
-        <br><br> 
+        
       
             <div class=row>
                 <div class="chart">
@@ -15,7 +15,17 @@
                 </div>
                 <div class="chart">
                     <aggtime></aggtime>
+                </div><br>
+                <div class="chart" @click="redirectFB()" style="cursor:pointer;">
+                    
+                    <fback></fback>
+                    Click Chart To Access Feedback
                 </div>
+                <div class="chart" @click="redirectFAQ()" style="cursor:pointer;">
+                    
+                    <faqpie ></faqpie>
+                    Click Chart To Access FAQs
+                </div><br>
             </div>
 
 
@@ -28,16 +38,25 @@
 import LoginLine from '../LoginLine.js'
 import UserPie from '../UserPie.js'
 import Time from '../AggregateTime.js'
+import FBack from '../FeedbackPie.js'
+import FAQChart from '../FAQPie.js'
 
 export default {
     components: {
         'login': LoginLine,
         'user': UserPie,
-        'aggtime': Time
+        'aggtime': Time,
+        'fback' : FBack,
+        'faqpie': FAQChart
     },
 
     methods: {
-       
+       redirectFB : function() {
+           this.$router.push({ path: '/admin/feedback'})
+       },
+       redirectFAQ : function() {
+           this.$router.push({ path: '/admin/FAQ'})
+       }
 
     }
     
@@ -53,7 +72,11 @@ export default {
     position: relative;
     display: inline-block;
     margin: 0% 1.5%;
+    border:black;
+    
 }
+
+
 
 .box {
   padding: 20px;
