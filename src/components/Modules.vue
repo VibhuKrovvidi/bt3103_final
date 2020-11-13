@@ -24,30 +24,150 @@
                 <h3>
                     Year 1 Sem 1 Modules Taken
                 </h3>
-                
                 <span>Please leave a comma after every module</span>
                 <br>
 
-                    <textarea v-model="Y1S1_modules" placeholder="add multiple lines"></textarea>
+                    <textarea v-model="Y1S1_modules" placeholder="Modules Taken">
+
+                    </textarea>
             </div>
             <div class="two">
                 <h3>
                     Year 1 Sem 2 Modules Taken
                 </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+                    <textarea v-model="Y1S2_modules" placeholder="Modules Taken">
+                    </textarea>
             </div>
         </section>
     </div>
 
-    <button v-on:click="testingAPI">Takes in module input and searches api </button>
+    <div v-if="selected == 2">
+        <section class="only_year_one">
+            <div class="one">
+                <h3>
+                    Year 1 Sem 1 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
 
-    <div v-for="items in this.modulesTaken" v-bind:key="items">
-        {{ items }}
+                    <textarea v-model="Y1S1_modules" placeholder="Modules Taken">
+
+                    </textarea>
+            </div>
+            <div class="two">
+                <h3>
+                    Year 1 Sem 2 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+                    <textarea v-model="Y1S2_modules" placeholder="Modules Taken">
+                    </textarea>
+            </div>
+        </section>
+        <section class="only_year_one">
+            <div class="one">
+                <h3>
+                    Year 2 Sem 1 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+
+                    <textarea v-model="Y2S1_modules" placeholder="Modules Taken">
+
+                    </textarea>
+            </div>
+            <div class="two">
+                <h3>
+                    Year 2 Sem 2 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+                    <textarea v-model="Y2S2_modules" placeholder="Modules Taken">
+                    </textarea>
+            </div>
+        </section>
+    </div>
+
+    <div v-if="selected == 3">
+        <section class="only_year_one">
+            <div class="one">
+                <h3>
+                    Year 1 Sem 1 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+
+                    <textarea v-model="Y1S1_modules" placeholder="Modules Taken">
+
+                    </textarea>
+            </div>
+            <div class="two">
+                <h3>
+                    Year 1 Sem 2 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+                    <textarea v-model="Y1S2_modules" placeholder="Modules Taken">
+                    </textarea>
+            </div>
+        </section>
+        <section class="only_year_one">
+            <div class="one">
+                <h3>
+                    Year 2 Sem 1 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+
+                    <textarea v-model="Y2S1_modules" placeholder="Modules Taken">
+
+                    </textarea>
+            </div>
+            <div class="two">
+                <h3>
+                    Year 2 Sem 2 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+                    <textarea v-model="Y2S2_modules" placeholder="Modules Taken">
+                    </textarea>
+            </div>
+        </section>
+        <section class="only_year_one">
+            <div class="one">
+                <h3>
+                    Year 3 Sem 1 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+
+                    <textarea v-model="Y3S1_modules" placeholder="Modules Taken">
+
+                    </textarea>
+            </div>
+            <div class="two">
+                <h3>
+                    Year 3 Sem 2 Modules Taken
+                </h3>
+                <span>Please leave a comma after every module</span>
+                <br>
+                    <textarea v-model="Y3S2_modules" placeholder="Modules Taken">
+                    </textarea>
+            </div>
+        </section>
     </div>
     
-    <br>
-    test bro
-    <br>
-    <button v-on:click="checkIfModCanTake('BT2101')">Testing </button>
+
+    <button v-on:click="testingAPI">Takes in module input and searches api </button>
+
+    <div>
+        <h4> List of modules you can take </h4>
+        <div v-for="items in this.modulesTaken" v-bind:key="items">
+            {{ items.fulfillRequirements }}
+        </div>
+    </div>
 
 
 </div>
@@ -60,6 +180,11 @@ export default {
         return {
             selected:'',
             Y1S1_modules:[],
+            Y1S2_modules:[],
+            Y2S1_modules:[],
+            Y2S2_modules:[],
+            Y3S1_modules:[],
+            Y3S2_modules:[],
             test:'xx',
             modulesTaken:[],
 
