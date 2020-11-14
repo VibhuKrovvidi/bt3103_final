@@ -8,14 +8,16 @@
     <br>
     <div>
         <h3> What year are you in </h3>
-        <select v-model="selected">
-        <option disabled value="">Please select one</option>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        </select>
+        <div class = 'year_selector'>
+            <select v-model="selected">
+            <option disabled value="">Please select one</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            </select>
+        </div>
         <br>
-        <span>Selected: {{ selected }}</span>
+        <span>Year Selected: {{ selected }}</span>
     </div>
 
     <div v-if="selected == 1">
@@ -27,7 +29,7 @@
                 <span>Please leave a comma after every module</span>
                 <br>
 
-                    <textarea v-model="Y1S1_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y1S1_modules" placeholder="CS1010S, BT1101">
 
                     </textarea>
             </div>
@@ -37,7 +39,7 @@
                 </h3>
                 <span>Please leave a comma after every module</span>
                 <br>
-                    <textarea v-model="Y1S2_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y1S2_modules" placeholder="CS1010S, BT1101">
                     </textarea>
             </div>
         </section>
@@ -52,7 +54,7 @@
                 <span>Please leave a comma after every module</span>
                 <br>
 
-                    <textarea v-model="Y1S1_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y1S1_modules" placeholder="CS1010S, BT1101">
 
                     </textarea>
             </div>
@@ -62,7 +64,7 @@
                 </h3>
                 <span>Please leave a comma after every module</span>
                 <br>
-                    <textarea v-model="Y1S2_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y1S2_modules" placeholder="CS1010S, BT1101">
                     </textarea>
             </div>
         </section>
@@ -71,10 +73,9 @@
                 <h3>
                     Year 2 Sem 1 Modules Taken
                 </h3>
-                <span>Please leave a comma after every module</span>
-                <br>
 
-                    <textarea v-model="Y2S1_modules" placeholder="Modules Taken">
+
+                    <textarea v-model="Y2S1_modules" placeholder="CS1010S, BT1101">
 
                     </textarea>
             </div>
@@ -84,7 +85,7 @@
                 </h3>
                 <span>Please leave a comma after every module</span>
                 <br>
-                    <textarea v-model="Y2S2_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y2S2_modules" placeholder="CS1010S, BT1101">
                     </textarea>
             </div>
         </section>
@@ -99,7 +100,7 @@
                 <span>Please leave a comma after every module</span>
                 <br>
 
-                    <textarea v-model="Y1S1_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y1S1_modules" placeholder="CS1010S, BT1101">
 
                     </textarea>
             </div>
@@ -109,7 +110,7 @@
                 </h3>
                 <span>Please leave a comma after every module</span>
                 <br>
-                    <textarea v-model="Y1S2_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y1S2_modules" placeholder="CS1010S, BT1101">
                     </textarea>
             </div>
         </section>
@@ -121,7 +122,7 @@
                 <span>Please leave a comma after every module</span>
                 <br>
 
-                    <textarea v-model="Y2S1_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y2S1_modules" placeholder="CS1010S, BT1101">
 
                     </textarea>
             </div>
@@ -131,7 +132,7 @@
                 </h3>
                 <span>Please leave a comma after every module</span>
                 <br>
-                    <textarea v-model="Y2S2_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y2S2_modules" placeholder="CS1010S, BT1101">
                     </textarea>
             </div>
         </section>
@@ -143,7 +144,7 @@
                 <span>Please leave a comma after every module</span>
                 <br>
 
-                    <textarea v-model="Y3S1_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y3S1_modules" placeholder="CS1010S, BT1101">
 
                     </textarea>
             </div>
@@ -153,20 +154,35 @@
                 </h3>
                 <span>Please leave a comma after every module</span>
                 <br>
-                    <textarea v-model="Y3S2_modules" placeholder="Modules Taken">
+                    <textarea v-model="Y3S2_modules" placeholder="CS1010S, BT1101">
                     </textarea>
             </div>
         </section>
     </div>
     
-
-    <button v-on:click="testingAPI">Takes in module input and searches api </button>
+    <br>
+    <button id=submit v-on:click="combinedFunction">Submit Modules Taken </button>
+    <br>
+    <br>
+    <button id=submit v-on:click="removeDuplicateModules">Generate Potential Modules To Take</button>
 
     <div>
-        <h4> List of modules you can take </h4>
-        <div v-for="items in this.modulesTaken" v-bind:key="items">
-            {{ items.fulfillRequirements }}
-        </div>
+        <h4> List of modules you can take </h4>        
+    </div>
+
+    <div class = 'container_for_modules' >
+        <table class = 'table table-stripped'>
+            <thead>
+                <tr>
+                    <th>Module Code</th>
+                    <th>Module Name</th>
+                    <th>Semester</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody id="data">
+            </tbody>
+        </table>
     </div>
 
 
@@ -187,6 +203,10 @@ export default {
             Y3S2_modules:[],
             test:'xx',
             modulesTaken:[],
+            modulesThatCanBeTaken:[],
+            finalArray:[],
+            finalJson:{},
+            showAllModules:false,
 
         }
     },
@@ -205,7 +225,7 @@ export default {
             },
             axiostest: function(moduleCode) {
                 // takes in a moduleCode and pulls data from NUSMODSapi
-                return axios.get('https://api.nusmods.com/v2/2018-2019/modules/'+moduleCode + '.json')
+                return axios.get('https://api.nusmods.com/v2/2019-2020/modules/'+moduleCode + '.json')
                 .then(response => response.data)
             },
             testingAPI: async function() {
@@ -218,28 +238,77 @@ export default {
                     let json_module = await this.axiostest(listOfModules[i]);
                     this.modulesTaken.push(json_module)
                 }
+                for (i=0; this.modulesTaken.length; i++){
+                    this.modulesThatCanBeTaken.push(this.modulesTaken[i].fulfillRequirements);
+                }
+                console.log("before function")
+            },
+            removeDuplicateModules: async function(){
+                var listOfNonDuplicates = [];
+                var i;
+                for (i=0; i<this.modulesThatCanBeTaken.length; i++){
+                    var x;
+                    for (x=0; x<this.modulesThatCanBeTaken[i].length; x++){
+                        if (listOfNonDuplicates.indexOf(this.modulesThatCanBeTaken[i][x]) == -1){
+                            listOfNonDuplicates.push(this.modulesThatCanBeTaken[i][x]);
+                        }
+                    }
+                }
+                this.finalArray = listOfNonDuplicates;
+                var g;
+                for (g=0; g<listOfNonDuplicates.length; g++){
+                    var moduleCodeFulfilled = listOfNonDuplicates[g];
+                    let json_module = await this.axiostest(moduleCodeFulfilled);
+                    this.finalJson[moduleCodeFulfilled] = json_module;
+                }
+                var arrayOfMods = Object.keys(this.finalJson);
+                var temp = "";
+                for (var n=0; n<arrayOfMods.length; n++){
+                    console.log(arrayOfMods[n])
+                    temp += "<tr>";
+                    temp += "<td>" + arrayOfMods[n] + "</td>";
+                    temp += "<td>" + this.finalJson[arrayOfMods[n]]['title'] + "</td>";
+                    temp += "<td>" + this.getSemesterFromModule(this.finalJson[arrayOfMods[n]]) + "</td>";
+                    temp += "<td>" + this.finalJson[arrayOfMods[n]]['description'] + "</td></tr>";
+                }
+                
+                this.showAllModules = true;
+                document.getElementById("data").innerHTML = temp;                
+            }
+            ,
+            combinedFunction: function(){
+                this.testingAPI();
+
             },
             getModulePreReq: async function(modCode) {
                 // takes in a modcode and gets the required pre-req
                 return axios.get('https://api.nusmods.com/v2/2018-2019/modules/'+modCode + '.json')
                 .then(response => response.data.prerequisite)
             },
-
             checkIfModCanTake: async function(modCode){
                 let preReqs = await this.getModulePreReq(modCode);
                 console.log(preReqs);
+            },
+            getSemesterFromModule: function(moduleJson){
+                var moduleSemInfo = moduleJson['semesterData'];
+                if (moduleSemInfo.length >=2) {
+                    return "Both"
+                }                
+                return moduleSemInfo[0]['semester'];
             }
 
 
         }
-    }
+}
+    
+    
 </script>
 
 <style scoped>
 .only_year_one {
   width: 80%;
-  height: 200px;
-  background: pink;
+  height: 150px;
+  background: #003D7C;
   margin: auto;
   padding: 10px;
 }
@@ -247,17 +316,48 @@ export default {
 
 .only_year_one > .one {
   width: 50%;
-  height: 200px;
-  background: cornsilk;
+  height: 150px;
+  background: #F5AD69;
   float: left;
 }
 
 .only_year_one > .two {
   width: 49%;
-  height: 200px;
-  background: cornsilk;
+  height: 150px;
+  background: #F5AD69;
   float:right;
 }
+
+table {
+  border: 1px solid black;
+}
+
+.container_for_modules {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    background: pink;
+}
+
+.table-stripped{
+    background: #003D7C;
+    border: 1px solid black;
+    width: 100%;
+    color: white;
+}
+
+.table-stripped > tbody {
+    background: #F5AD69;
+    margin-bottom: auto;
+    margin-top: auto;
+    line-height: 30px;
+    color: black;
+    padding: 10px;
+}
+
+
+
+
 
 
 
