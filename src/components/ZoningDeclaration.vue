@@ -40,9 +40,7 @@ export default {
         },
 
         redirectToMail() {
-            //"http://www.nus.edu.sg/registrar/administrative-policies-procedures/undergraduate/leave-of-absence"
-            //maito does not work. if it doesnt work, just link the nus loa website?
-            //window.location.href = "mailto:ivyng@nus.edu.sg?subject=Application%for%LOA%due%to%SHN"
+            window.location.href = "mailto:your-faculty-admin-office@u.nus.edu?subject=Application%20for%20LOA%20due%20to%20SHN"
         },
 
         redirectToZoning() {
