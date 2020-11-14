@@ -9,7 +9,7 @@ export default {
                 labels: ["Work","Social","Exercise","Sleep"],
                 datasets: [{
                     label: "Average number of hours",
-                    backgroundColor: "navy",
+                    backgroundColor: "#EF7C00",
                     data: [0,0,0,0]
                 }]
             },
@@ -28,7 +28,7 @@ export default {
                 title: {
                     display: true,
                     text: "Average Time Spent Across Users",
-                    fontSize: 14
+                    fontSize: 16
                     
                 },
                 layout:{
