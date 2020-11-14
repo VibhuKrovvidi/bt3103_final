@@ -145,12 +145,12 @@ export default {
 
 <style scoped>
 .category {
-  padding: 2.5%;
+  padding: 1.5%;
   width: 90%;
   position: relative;
   overflow: hidden;
   border-radius: 20px;
-  margin: 0 2.5% 2% 2.5%;
+  margin: 0 3.5% 2% 3.5%;
   background:#ebf1faff;
   transition: all 0.3s ease-in-out;
   text-align: left;

@@ -39,6 +39,7 @@
 
             <p>*This form is completely anonymous.</p>
         </form>
+        <br><br>
     </div>
 </template>
 

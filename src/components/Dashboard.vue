@@ -218,7 +218,6 @@ export default {
     .bigbox {
         width: 100%;
         height: 580px;
-        
         position: relative;
         float: left;
         float: right;
@@ -239,15 +238,16 @@ export default {
         width: 500px;
         top: 0;
         left: 25px;
-        background-color:#526C80;
+        background-color:#003D7C;
         border: none;
         color: white;
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         cursor: pointer;
+        padding: 15px;
     }
 
     #bx1:hover {
-        background-color: #003D7C;
+        background-color: #154360;
         
     }
 
@@ -257,15 +257,17 @@ export default {
         width: 300px;
         top: 0px;
         left: 525px;
-        background-color: #F5AD69;
+        background-color: #EF7C00;
         border: none;
         color: white;
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         cursor: pointer;
+        padding: 15px;
+
     }
 
     #bx2:hover {
-        background-color: #EF7C00;
+        background-color: #EB984E;
     }
 
     #bx3 {
@@ -274,15 +276,16 @@ export default {
         width: 300px;
         top: 300px;
         left: 25px;
-        background-color: #F5AD69;
+        background-color: #EF7C00;
         border: none;
         color: white;
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         cursor: pointer;
+        padding: 15px;
     }
 
     #bx3:hover {
-        background-color: #EF7C00;
+        background-color: #EB984E;
     }
 
     #bx4 {
@@ -291,25 +294,27 @@ export default {
         width: 500px;
         top: 300px;
         left: 325px;
-        background-color:#526C80;
+        background-color:#003D7C;
         border: none;
         color: white;
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         cursor: pointer;
+        padding: 15px;
     }
 
     #bx4:hover {
-        background-color: #003D7C;
+        background-color: #154360;
     }
 
     #bx5 {
         position: absolute;
         height: 560px;
-        width: auto;
+        width: 40%;
         top: 0;
         left: 825px;
         border: none;
         overflow: auto;
+        margin-left: 30px;
         margin-right: 25px;
     }
 
@@ -317,14 +322,13 @@ export default {
         font-size: 1.25em;
         text-align: left;
         cursor: pointer;
-        border:none;
+        border: none;
     }
 
     .details {
         color: gray;
         text-align: left;
         font-size: smaller;
-       
 
     }
 
