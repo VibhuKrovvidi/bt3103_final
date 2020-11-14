@@ -276,12 +276,46 @@ export default {
            parseInputList: function(){
                 // This function takes in the string input by the user
                 // splits it up to return a list of the modules taken, trimmed
+                console.log('first');
                 var list_of_modules_taken = this.Y1S1_modules.split(",");
                 var list_trimmed = []
                 var i;
                 for (i = 0; i < list_of_modules_taken.length; i++) {
                     list_trimmed.push(list_of_modules_taken[i].trim());
                 }
+
+                if (this.Y1S2_modules.length > 0) {
+                    var list_of_modules_taken_y1s2 = this.Y1S2_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y1s2.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y1s2[i].trim());
+                    }
+                }
+
+                if (this.Y2S1_modules.length > 0) {
+                    var list_of_modules_taken_y2s1 = this.Y2S1_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y2s1.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y2s1[i].trim());
+                    }
+                }
+                if (this.Y2S2_modules.length > 0) {
+                    var list_of_modules_taken_y2s2 = this.Y2S2_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y2s2.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y2s2[i].trim());
+                    }
+                }
+                if (this.Y3S1_modules.length > 0) {
+                    var list_of_modules_taken_y3s1 = this.Y3S1_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y3s1.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y3s1[i].trim());
+                    }
+                }
+                if (this.Y3S2_modules.length > 0) {
+                    var list_of_modules_taken_y3s2 = this.Y3S2_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y3s2.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y3s2[i].trim());
+                    }
+                }
+                
                 return list_trimmed;
             },
             axiostest: function(moduleCode) {
