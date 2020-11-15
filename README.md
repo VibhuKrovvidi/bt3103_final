@@ -51,7 +51,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 4. Vibhu
 
 # Credits
-1. Guidance from Professor RAMASAMY Thangamani
+1. Guidance from Professor Ramasamy Thangamani
 2. Shirley
 3. Cui Wei
 4. [NUSMODS API](https://api.nusmods.com/v2/)
