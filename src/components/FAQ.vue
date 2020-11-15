@@ -159,11 +159,12 @@ export default {
 ul {
     list-style-type: none;
     text-align: left;
-    margin: 0 0 0 5%;
+    margin: 0 5% 0 5%;
 }
 
 p {
     font-size: 18px;
+
 }
 
 </style>
