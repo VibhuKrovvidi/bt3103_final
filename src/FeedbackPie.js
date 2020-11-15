@@ -8,7 +8,7 @@ export default {
             datacollection: {
                 labels: ["Residential","Faculty","Activities","MySID","Others"],
                 datasets: [{
-                    backgroundColor: ['#76448A', '#9B59B6', '#C39BD3', '#D7BDE2', '#E8DAEF'],
+                    backgroundColor: ['#0D47A1', '#1976D2', '#2196F3', '#90CAF9', '#E3F2FD'],
                     data: [0,0,0,0,0],
                     borderWidth: 1,
                 },
@@ -29,7 +29,7 @@ export default {
                 title: {
                     display: true,
                     text: "Breakdown of Feedback By Category",
-                    fontSize: 14
+                    fontSize: 16
                     
                 },
                 layout:{

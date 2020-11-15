@@ -10,10 +10,9 @@
                 <button v-on:click= "redirectToForm()"> Add Event</button>
             </div> 
         </div>
-        <br>
-        <hr>
+
         <mmt id=stackItem></mmt>
-        <hr>
+
         <s1 id=stackItem></s1>
         <hr>
         <s2 id=stackItem></s2>

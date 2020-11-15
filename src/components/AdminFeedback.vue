@@ -22,7 +22,7 @@
         <li v-for="fb in resid" v-bind:key="fb.feedback" >  
             <h3> {{fb.residency}} </h3>
             <div class=feedback> <p>{{fb.feedback}}</p></div>
-            <div class=reviewed v-on:click="reviewed(fb.id)"> <p>{{fb.review}}</p> </div>
+            <div class=reviewed @click="reviewed(fb.id)"> <p>{{fb.review}}</p> </div>
             <br><br><br><br>
             
         </li>
@@ -75,6 +75,7 @@ export default {
     methods: {
         reviewed(i) {
             database.collection("feedback_forms").doc(i).update({review: "Reviewed"})
+            window.location.reload()
         },
         
         getFaculty() {
@@ -146,12 +147,12 @@ export default {
 
 <style scoped>
 .category {
-  padding: 2.5%;
+  padding: 1.5%;
   width: 90%;
   position: relative;
   overflow: hidden;
   border-radius: 20px;
-  margin: 0 2.5% 2% 2.5%;
+  margin: 0 3.5% 2% 3.5%;
   background:#ebf1faff;
   transition: all 0.3s ease-in-out;
   text-align: left;

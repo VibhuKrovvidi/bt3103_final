@@ -4,10 +4,14 @@
     <br><br>
     <h1> Modules </h1>
     <h2> Hello name, which modules are you interested in exploring?</h2>
+    <p>
+        The purpose of this section is to assist in your module planning. 
+        <br>
+        By inputting the modules you have taken, you will be able to see the modules you have unlocked.
+    </p>
 
-    <br>
     <div>
-        <h3> What year are you in </h3>
+        <h3> What year are you in?</h3>
         <div class = 'year_selector'>
             <select v-model="selected">
             <option disabled value="">Please select one</option>
@@ -162,9 +166,58 @@
     
     <br>
     <button id=submit v-on:click="combinedFunction">Submit Modules Taken </button>
+
     <br>
     <br>
-    <button id=submit v-on:click="removeDuplicateModules">Generate Potential Modules To Take</button>
+    <div>
+        <div class = 'faculty_selector'>
+            <h3> Would you like to filter potential modules by Faculty?</h3>
+            <select v-model="selectedFaculty">
+            <option disabled value="">None</option>
+            <option>All</option>
+            <option>Arts and Social Science</option>
+            <option>Computing</option>
+            <option>Cont and Lifelong Education</option>
+            <option>Dentistry</option>
+            <option>Design and Environment</option>
+            <option>Duke-NUS Medical School</option>
+            <option>Engineering</option>
+            <option>Institute of Systems Science</option>
+            <option>LKY School of Public Policy</option>
+            <option>Law</option>
+            <option>Logistics Inst-Asia Pac</option>
+            <option>Mechanobiology Institute (MBI)</option>
+            <option>Multi Disciplinary Programme</option>
+            <option>NUS</option>
+            <option>NUS Business School</option>
+            <option>NUS Graduate Sch for Int Science and Engineering</option>
+            <option>Residential College</option>
+            <option>Risk Management Institute</option>
+            <option>SSH School of Public Health</option>
+            <option>Science</option>
+            <option>Temasek Defence Sys. Institute</option>
+            <option>University Scholars Programme</option>
+            <option>YST Conservatory of Music</option>
+            <option>Yale-NUS College</option>
+            <option>Yong Loo Lin Sch of Medicine</option>
+            </select>
+        </div>
+        <br>
+    </div>
+    <div>
+        <div class = 'faculty_selector'>
+            <h3>Would you like to filter by semesters offered?</h3>
+            <select v-model="selectedSemester">
+                <option disabled value="">None</option>
+                <option>1</option>
+                <option>2</option>
+                <option>Both</option>
+            </select>
+        </div>
+        <br>
+    </div>
+    <br>
+    <button id=submit v-on:click="removeDuplicateModules">Click to update table below</button>
 
     <div>
         <h4> List of modules you can take </h4>        
@@ -176,6 +229,7 @@
                 <tr>
                     <th>Module Code</th>
                     <th>Module Name</th>
+                    <th>Faculty</th>
                     <th>Semester</th>
                     <th>Description</th>
                 </tr>
@@ -184,6 +238,11 @@
             </tbody>
         </table>
     </div>
+    <br>
+    poop
+    <br>
+
+
 
 
 </div>
@@ -207,6 +266,8 @@ export default {
             finalArray:[],
             finalJson:{},
             showAllModules:false,
+            selectedFaculty:'',
+            selectedSemester:'',
 
         }
     },
@@ -215,12 +276,46 @@ export default {
            parseInputList: function(){
                 // This function takes in the string input by the user
                 // splits it up to return a list of the modules taken, trimmed
+                console.log('first');
                 var list_of_modules_taken = this.Y1S1_modules.split(",");
                 var list_trimmed = []
                 var i;
                 for (i = 0; i < list_of_modules_taken.length; i++) {
                     list_trimmed.push(list_of_modules_taken[i].trim());
                 }
+
+                if (this.Y1S2_modules.length > 0) {
+                    var list_of_modules_taken_y1s2 = this.Y1S2_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y1s2.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y1s2[i].trim());
+                    }
+                }
+
+                if (this.Y2S1_modules.length > 0) {
+                    var list_of_modules_taken_y2s1 = this.Y2S1_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y2s1.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y2s1[i].trim());
+                    }
+                }
+                if (this.Y2S2_modules.length > 0) {
+                    var list_of_modules_taken_y2s2 = this.Y2S2_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y2s2.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y2s2[i].trim());
+                    }
+                }
+                if (this.Y3S1_modules.length > 0) {
+                    var list_of_modules_taken_y3s1 = this.Y3S1_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y3s1.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y3s1[i].trim());
+                    }
+                }
+                if (this.Y3S2_modules.length > 0) {
+                    var list_of_modules_taken_y3s2 = this.Y3S2_modules.split(",");
+                    for (i = 0; i < list_of_modules_taken_y3s2.length; i++) {
+                        list_trimmed.push(list_of_modules_taken_y3s2[i].trim());
+                    }
+                }
+                
                 return list_trimmed;
             },
             axiostest: function(moduleCode) {
@@ -238,12 +333,14 @@ export default {
                     let json_module = await this.axiostest(listOfModules[i]);
                     this.modulesTaken.push(json_module)
                 }
-                for (i=0; this.modulesTaken.length; i++){
+                for (i=0; i<this.modulesTaken.length; i++){
                     this.modulesThatCanBeTaken.push(this.modulesTaken[i].fulfillRequirements);
+
                 }
-                console.log("before function")
+                
             },
             removeDuplicateModules: async function(){
+                console.log(this.selectedFaculty);
                 var listOfNonDuplicates = [];
                 var i;
                 for (i=0; i<this.modulesThatCanBeTaken.length; i++){
@@ -264,13 +361,39 @@ export default {
                 var arrayOfMods = Object.keys(this.finalJson);
                 var temp = "";
                 for (var n=0; n<arrayOfMods.length; n++){
-                    console.log(arrayOfMods[n])
-                    temp += "<tr>";
-                    temp += "<td>" + arrayOfMods[n] + "</td>";
-                    temp += "<td>" + this.finalJson[arrayOfMods[n]]['title'] + "</td>";
-                    temp += "<td>" + this.getSemesterFromModule(this.finalJson[arrayOfMods[n]]) + "</td>";
-                    temp += "<td>" + this.finalJson[arrayOfMods[n]]['description'] + "</td></tr>";
-                }
+                    if (this.selectedFaculty == "All") {
+                        if (this.selectedSemester == "Both"){
+                            temp += "<tr>";
+                            temp += "<td>" + arrayOfMods[n] + "</td>";
+                            temp += "<td>" + this.finalJson[arrayOfMods[n]]['title'] + "</td>";
+                            temp += "<td>" + this.finalJson[arrayOfMods[n]]['faculty'] + "</td>";
+                            temp += "<td>" + this.getSemesterFromModule(this.finalJson[arrayOfMods[n]]) + "</td>";
+                            temp += "<td>" + this.finalJson[arrayOfMods[n]]['description'] + "</td></tr>";
+                        }
+                        else {
+                            if (this.selectedSemester == this.getSemesterFromModule(this.finalJson[arrayOfMods[n]])){
+                                temp += "<tr>";
+                                temp += "<td>" + arrayOfMods[n] + "</td>";
+                                temp += "<td>" + this.finalJson[arrayOfMods[n]]['title'] + "</td>";
+                                temp += "<td>" + this.finalJson[arrayOfMods[n]]['faculty'] + "</td>";
+                                temp += "<td>" + this.getSemesterFromModule(this.finalJson[arrayOfMods[n]]) + "</td>";
+                                temp += "<td>" + this.finalJson[arrayOfMods[n]]['description'] + "</td></tr>";
+                            }
+                        }
+                    }
+                    else {
+                        if (this.finalJson[arrayOfMods[n]]['faculty'] == this.selectedFaculty) {
+                            if (this.selectedSemester == this.getSemesterFromModule(this.finalJson[arrayOfMods[n]])) {
+                                temp += "<tr>";
+                                temp += "<td>" + arrayOfMods[n] + "</td>";
+                                temp += "<td>" + this.finalJson[arrayOfMods[n]]['title'] + "</td>";
+                                temp += "<td>" + this.finalJson[arrayOfMods[n]]['faculty'] + "</td>";
+                                temp += "<td>" + this.getSemesterFromModule(this.finalJson[arrayOfMods[n]]) + "</td>";
+                                temp += "<td>" + this.finalJson[arrayOfMods[n]]['description'] + "</td></tr>";
+                            }
+                        }
+                    }
+            }
                 
                 this.showAllModules = true;
                 document.getElementById("data").innerHTML = temp;                
@@ -292,7 +415,10 @@ export default {
             getSemesterFromModule: function(moduleJson){
                 var moduleSemInfo = moduleJson['semesterData'];
                 if (moduleSemInfo.length >=2) {
-                    return "Both"
+                    return "Both";
+                }
+                if (moduleSemInfo.length == 0){
+                    return "Unavailable";
                 }                
                 return moduleSemInfo[0]['semester'];
             }
@@ -333,7 +459,7 @@ table {
 }
 
 .container_for_modules {
-    width: 80%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
     background: pink;
