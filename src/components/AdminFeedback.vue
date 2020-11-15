@@ -5,7 +5,6 @@
     <h1> Admin </h1>
     <h3> Feedback </h3>
 
-    <br>
     <h2 class=category> A. Faculty </h2>
     <ul>
         <li v-for="fb in faculty" v-bind:key="fb.feedback">
@@ -22,7 +21,7 @@
         <li v-for="fb in resid" v-bind:key="fb.feedback" >  
             <h3> {{fb.residency}} </h3>
             <div class=feedback> <p>{{fb.feedback}}</p></div>
-            <div class=reviewed @click="reviewed(fb.id)"> <p>{{fb.review}}</p> </div>
+            <div class=reviewed v-on:click="reviewed(fb.id)"> <p>{{fb.review}}</p> </div>
             <br><br><br><br>
             
         </li>
@@ -55,6 +54,7 @@
             <br><br><br><br>
         </li>
     </ul>
+    <br>
 </div>
 </template>
 
@@ -75,6 +75,7 @@ export default {
     methods: {
         reviewed(i) {
             database.collection("feedback_forms").doc(i).update({review: "Reviewed"})
+            console.log("here")
             window.location.reload()
         },
         
@@ -92,8 +93,7 @@ export default {
         getResi() {
             database.collection("feedback_forms").where("category", "==", "resid").get().then((querySnapShot) => {      
                     querySnapShot.forEach(doc => {  
-                        var fb = doc.data()
-                        console.log(fb)
+                        var fb = doc.data()                       
                         this.resid.push({id: doc.id, feedback: fb.feedback, review: fb.review})
                     })
                 }
@@ -185,10 +185,10 @@ p {
     background-color: #003D7C;
     position: relative;
     width: 15%;
+    height: 57px;
     padding-left: 0px;
     text-align: center;
     color: white;
-
 }
 
 .reviewed:hover {
