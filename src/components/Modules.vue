@@ -2,8 +2,8 @@
 <div>
     <navi></navi>
     <br><br>
-    <h1> Modules </h1>
-    <h2> Hello name, which modules are you interested in exploring?</h2>
+    <h1> Modules Unlocked</h1>
+    <h2> Which modules are you interested in exploring?</h2>
     <p>
         The purpose of this section is to assist in your module planning. 
         <br>
@@ -239,8 +239,6 @@
         </table>
     </div>
     <br>
-    poop
-    <br>
 
 
 
@@ -276,7 +274,6 @@ export default {
            parseInputList: function(){
                 // This function takes in the string input by the user
                 // splits it up to return a list of the modules taken, trimmed
-                console.log('first');
                 var list_of_modules_taken = this.Y1S1_modules.split(",");
                 var list_trimmed = []
                 var i;
@@ -327,6 +324,7 @@ export default {
                 // Takes in the list of modules that have been input by the user
                 // provides the information to our thismodulestaken
                 var listOfModules = this.parseInputList();
+                console.log("Modules you've input")
                 console.log(listOfModules);
                 var i;
                 for (i = 0; i<listOfModules.length; i++){
@@ -335,12 +333,30 @@ export default {
                 }
                 for (i=0; i<this.modulesTaken.length; i++){
                     this.modulesThatCanBeTaken.push(this.modulesTaken[i].fulfillRequirements);
-
                 }
                 
             },
+            sortArrayByModLevel: function(moduleArray){
+                var tempJson = {};
+                for (var z=0; z < moduleArray.length; z++){
+                    var newModuleCode = moduleArray[z];
+                    var moduleLevel = newModuleCode.slice(-4,-3);
+                    tempJson[newModuleCode] = moduleLevel;
+                }
+
+                var arrayOfModulesUnlocked_Sorted=[];
+                for(var a in tempJson){
+                    arrayOfModulesUnlocked_Sorted.push([a,tempJson[a]])
+                }
+
+                arrayOfModulesUnlocked_Sorted.sort(
+                    function(a,b){
+                    return a[1] - b[1]
+                });
+                return arrayOfModulesUnlocked_Sorted;
+
+            },
             removeDuplicateModules: async function(){
-                console.log(this.selectedFaculty);
                 var listOfNonDuplicates = [];
                 var i;
                 for (i=0; i<this.modulesThatCanBeTaken.length; i++){
@@ -351,10 +367,15 @@ export default {
                         }
                     }
                 }
-                this.finalArray = listOfNonDuplicates;
+
+                // Here, we conduct a sorting of the list of modules by code               
+
+                var arrayOfModulesUnlocked_Sorted = this.sortArrayByModLevel(listOfNonDuplicates);
+
+                // for loop across Unlocked modules, to call API for moduleInfo;
                 var g;
-                for (g=0; g<listOfNonDuplicates.length; g++){
-                    var moduleCodeFulfilled = listOfNonDuplicates[g];
+                for (g=0; g<arrayOfModulesUnlocked_Sorted.length; g++){
+                    var moduleCodeFulfilled = arrayOfModulesUnlocked_Sorted[g][0];
                     let json_module = await this.axiostest(moduleCodeFulfilled);
                     this.finalJson[moduleCodeFulfilled] = json_module;
                 }
