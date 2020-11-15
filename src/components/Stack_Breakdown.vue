@@ -3,20 +3,15 @@
     <h3 id=intro> Here is a breakdown and analysis of your time spent.</h3>
     <div id=column>
         <div id=chart>
-            <piechart v-bind:chartData = "datacollection" :options = "chartOptions"></piechart>
+            <tdypie v-if="tdy"></tdypie>
+            <weekpie v-if="wk"></weekpie>
+            <monthpie v-if="mth"></monthpie>
         </div>
-
-        <div v-show="dteSel">
-        Enter Date:
-            <br>
-            <input type=date v-model="dateSelected" required/>
-        </div>
-        <button v-on:click="historical"> Historical </button>
+        <button v-on:click="tdyslice"> Today </button>
         <div class="divider"/>
-        <button v-on:click="showinput" v-show="!dteSel"> By Date </button>
-        <button v-on:click="dateslice" v-show="dteSel"> Slice Date </button>
+        <button v-on:click="weekslice"> Past Week </button>
         <div class="divider"/>
-        <button v-on:click="weekslice"> By Week </button>
+        <button v-on:click="monthslice"> Past Month </button>
 
         <div id=right_seg>
             <div id=data>
@@ -29,8 +24,8 @@
             </div>
             <div id=insights>
                 <h2>Insights</h2>
-                <h4 v-show="!(this.total==0)">You’ve have spent {{Math.round(this.work*100/this.total)}}% on work and 
-                {{Math.round(this.sleep*100/this.total)}}% on sleep.
+                <h4 v-show="!(this.total==0)">You’ve have spent {{Math.round(this.agg[0]*100/this.total)}}% on work and 
+                {{Math.round(this.agg[3]*100/this.total)}}% on sleep.
                 </h4>
                 <h3 id=recommend>{{this.rec()}}</h3>
             </div>
@@ -40,318 +35,160 @@
 </template>
 
 <script>
-import piechart from '../PieChart.js'
 import database from '../firebase.js'
 import firebase from 'firebase'
+import tdypie from '../Time_PieChart_Today.js'
+import weekpie from '../Time_PieChart_Week.js'
+import monthpie from '../Time_PieChart_Month.js'
 
 export default {
     components: {
-        piechart
+        tdypie, weekpie, monthpie
     },
 
     data(){
         return {
             usr: firebase.auth().currentUser.email,
-            dteSel: false,
-            dateSelected: new Date(),
-            mth31: [1,3,5,7,8,10,12],
-            mth30: [4,6,9,11],
-            //counts for insights (cannot extract data from observer)
-            total: 0,
-            work: 0,
-            sleep: 0,
-            leisure: 0, //anything that is not work & sleep
+            tdy: false,
+            wk: false,
+            mth: false,
             categories: [],
             agg: [],
-            //callback pie label formats for with data & no data cases
-            form: {
-                label(tooltipItem, data) {
-                    return `${data.labels[tooltipItem.index]}: ${Math.round(data.datasets[0].data[tooltipItem.index])} Hours`;
-                }
-            },
-            dummy: {
-                label(tooltipItem, data) {
-                    return `${data.labels[tooltipItem.index]}: No Data`;
-                }
-            },
-            datacollection: {
-                labels: [],
-                datasets: [{
-                    backgroundColor: ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey'],
-                    data: [],
-                    borderWidth: 0.5
-                }]
-            },
-            chartOptions: {
-                legend: {
-                    display: true,
-                    labels: {
-                        fontSize: 15,
-                        }
-                    },
-
-                title: {
-                    display: true,
-                    text: ["Time Spent Breakdown",""],
-                    fontSize: 20,
-                    
-                },
-                layout:{
-                    padding:{
-                        left:5,
-                        right:0,
-                        top:0,
-                        bottom:0
-                    }
-                },
-                tooltips: {
-                    callbacks: {}
-                    /*
-                    callbacks: {
-                        label(tooltipItem, data) {
-                            return `${data.labels[tooltipItem.index]}: ${Math.round(data.datasets[0].data[tooltipItem.index])} Hours`;
-                        }
-                    }*/
-                },
-                responsive: true,
-                maintainAspectRatio: false
-            },
+            total: 0,
         }
     },
 
     methods: {
-        showinput: function() {
-            this.dteSel = !this.dteSel
-        },
-        fetchItems: function() {
-            database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
-                querySnapShot.forEach(doc => {
-                    let curr = doc.data()
-                    let label = curr.category
-                    let idx = this.categories.indexOf(label)
-                    //conversion to minutes
-                    let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
-                    let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
-                    //conversion to hours
-                    let currSum = (((end-start)/60))
-                    if (idx == '-1') {
-                        this.categories.push(label)
-                        this.agg.push(currSum)
-                    } else {
-                        this.agg[idx] += currSum
-                    }
-                    //data for recommendations
-                    if (label == "work") {
-                        this.total += currSum
-                        this.work += currSum
-                    } else if (label == "sleep") {
-                        this.total += currSum
-                        this.sleep += currSum
-                    } else {
-                        this.total += currSum
-                        this.leisure += currSum
-                    }
-                })
-                if (this.total != 0) {
-                    this.chartOptions.title.text = ["Time Spent Breakdown","(Historical)"]
-                    this.datacollection.datasets[0].data = this.agg
-                    this.datacollection.labels = this.categories
-                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
-                    this.chartOptions.tooltips.callbacks = this.form
-                } else {
-                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data"]
-                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
-                    this.datacollection.labels = ["","","","","",""]
-                    this.datacollection.datasets[0].backgroundColor = []
-                    this.chartOptions.tooltips.callbacks = this.dummy
-                }
-            })
-        },
-        historical: function() {
-            this.categories = []
-            this.agg = []
-            this.total = 0
-            this.sleep = 0
-            this.leisure = 0
-            this.work = 0
-            database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
-                querySnapShot.forEach(doc => {
-                    let curr = doc.data()
-                    let label = curr.category
-                    let idx = this.categories.indexOf(label)
-                    //conversion to minutes
-                    let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
-                    let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
-                    //conversion to hours
-                    let currSum = (((end-start)/60))
-                    if (idx == '-1') {
-                        this.categories.push(label)
-                        this.agg.push(currSum)
-                    } else {
-                        this.agg[idx] += currSum
-                    }
-                    //data for recommendations
-                    if (label == "work") {
-                        this.total += currSum
-                        this.work += currSum
-                    } else if (label == "sleep") {
-                        this.total += currSum
-                        this.sleep += currSum
-                    } else {
-                        this.total += currSum
-                        this.leisure += currSum
-                    }
-                })
-                if (this.total != 0) {
-                    this.chartOptions.title.text = ["Time Spent Breakdown","(Historical)"]
-                    this.datacollection.datasets[0].data = this.agg
-                    this.datacollection.labels = this.categories
-                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
-                    this.chartOptions.tooltips.callbacks = this.form
-                } else {
-                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data"]
-                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
-                    this.datacollection.labels = ["","","","","",""]
-                    this.datacollection.datasets[0].backgroundColor = []
-                    this.chartOptions.tooltips.callbacks = this.dummy
-                }
-            })
-        },
-        dateslice: function() {
-            var sel = new Date(this.dateSelected)
-            var dte = (sel.getFullYear()*10000) + ((sel.getMonth()+1)*100) + (sel.getDate())
-            this.dteSel = !this.dteSel
+        tdyslice: function() {
             //reset
-            this.categories = []
-            this.agg = []
+            this.categories = ["Work","Social","Exercise","Sleep","Idle","Others"]
+            this.agg = [0,0,0,0,0,0]
+            this.tdy = true
+            this.wk = false
+            this.mth = false
             this.total = 0
-            this.sleep = 0
-            this.leisure = 0
-            this.work = 0
             //getting today's date value
+            let today = new Date()
+            let tdy = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
+            //collecting data
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 querySnapShot.forEach(doc => {
-                    if (doc.data().date == dte) {
+                    if (doc.data().date == tdy) {
                         let curr = doc.data()
                         let label = curr.category
-                        let idx = this.categories.indexOf(label)
                         //conversion to minutes
                         let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
                         let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
                         //conversion to hours
                         let currSum = (((end-start)/60))
-                        if (idx == '-1') {
-                            this.categories.push(label)
-                            this.agg.push(currSum)
-                        } else {
-                            this.agg[idx] += currSum
-                        }
-                        //data for recommendations
                         if (label == "work") {
-                            this.total += currSum
-                            this.work += currSum
+                            this.agg[0] += currSum
+                        } else if (label == "social") {
+                            this.agg[1] += currSum
+                        } else if (label == "exercise") {
+                            this.agg[2] += currSum
                         } else if (label == "sleep") {
-                            this.total += currSum
-                            this.sleep += currSum
+                            this.agg[3] += currSum
+                        } else if (label == "idle") {
+                            this.agg[4] += currSum
                         } else {
-                            this.total += currSum
-                            this.leisure += currSum
+                            this.agg[5] += currSum
                         }
+                        this.total += currSum
+                        //console.log(this.agg)
                     }
                 })
-                if (this.total != 0) {
-                    this.chartOptions.title.text = ["Time Spent Breakdown","(On " + dte.toString()+")"]
-                    this.datacollection.datasets[0].data = this.agg
-                    this.datacollection.labels = this.categories
-                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
-                    this.chartOptions.tooltips.callbacks = this.form
-                } else {
-                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data for " +  dte.toString()]
-                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
-                    this.datacollection.labels = ["","","","","",""]
-                    this.datacollection.datasets[0].backgroundColor = []
-                    this.chartOptions.tooltips.callbacks = this.dummy
-                }
             })
         },
         weekslice: function() {
             //reset
-            this.categories = []
-            this.agg = []
+            this.categories = ["Work","Social","Exercise","Sleep","Idle","Others"]
+            this.agg = [0,0,0,0,0,0]
+            this.tdy = false
+            this.wk = true
+            this.mth = false
             this.total = 0
-            this.sleep = 0
-            this.leisure = 0
-            this.work = 0
             //getting today's date value
             let today = new Date()
-            let y = today.getFullYear()
+            let last = new Date()
+            last.setDate(last.getDate()-7)
             let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
-            let tdymin = 0
-            if (today.getDate() >= 7) {
-                tdymin = tdymax - 6
-            } else {
-                let m = today.getMonth()+1
-                let prev_m = 0
-                if (m==1) { //jan corner case
-                    prev_m = 12
-                    y = y-1
-                } else {
-                    prev_m = m-1
-                }
-                let dd = 6-today.getDate()
-                if (this.mth31.includes(prev_m)) {
-                    tdymin = (y*10000) + ((prev_m)*100) + (31-dd)
-                } else if (this.mth30.includes(prev_m)) {
-                    tdymin = (y*10000) + ((prev_m)*100) + (30-dd)
-                } else {
-                    tdymin = (y*10000) + ((prev_m)*100) + (28-dd)
-                }
-            }
+            let tdymin = (last.getFullYear()*10000) + ((last.getMonth()+1)*100) + last.getDate()
+            //collecting data
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 querySnapShot.forEach(doc => {
                     if (doc.data().date <= tdymax && doc.data().date >= tdymin) {
                         let curr = doc.data()
                         let label = curr.category
-                        let idx = this.categories.indexOf(label)
                         //conversion to minutes
                         let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
                         let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
                         //conversion to hours
                         let currSum = (((end-start)/60))
-                        if (idx == '-1') {
-                            this.categories.push(label)
-                            this.agg.push(currSum)
-                        } else {
-                            this.agg[idx] += currSum
-                        }
-                        //data for recommendations
                         if (label == "work") {
-                            this.total += currSum
-                            this.work += currSum
+                            this.agg[0] += currSum
+                        } else if (label == "social") {
+                            this.agg[1] += currSum
+                        } else if (label == "exercise") {
+                            this.agg[2] += currSum
                         } else if (label == "sleep") {
-                            this.total += currSum
-                            this.sleep += currSum
+                            this.agg[3] += currSum
+                        } else if (label == "idle") {
+                            this.agg[4] += currSum
                         } else {
-                            this.total += currSum
-                            this.leisure += currSum
+                            this.agg[5] += currSum
                         }
+                        this.total += currSum
+                        //console.log(this.agg)
                     }
                 })
-                if (this.total != 0) {
-                    this.chartOptions.title.text = ["Time Spent Breakdown","(Week)"]
-                    this.datacollection.datasets[0].data = this.agg
-                    this.datacollection.labels = this.categories
-                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
-                    this.chartOptions.tooltips.callbacks = this.form
-                } else {
-                    this.chartOptions.title.text = ["Time Spent Breakdown","No Data"]
-                    this.datacollection.datasets[0].data = [1,1,1,1,1,1]
-                    this.datacollection.labels = ["","","","","",""]
-                    this.datacollection.datasets[0].backgroundColor = []
-                    this.chartOptions.tooltips.callbacks = this.dummy
-                }
             })
         },
+        monthslice: function() {
+            //reset
+            this.categories = ["Work","Social","Exercise","Sleep","Idle","Others"]
+            this.agg = [0,0,0,0,0,0]
+            this.tdy = false
+            this.wk = false
+            this.mth = true
+            this.total = 0
+            //getting today's date value
+            let today = new Date()
+            let last = new Date()
+            last.setDate(last.getDate()-28)
+            let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
+            let tdymin = (last.getFullYear()*10000) + ((last.getMonth()+1)*100) + last.getDate()
+            //collecting data
+            database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
+                querySnapShot.forEach(doc => {
+                    if (doc.data().date <= tdymax && doc.data().date >= tdymin) {
+                        let curr = doc.data()
+                        let label = curr.category
+                        //conversion to minutes
+                        let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
+                        let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
+                        //conversion to hours
+                        let currSum = (((end-start)/60))
+                        if (label == "work") {
+                            this.agg[0] += currSum
+                        } else if (label == "social") {
+                            this.agg[1] += currSum
+                        } else if (label == "exercise") {
+                            this.agg[2] += currSum
+                        } else if (label == "sleep") {
+                            this.agg[3] += currSum
+                        } else if (label == "idle") {
+                            this.agg[4] += currSum
+                        } else {
+                            this.agg[5] += currSum
+                        }
+                        this.total += currSum
+                        //console.log(this.agg)
+                    }
+                })
+            })
+        },
+        /*
         rec: function() {
             //An individual should sleep at least 6hrs (25%)
             //Work should not exceed 10hours (41%)
@@ -370,16 +207,27 @@ export default {
             } else {
                 return "You are good to go!"
             }
+        },*/
+        rec: function() {
+            let wk = Math.round(this.agg[0]*100/this.total)
+            let slp = Math.round(this.agg[3]*100/this.total)
+            if (wk >= 40) {
+                if (slp < 25) {
+                    return "Try to reduce work and improve sleep!"
+                } else {
+                    return "Try to reduce work!"
+                }
+            } else if (slp < 25) {
+                return "Try to improve sleep!"
+            } else if (this.total == 0) {
+                return "Log your schedule to receive inisghts!"
+            } else {
+                return "You are good to go!"
+            }
         },
     }, 
     created() {
-        var tdy = new Date()
-        var yr = tdy.getFullYear()
-        var mth = (tdy.getMonth()+1)
-        var day = (tdy.getDate())
-        var final = yr.toString() + "-" + mth.toString() + "-" + day.toString()
-        this.dateSelected = final
-        this.fetchItems() 
+        this.weekslice() 
     },
 }
 </script>
