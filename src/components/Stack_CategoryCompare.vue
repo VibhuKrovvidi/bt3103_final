@@ -3,7 +3,9 @@
     <h3 id=intro> Here is a comparison with MySID's recommendations.</h3>
     <div id=column>
         <div id=chart>
-            <groupedbar v-bind:chartData = "datacollection" :options = "chartOptions"></groupedbar>
+            <tdybar v-if="tdy"></tdybar>
+            <weekbar v-if="wk"></weekbar>
+            <monthbar v-if="mth"></monthbar>
         </div>
         <div id=warn v-show="warn()">
             <h4> 
@@ -15,12 +17,13 @@
         <button v-on:click="weekslice"> Past Week </button>
         <div class="divider"/>
         <button v-on:click="monthslice"> Past Month </button>
+
         <div id=right_seg>
             <div id=data>
                 <h4> Difference from Recommendations <br> (Rounded Nett Differences) </h4>
                 <ul>
                 <li  v-for="lab in labs" v-bind:key="lab">
-                    <h3>  {{lab}} <span id=circle> {{diff_txt[labs.indexOf(lab)]}} hours</span> </h3>
+                    <h3>  {{lab}} <span id=circle> {{diff_txt[labs.indexOf(lab)]}}</span> </h3>
                 </li>
                 </ul>
             </div>
@@ -36,155 +39,46 @@
 </template>
 
 <script>
-import groupedbar from '../GroupedBar.js'
 import database from '../firebase.js'
 import firebase from 'firebase'
+import tdybar from '../Time_GroupedBar_Today.js'
+import weekbar from '../Time_GroupedBar_Week.js'
+import monthbar from '../Time_GroupedBar_Month.js'
+
 
 export default {
     components: {
-        groupedbar
+        tdybar, weekbar, monthbar
     },
 
     data(){
         return {
             usr: firebase.auth().currentUser.email,
-            mth31: [1,3,5,7,8,10,12],
-            mth30: [4,6,9,11],
+            tdy: true,
+            wk: true,
+            mth: true,
             total: 0,
-            labs: [],
+            msrec: [7.5,1.5,0.5,6],
+            labs: ["Work","Social","Exercise","Sleep"],
             diff_txt: [],
             diff_val: [],
-            datacollection: {
-                labels: ["Work","Social","Exercise","Sleep"],
-                datasets: [
-                    {
-                        label: "Your Data",
-                        data: [],
-                        backgroundColor:"steelblue",
-                    },
-                    {
-                        label: "MySID Recommended",
-                        data: [7.5,1.5,0.5,6], // default & hardcoded as [7.5,1.5,0.5,6]
-                        backgroundColor:"#948f8a",
-                    }
-                ]
-            },
-            chartOptions: {
-                legend: {
-                    display: true,
-                    position: "bottom"
-                },
-                title: {
-                    display: true,
-                    text: [],
-                    fontSize: 20,
-                },
-                layout:{
-                    padding:{
-                        left:5,
-                        right:5,
-                        top:0,
-                        bottom:5
-                    }
-                },
-                scales: {
-                    yAxes: [{
-                        ticks:{
-                            min:0,
-                        }
-                    }]
-                },
-                responsive: true,
-                maintainAspectRatio: false
-            },
+            agg: [],
         }
     },
 
     methods: {
-        fetchItems: function() {
-            //getting today's date value
-            let today = new Date()
-            let y = today.getFullYear()
-            let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
-            let tdymin = 0
-            if (today.getDate() >= 7) {
-                tdymin = tdymax - 6
-            } else {
-                let m = today.getMonth()+1
-                let prev_m = 0
-                if (m==1) { //jan corner case
-                    prev_m = 12
-                    y = y-1
-                } else {
-                    prev_m = m-1
-                }
-                let dd = 6-today.getDate()
-                if (this.mth31.includes(prev_m)) {
-                    tdymin = (y*10000) + ((prev_m)*100) + (31-dd)
-                } else if (this.mth30.includes(prev_m)) {
-                    tdymin = (y*10000) + ((prev_m)*100) + (30-dd)
-                } else {
-                    tdymin = (y*10000) + ((prev_m)*100) + (28-dd)
-                }
-            }
-            //collect user's total
-            database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
-                let work = 0
-                let soc = 0
-                let exe = 0
-                let slp = 0
-                let dates = new Set()
-                querySnapShot.forEach(doc => {
-                    if (doc.data().date <= tdymax && doc.data().date >= tdymin) {
-                        let curr = doc.data()
-                        //conversion to minutes
-                        let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
-                        let start = (curr.start%100) + (Math.floor(curr.start/100)*60)
-                        //conversion to hours
-                        let currSum = (((end-start)/60))
-                        if (curr.category == "work") {
-                            this.total++
-                            dates.add(curr.date)
-                            work += currSum
-                        } else if (curr.category == "social") {
-                            this.total++
-                            dates.add(curr.date)
-                            soc += currSum
-                        } else if (curr.category == "exercise") {
-                            this.total++
-                            dates.add(curr.date)
-                            exe += currSum
-                        } else if (curr.category == "sleep") {
-                            this.total++
-                            dates.add(curr.date)
-                            slp += currSum
-                        }
-                    }
-                })
-                let denom = dates.size
-                let res = [work,soc,exe,slp].map(function(x) { return x/denom; })
-                let rec = [7.5,1.5,0.5,6]
-                if (this.total == 0) {
-                    this.datacollection.datasets[1].data = []
-                    this.chartOptions.title.text = ["Time Spent Comparison","No Data"]
-                } else {
-                    this.datacollection.datasets[1].data = rec
-                    this.datacollection.datasets[0].data = res
-                    this.chartOptions.title.text = ["Time Spent Comparison","Week's Average"]
-                    this.getDiff()
-                }
-            })
-        },
-        tdyslice: function () {
-            this.total=0
-            this.datacollection.datasets[0].data = []
+        tdyslice: function() {
+            //reset
             this.diff_txt = []
             this.diff_val=[]
-            this.labs=[]
+            this.agg = []
+            this.tdy = true
+            this.wk = false
+            this.mth = false
+            this.total = 0
             //getting today's date value
             let today = new Date()
-            let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
-            //collect user's total
+            let tdy = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 let work = 0
                 let soc = 0
@@ -192,7 +86,7 @@ export default {
                 let slp = 0
                 let dates = new Set()
                 querySnapShot.forEach(doc => {
-                    if (doc.data().date == tdymax) {
+                    if (doc.data().date == tdy) {
                         let curr = doc.data()
                         //conversion to minutes
                         let end = (curr.end%100) + (Math.floor(curr.end/100)*60)
@@ -219,51 +113,29 @@ export default {
                     }
                 })
                 let denom = dates.size
-                let res = [work,soc,exe,slp].map(function(x) { return x/denom; })
-                let rec = [7.5,1.5,0.5,6]
-                if (this.total == 0) {
-                    this.datacollection.datasets[1].data = []
-                    this.chartOptions.title.text = ["Time Spent Comparison","No Data"]
+                if (denom == 0) {
+                    this.agg = [0,0,0,0]
                 } else {
-                    this.datacollection.datasets[1].data = rec
-                    this.datacollection.datasets[0].data = res
-                    this.chartOptions.title.text = ["Time Spent Comparison","Today"]
-                    this.getDiff()
+                    this.agg = [work,soc,exe,slp].map(function(x) { return x/denom; })
                 }
+                this.getDiff()
             })
         },
         weekslice: function() {
-            this.total=0
-            this.datacollection.datasets[0].data = []
+            //reset
             this.diff_txt = []
             this.diff_val=[]
-            this.labs=[]
+            this.agg = []
+            this.tdy = false
+            this.wk = true
+            this.mth = false
+            this.total = 0
             //getting today's date value
             let today = new Date()
-            let y = today.getFullYear()
+            let last = new Date()
+            last.setDate(last.getDate()-7)
             let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
-            let tdymin = 0
-            if (today.getDate() >= 7) {
-                tdymin = tdymax - 6
-            } else {
-                let m = today.getMonth()+1
-                let prev_m = 0
-                if (m==1) { //jan corner case
-                    prev_m = 12
-                    y = y-1
-                } else {
-                    prev_m = m-1
-                }
-                let dd = 6-today.getDate()
-                if (this.mth31.includes(prev_m)) {
-                    tdymin = (y*10000) + ((prev_m)*100) + (31-dd)
-                } else if (this.mth30.includes(prev_m)) {
-                    tdymin = (y*10000) + ((prev_m)*100) + (30-dd)
-                } else {
-                    tdymin = (y*10000) + ((prev_m)*100) + (28-dd)
-                }
-            }
-            //collect user's total
+            let tdymin = (last.getFullYear()*10000) + ((last.getMonth()+1)*100) + last.getDate()
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 let work = 0
                 let soc = 0
@@ -298,37 +170,29 @@ export default {
                     }
                 })
                 let denom = dates.size
-                let res = [work,soc,exe,slp].map(function(x) { return x/denom; })
-                let rec = [7.5,1.5,0.5,6]
-                if (this.total == 0) {
-                    this.datacollection.datasets[1].data = []
-                    this.chartOptions.title.text = ["Time Spent Comparison","No Data"]
+                if (denom == 0) {
+                    this.agg = [0,0,0,0]
                 } else {
-                    this.datacollection.datasets[1].data = rec
-                    this.datacollection.datasets[0].data = res
-                    this.chartOptions.title.text = ["Time Spent Comparison","Week's Average"]
-                    this.getDiff()
+                    this.agg = [work,soc,exe,slp].map(function(x) { return x/denom; })
                 }
+                this.getDiff()
             })
-        },
+        }, 
         monthslice: function() {
-            this.total=0
-            this.datacollection.datasets[0].data = []
+            //reset
             this.diff_txt = []
             this.diff_val=[]
-            this.labs=[]
-             //getting today's date value
+            this.agg = []
+            this.tdy = false
+            this.wk = false
+            this.mth = true
+            this.total = 0
+            //getting today's date value
             let today = new Date()
-            let y = (today.getFullYear())
-            let m = (today.getMonth()+1)
-            let d = today.getDate()
-            let tdymax = y*10000 + m*100 + d
-            if (m==1) {
-                y = y-1
-                m = 12
-            }
-            let tdymin = y*10000 + (m-1)*100 + d
-            //collect user's total
+            let last = new Date()
+            last.setDate(last.getDate()-28)
+            let tdymax = (today.getFullYear()*10000) + ((today.getMonth()+1)*100) + today.getDate()
+            let tdymin = (last.getFullYear()*10000) + ((last.getMonth()+1)*100) + last.getDate()
             database.collection("users").doc(this.usr).collection("time").get().then((querySnapShot) => {
                 let work = 0
                 let soc = 0
@@ -363,41 +227,41 @@ export default {
                     }
                 })
                 let denom = dates.size
-                let res = [work,soc,exe,slp].map(function(x) { return x/denom; })
-                let rec = [7.5,1.5,0.5,6]
-                if (this.total == 0) {
-                    this.datacollection.datasets[1].data = []
-                    this.chartOptions.title.text = ["Time Spent Comparison","No Data"]
+                if (denom == 0) {
+                    this.agg = [0,0,0,0]
                 } else {
-                    this.datacollection.datasets[1].data = rec
-                    this.datacollection.datasets[0].data = res
-                    this.chartOptions.title.text = ["Time Spent Comparison","Month's Average"]
-                    this.getDiff()
+                    this.agg = [work,soc,exe,slp].map(function(x) { return x/denom; })
                 }
+                this.getDiff()
             })
         },
         getDiff: function() {
-            this.labs = ["Work","Social","Exercise","Sleep"]
-            let a1 = this.datacollection.datasets[0].data
-            let a2 = this.datacollection.datasets[1].data
+            let a1 = this.agg
+            let a2 = this.msrec
             let dt = a1.map(function (num, idx) {return Math.round(num - a2[idx]);});
             this.diff_val = dt
-            let dtxt = dt.map(function(x) {
-                let temp = Math.round(x)
-                if (temp<0) {
-                    temp *= -1
-                    return "-" + temp.toString();
-                } else if (temp == 0) {
-                    return temp.toString();
+
+
+            let dtxt = dt.map(function(x, i) {
+                if (a1[i] == 0) {
+                    return "No Data"
                 } else {
-                    return "+" + temp.toString();
+                    let temp = Math.round(x)
+                    if (temp<0) {
+                        temp *= -1
+                        return "-" + temp.toString() + " Hours";
+                    } else if (temp == 0) {
+                        return temp.toString() + " Hours";
+                    } else {
+                        return "+" + temp.toString() + " Hours";
+                    }
                 }
             });
             this.diff_txt = dtxt
         },
         warn: function() {
             if (this.total != 0) {
-                let d = this.datacollection.datasets[0].data
+                let d = this.agg
                 let curr = d.reduce((x,y) => x+y,0)
                 return (curr <= 7)  //users should log a reasonable amount of events
                                     //to make reasonable comparisons
@@ -405,12 +269,13 @@ export default {
         },
         rec1: function() {
             let arr = this.diff_val
-            if (arr[0]>0 || arr[1]<0 || arr[2]<0 || arr[3]<0) {
+            let t = this.diff_txt
+            if (arr[0]>0 || (arr[1]<0 && t[1] != "No Data") || (arr[2]<0 && t[2] != "No Data") || (arr[3]<0 && t[3] != "No Data")) {
                 return "Your categories could benefit from some reblancing to meet MySID's recommendations!"
             } else if (this.total == 0) {
                 return "Log your schedule to receive inisghts!"
             } else {
-                return "Your categories are balanced!"
+                return "Your categories are within our recommendations!"
             }
         },
         rec2: function() {
@@ -418,34 +283,37 @@ export default {
                 return "Log your schedule to receive inisghts!"
             } else {
                 let s = this.diff_val
+                let t = this.diff_txt
                 if (s[0] > 0) {
                     let txt = "Try to reduce workload. " 
-                    if (s[1] < 0 || s[2] < 0 || s[3] < 0) {
+                    if ((s[1] < 0 && t[1] != "No Data") || (s[2] < 0 && t[2] != "No Data") || (s[3] < 0 && t[3] != "No Data")) {
                         txt += "Try to increase "
                     }
-                    if (s[1] < 0) {
-                        txt += "social activity"
+                    if (s[1] < 0 && t[1] != "No Data") {
+                        txt += ", social activity"
                     }
-                    if (s[2] < 0) {
+                    if (s[2] < 0 && t[2] != "No Data") {
                         txt += ", exercise"
                     }
-                    if (s[3] < 0) {
+                    if (s[3] < 0 && t[3] != "No Data") {
                         txt += ", sleep"
                     }
-                    txt += "."
+                    if ((s[1] < 0 && t[1] != "No Data") || (s[2] < 0 && t[2] != "No Data") || (s[3] < 0 && t[3] != "No Data")) {
+                        txt += "."
+                    }
                     return txt
                 } else {
                     let txt = ""
-                    if (s[1] < 0 || s[2] < 0 || s[3] < 0) {
+                    if ((s[1] < 0 && t[1] != "No Data") || (s[2] < 0 && t[2] != "No Data") || (s[3] < 0 && t[3] != "No Data")) {
                         txt += "Try to increase"
                     }
-                    if (s[1] < 0) {
+                    if (s[1] < 0 && t[1] != "No Data") {
                         txt += ", social activity"
                     }
-                    if (s[2] < 0) {
+                    if (s[2] < 0 && t[2] != "No Data") {
                         txt += ", exercise"
                     }
-                    if (s[3] < 0) {
+                    if (s[3] < 0 && t[3] != "No Data") {
                         txt += ", sleep"
                     }
                     if (txt == "") {
@@ -459,7 +327,7 @@ export default {
         },
     }, 
     created() {
-        this.fetchItems()
+        this.weekslice()
     },
 }
 </script>

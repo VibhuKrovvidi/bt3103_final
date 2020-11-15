@@ -4,7 +4,7 @@
         <br><br>
         <h1> Time </h1>
         <div id=top>
-            <h2 style="text-align:left" id=left_top>Good {{timeOfDay()}}, {{userName}}!</h2>
+            <h2 style="text-align:left" id=left_top>Good {{timeOfDay()}}!</h2>
             <div id=right_top>
                 <p> <i>Log your daily events here!</i> </p>
                 <button v-on:click= "redirectToForm()"> Add Event</button>
