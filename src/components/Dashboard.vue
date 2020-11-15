@@ -151,7 +151,7 @@ export default {
         this.getUserName()
         this.get_policies()
         var curr = new Date() //Today
-        var strt = new Date("2020-08-10") //sem start
+        var strt = new Date("2020-08-10 00:00:00") //sem start
         var d = (curr.getTime()-strt.getTime()) / (1000*3600*24)
         var n = Math.floor(d/7)
         if (n>=17) {
