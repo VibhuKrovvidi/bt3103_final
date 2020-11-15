@@ -1,6 +1,7 @@
 <template>
     <div>
         <navi></navi>
+        <br><br>
         <h1> Zoning </h1>
         <h3>Health and Travel Declarations</h3>
 
@@ -9,7 +10,7 @@
         <div class=row>
             <div class=box v-on:click="redirectToHealth()">
                 <h4>Health Declaration</h4>
-                <p>All students who come to campus, and students staying in hostels must declare your temperature twice a day.<br><br></p>
+                <p>All students who come to campus, and students staying in hostels must declare your temperature twice a day.</p>
             </div>
 
             <div class=box v-on:click="redirectToTravel()">
@@ -58,6 +59,7 @@ export default {
 .box {
   padding: 20px;
   width: 24%;
+  height: 150px;
   position: relative;
   overflow: hidden;
   float: center;

@@ -8,7 +8,7 @@ export default {
             datacollection: {
                 labels: ["Zoning","Health","Residential","Student Services","Others"],
                 datasets: [{
-                    backgroundColor: ['#D68910', '#F39C12', '#F5B041', '#F8C471', '#FDEBD0'],
+                    backgroundColor: ['#EF7C00', '#F39C12', '#F5B041', '#F8C471', '#FDEBD0'],
                     data: [0,0,0,0,0],
                     borderWidth: 1,
                 },
@@ -29,7 +29,7 @@ export default {
                 title: {
                     display: true,
                     text: "Breakdown of Posted FAQs By Category",
-                    fontSize: 14
+                    fontSize: 16
                     
                 },
                 layout:{

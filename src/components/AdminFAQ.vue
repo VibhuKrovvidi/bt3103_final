@@ -5,7 +5,7 @@
         <h1> Admin </h1>
         <h3> FAQs </h3>
 
-        <br><br>
+        <br>
 
         <form>
             <label>Policy Category</label>
@@ -82,7 +82,7 @@ input[type=text], select, textarea  {
 }
 
 #submit {
-  background-color: orange;
+  background-color: #EF7C00;
   color: white;
   padding: 14px 20px;
   border: none;
@@ -91,7 +91,7 @@ input[type=text], select, textarea  {
 }
 
 #submit:hover {
-  background-color: orangered;
+  background-color: orangered  ;
 }
 
 form {

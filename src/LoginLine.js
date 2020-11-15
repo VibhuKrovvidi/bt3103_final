@@ -8,7 +8,7 @@ export default {
             labels: [],
             datasets: [{
                 label: "Number of logins",
-                borderColor: "#003D7C",
+                borderColor: "#EF7C00",
                 data: []
             }]
         },
@@ -17,7 +17,7 @@ export default {
             title: {
                 display: true,
                 text: "Number of logins per day",
-                fontSize: 14
+                fontSize: 16
             },
 
 
