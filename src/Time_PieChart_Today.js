@@ -100,7 +100,7 @@ export default{
                 })
                 if (this.total != 0) {
                     this.chartOptions.title.text = ["Time Spent Breakdown","(Today)"]
-                    this.datacollection.datasets[0].backgroundColor = ['steelblue', 'cadetblue', 'darkturquoise','aquamarine', 'paleturquoise','lightgrey']
+                    this.datacollection.datasets[0].backgroundColor = ['navy', '#0D47A1', '#1976D2', '#2196F3', '#90CAF9', '#E3F2FD']
                     this.chartOptions.tooltips.callbacks = this.form
                     this.renderChart(this.datacollection, this.chartOptions)
                 } else {
