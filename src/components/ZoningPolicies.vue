@@ -1,6 +1,7 @@
 <template>
     <div>
         <navi></navi>
+        <br><br>
         <h1> Zoning </h1>
         <h3>Zoning Policies</h3>
         <h3> Filter By:
@@ -12,12 +13,10 @@
                 <option value="Residential Policies">Residential Policies</option>
                 <option value="Other Policies">Other Policies</option>
             </select></h3>
-        
-        
+
+            <br>
 
         <div class="notice_cont">
-            
-            <div class="cont"> 
             <h2 style="text-align:center"> <u>{{selectedoption}} </u> </h2>
             <ul>
                     <li v-for="fb in policies" v-bind:key="fb.category" @click="toggleShow">
@@ -28,11 +27,13 @@
                         
                     </li>
                 </ul>
-            </div>
+        </div>
+        <div>
+        <button id=back v-on:click="redirectToZoning()"> Back </button>
         </div>
 
-        <button id=back v-on:click="redirectToZoning()"> Back </button>
-        
+        <br>
+
     </div>
 </template>
 
@@ -104,6 +105,7 @@ button {
     background-color: #EF7C00;
     border-radius: 4px;
     float: center;
+    
 }
 
 button:hover {
@@ -118,60 +120,21 @@ button:hover {
 
 }
 
-table {
-    border-collapse:collapse;
-    margin-left: auto;
-    margin-right: auto;
-    width: 80%;
-    /*display: inline-block;*/
-    float: center
-}
-
-table:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-td, th {
-    border: 1px solid black;
-    padding: 8px;
-}
-
-tr:nth-child(even){
-    background-color: #ebf1faff;
-}
-
 .notice_cont {
-    width: 100%;
-    height: 580px;
-    
+    width: 80%;
+    height: 450px;
     position: relative;
-    float: left;
-    float: right;
+    margin: auto;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    
-
     letter-spacing: 0.75px;
-    margin-left: 0px;
     text-decoration: none;
-    padding-right: 0px;
-    }   
-
-.cont {
-    position: absolute;
-    height: 440px;
-    width: 720px;
-    top: 0;
-    left: 20%;
-    
+    padding: 20px;
+    background: lightgrey;
     border: none;
-    
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
     cursor: pointer;
     text-align: left;
     overflow: auto;
-    }
+    }   
 
     .category {
         font-size: 1.25em;
@@ -184,8 +147,6 @@ tr:nth-child(even){
         color: gray;
         text-align: left;
         font-size: smaller;
-       
-
     }
 
     .contents {

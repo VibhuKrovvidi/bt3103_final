@@ -3,8 +3,7 @@
         <navi></navi>
         <br><br>
         <h1> Zoning </h1>
-        
-        <h3> Hi {{userName}}! </h3>
+
         <h3> Activity Zone: <span class=info>{{act_zone}}</span> Residential Zone: <span class=info>{{res_zone}} </span> </h3>
 
         <br><br>

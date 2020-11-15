@@ -1,6 +1,7 @@
 <template>
     <div>
         <navi></navi>
+        <br><br>
         <h1> Zoning </h1>
         <h3>External Resources</h3>
         

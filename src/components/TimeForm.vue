@@ -1,6 +1,7 @@
 <template>
     <div>
         <navi></navi>
+        <br><br>
         <h1> Time </h1>
         <h3> Good afternoon. Here is a breakdown and analysis of your time spent yesterday.</h3>
 
@@ -31,6 +32,7 @@
             <br><br>
             <button v-on:click.prevent="sub" id=submit > Submit </button>
         </form>
+        <br><br>
     </div>
 
 </template>

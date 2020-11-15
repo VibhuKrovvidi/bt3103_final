@@ -5,7 +5,7 @@
         <h1> Admin </h1>
         <h3> Policies </h3>
 
-        <br><br>
+        <br>
 
         <form>
             <label>Policy Category</label>
@@ -88,10 +88,9 @@ input[type=text], input[type=date], select, textarea  {
 }
 
 #submit {
-  background-color: orange;
+  background-color: #EF7C00;
   color: white;
   padding: 14px 20px;
-  
   border: none;
   border-radius: 4px;
   cursor: pointer;
