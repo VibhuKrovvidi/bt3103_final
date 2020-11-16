@@ -39,6 +39,8 @@
 
         <button id=back v-on:click="redirectToAdmin()"> Back </button>
 
+        <br><br>
+
     </div>
     
 </template>
