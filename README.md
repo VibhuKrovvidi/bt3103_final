@@ -12,6 +12,8 @@ The second problem we aim to tackle is the complete virtualness of this semester
 The lack of a centralised repository of information and blurred control of our time inspired this project. As such, we decided to develop an application to solve this problem. 
 
 We hope that you will enjoy using this :bowtie:
+
+See A Live Demo Here: https://bt3103-mysid.firebaseapp.com/
 ---
 
 ### Summary of key features
